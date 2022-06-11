@@ -5,6 +5,4 @@ import com.cafe.dto.*;
 public interface UserFacade {
 
     UserRegistrationResponseDto registerUser(UserRegistrationRequestDto dto);
-
-
 }
