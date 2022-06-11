@@ -5,5 +5,5 @@ import com.cafe.service.core.order.OrderCreationParams;
 
 import java.util.function.Function;
 
-public interface OrderRegistrationRequestDtoMapper extends Function<OrderRegistrationRequestDto, OrderCreationParams> {
+public interface OrderCreationParamsMapper extends Function<OrderRegistrationRequestDto, OrderCreationParams> {
 }

@@ -5,7 +5,7 @@ import com.cafe.service.core.order.OrderUpdateParams;
 
 import java.util.function.Function;
 
-public interface OrderUpdateRequestDtoMapper extends Function<OrderUpdateRequestDto, OrderUpdateParams> {
+public interface OrderUpdateParamsMapepr extends Function<OrderUpdateRequestDto, OrderUpdateParams> {
 
     OrderUpdateParams apply(OrderUpdateRequestDto dto);
 }

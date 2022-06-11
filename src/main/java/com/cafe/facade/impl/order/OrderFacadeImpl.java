@@ -10,16 +10,13 @@ import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.facade.core.order.OrderFacade;
 import com.cafe.mapper.order.*;
-import com.cafe.service.core.order.OrderCreationParams;
 import com.cafe.service.core.order.OrderService;
-import com.cafe.service.core.order.OrderUpdateParams;
 import com.cafe.service.core.table.CafeTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,15 +28,15 @@ public class OrderFacadeImpl implements OrderFacade {
     private final CafeTableService cafeTableService;
     private final OrderRegistrationResponseDtoMapper orderRegistrationResponseDtoMapper;
     private final OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper;
-    private final OrderUpdateRequestDtoMapper orderUpdateRequestDtoMapper;
-    private final OrderRegistrationRequestDtoMapper orderRegistrationRequestDtoMapper;
+    private final OrderUpdateParamsMapepr orderUpdateRequestDtoMapper;
+    private final OrderCreationParamsMapper orderRegistrationRequestDtoMapper;
 
     public OrderFacadeImpl(OrderService orderService,
                            CafeTableService cafeTableService,
                            OrderRegistrationResponseDtoMapper orderRegistrationResponseDtoMapper,
                            OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper,
-                           OrderUpdateRequestDtoMapper orderUpdateRequestDtoMapper,
-                           OrderRegistrationRequestDtoMapper orderRegistrationRequestDtoMapper) {
+                           OrderUpdateParamsMapepr orderUpdateRequestDtoMapper,
+                           OrderCreationParamsMapper orderRegistrationRequestDtoMapper) {
         this.orderService = orderService;
         this.cafeTableService = cafeTableService;
         this.orderRegistrationResponseDtoMapper = orderRegistrationResponseDtoMapper;

@@ -3,7 +3,7 @@ package com.cafe.mapper.order;
 import com.cafe.dto.OrderUpdateRequestDto;
 import com.cafe.service.core.order.OrderUpdateParams;
 
-public class OrderUpdateRequestDtoMapperImpl implements OrderUpdateRequestDtoMapper{
+public class OrderUpdateParamsMapperImpl implements OrderUpdateParamsMapepr {
 
     @Override
     public OrderUpdateParams apply(OrderUpdateRequestDto dto) {

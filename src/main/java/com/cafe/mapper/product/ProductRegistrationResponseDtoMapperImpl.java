@@ -1,0 +1,18 @@
+package com.cafe.mapper.product;
+
+import com.cafe.dto.ProductRegistrationResponseDto;
+import com.cafe.entity.product.Product;
+
+import java.time.LocalDateTime;
+
+public class ProductRegistrationResponseDtoMapperImpl implements ProductRegistrationResponseDtoMapper {
+    @Override
+    public ProductRegistrationResponseDto apply(Product product) {
+        return new ProductRegistrationResponseDto(
+                product.getProductName(),
+                product.getPrice(),
+                product.getAmount(),
+                LocalDateTime.now()
+        );
+    }
+}

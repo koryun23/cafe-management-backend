@@ -6,6 +6,7 @@ import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.product.Product;
 import com.cafe.entity.product.ProductInOrder;
 import com.cafe.facade.core.product.ProductFacade;
+import com.cafe.mapper.product.*;
 import com.cafe.service.core.order.OrderService;
 import com.cafe.service.core.product.*;
 import org.slf4j.Logger;
@@ -24,13 +25,31 @@ public class ProductFacadeImpl implements ProductFacade {
     private final ProductService productService;
     private final ProductInOrderService productInOrderService;
     private final OrderService orderService;
+    private final ProductCreationParamsMapper productCreationParamsMapper;
+    private final ProductRegistrationResponseDtoMapper productRegistrationResponseDtoMapper;
+    private final ProductUpdateParamsMapper productUpdateParamsMapper;
+    private final ProductUpdateResponseDtoMapper productUpdateResponseDtoMapper;
+    private final ProductInOrderCreationParamsMapper productInOrderCreationParamsMapper;
+    private final ProductInOrderRegistrationResponseDtoMapper productInOrderRegistrationResponseDtoMapper;
 
     public ProductFacadeImpl(ProductService productService,
                              ProductInOrderService productInOrderService,
-                             OrderService orderService) {
+                             OrderService orderService,
+                             ProductCreationParamsMapper productRegistrationRequestDtoMapper,
+                             ProductRegistrationResponseDtoMapper productRegistrationResponseDtoMapper,
+                             ProductUpdateParamsMapper productUpdateParamsMapper,
+                             ProductUpdateResponseDtoMapper productUpdateResponseDtoMapper,
+                             ProductInOrderCreationParamsMapper productInOrderCreationParamsMapper,
+                             ProductInOrderRegistrationResponseDtoMapper productInOrderRegistrationResponseDtoMapper) {
         this.productService = productService;
         this.productInOrderService = productInOrderService;
         this.orderService = orderService;
+        this.productCreationParamsMapper = productRegistrationRequestDtoMapper;
+        this.productRegistrationResponseDtoMapper = productRegistrationResponseDtoMapper;
+        this.productUpdateParamsMapper = productUpdateParamsMapper;
+        this.productUpdateResponseDtoMapper = productUpdateResponseDtoMapper;
+        this.productInOrderCreationParamsMapper = productInOrderCreationParamsMapper;
+        this.productInOrderRegistrationResponseDtoMapper = productInOrderRegistrationResponseDtoMapper;
     }
 
     @Override
@@ -42,17 +61,8 @@ public class ProductFacadeImpl implements ProductFacade {
                 List.of(String.format("Product with the name %s is already registered", dto.getName()))
             );
         }
-        Product product = productService.create(new ProductCreationParams(
-                dto.getName(),
-                dto.getPrice(),
-                dto.getAmount()
-        ));
-        ProductRegistrationResponseDto responseDto = new ProductRegistrationResponseDto(
-                product.getProductName(),
-                product.getPrice(),
-                product.getAmount(),
-                LocalDateTime.now()
-        );
+        Product product = productService.create(productCreationParamsMapper.apply(dto));
+        ProductRegistrationResponseDto responseDto = productRegistrationResponseDtoMapper.apply(product);
         LOGGER.info("Successfully registered a new product according to the product registration request dto - {}, response - {}", dto, responseDto);
         return responseDto;
     }
@@ -73,17 +83,8 @@ public class ProductFacadeImpl implements ProductFacade {
                     List.of(String.format("Could not register a product in order because its amount(%d) exceeds the amount of the product(%d)", productInOrderAmount, productAmount))
             );
         }
-        ProductInOrder productInOrder = productInOrderService.create(new ProductInOrderCreationParams(
-                dto.getProductId(),
-                dto.getOrderId(),
-                dto.getAmount()
-        ));
-        ProductInOrderRegistrationResponseDto responseDto = new ProductInOrderRegistrationResponseDto(
-                productInOrder.getProduct().getId(),
-                productInOrder.getOrder().getId(),
-                productInOrder.getAmount(),
-                LocalDateTime.now()
-        );
+        ProductInOrder productInOrder = productInOrderService.create(productInOrderCreationParamsMapper.apply(dto));
+        ProductInOrderRegistrationResponseDto responseDto = productInOrderRegistrationResponseDtoMapper.apply(productInOrder);
         LOGGER.info("Successfully registered a new product in order according to the product in order registration dto - {}, resopnse - {}",
                 dto,
                 responseDto
@@ -131,19 +132,8 @@ public class ProductFacadeImpl implements ProductFacade {
     public ProductUpdateResponseDto updateProduct(ProductUpdateRequestDto dto) {
         Assert.notNull(dto, "Product update request dto should not be null");
         LOGGER.info("Updating a product according to the product update request dto - {}", dto);
-        Product product = productService.updateProduct(new ProductUpdateParams(
-                dto.getId(),
-                dto.getName(),
-                dto.getAmount(),
-                dto.getPrice()
-        ));
-        ProductUpdateResponseDto responseDto = new ProductUpdateResponseDto(
-                product.getId(),
-                product.getProductName(),
-                product.getPrice(),
-                product.getAmount(),
-                LocalDateTime.now()
-        );
+        Product product = productService.updateProduct(productUpdateParamsMapper.apply(dto));
+        ProductUpdateResponseDto responseDto = productUpdateResponseDtoMapper.apply(product);
         LOGGER.info("Successfully updated a product according to the product update request dto - {}, response - {}", dto, responseDto);
         return responseDto;
     }
