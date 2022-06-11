@@ -10,10 +10,10 @@ public class OrderUpdateRequestDto {
     private Long cafeTableId;
     private OrderStatusType orderStatusType;
 
-    public OrderUpdateRequestDto(Long id, Long cafeTableId, OrderStatusType orderStatusType) {
+    public OrderUpdateRequestDto(Long id, Long cafeTableId) {
         this.id = id;
         this.cafeTableId = cafeTableId;
-        this.orderStatusType = orderStatusType;
+        this.orderStatusType = OrderStatusType.OPEN;
     }
 
     public Long getCafeTableId() {
