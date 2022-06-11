@@ -9,6 +9,7 @@ import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.facade.core.order.OrderFacade;
+import com.cafe.mapper.order.*;
 import com.cafe.service.core.order.OrderCreationParams;
 import com.cafe.service.core.order.OrderService;
 import com.cafe.service.core.order.OrderUpdateParams;
@@ -28,10 +29,23 @@ public class OrderFacadeImpl implements OrderFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderFacadeImpl.class);
     private final OrderService orderService;
     private final CafeTableService cafeTableService;
+    private final OrderRegistrationResponseDtoMapper orderRegistrationResponseDtoMapper;
+    private final OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper;
+    private final OrderUpdateRequestDtoMapper orderUpdateRequestDtoMapper;
+    private final OrderRegistrationRequestDtoMapper orderRegistrationRequestDtoMapper;
 
-    public OrderFacadeImpl(OrderService orderService, CafeTableService cafeTableService) {
+    public OrderFacadeImpl(OrderService orderService,
+                           CafeTableService cafeTableService,
+                           OrderRegistrationResponseDtoMapper orderRegistrationResponseDtoMapper,
+                           OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper,
+                           OrderUpdateRequestDtoMapper orderUpdateRequestDtoMapper,
+                           OrderRegistrationRequestDtoMapper orderRegistrationRequestDtoMapper) {
         this.orderService = orderService;
         this.cafeTableService = cafeTableService;
+        this.orderRegistrationResponseDtoMapper = orderRegistrationResponseDtoMapper;
+        this.orderUpdateResponseDtoMapper = orderUpdateResponseDtoMapper;
+        this.orderUpdateRequestDtoMapper = orderUpdateRequestDtoMapper;
+        this.orderRegistrationRequestDtoMapper = orderRegistrationRequestDtoMapper;
     }
 
     @Override
@@ -46,15 +60,8 @@ public class OrderFacadeImpl implements OrderFacade {
         if(cafeTable.getCafeTableStatusType() != CafeTableStatusType.FREE) {
             return new OrderRegistrationResponseDto(List.of(String.format("The cafe table with an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTable.getCafeTableStatusType())));
         }
-        Order order = orderService.create(new OrderCreationParams(
-                dto.getCafeTableId(),
-                dto.getOrderStatusType()
-        ));
-        OrderRegistrationResponseDto orderRegistrationResponseDto = new OrderRegistrationResponseDto(
-                order.getTable().getId(),
-                order.getOrderStatusType(),
-                LocalDateTime.now()
-        );
+        Order order = orderService.create(orderRegistrationRequestDtoMapper.apply(dto));
+        OrderRegistrationResponseDto orderRegistrationResponseDto = orderRegistrationResponseDtoMapper.apply(order);
         cafeTableService.markAs(order.getTable().getId(), CafeTableStatusType.TAKEN);
         LOGGER.info("Successfully registered a new order according to the order registration request dto - {}, response - {}", dto, orderRegistrationResponseDto);
         return orderRegistrationResponseDto;
@@ -64,20 +71,11 @@ public class OrderFacadeImpl implements OrderFacade {
     public OrderUpdateResponseDto updateOrder(OrderUpdateRequestDto dto) {
         Assert.notNull(dto, "Order update request dto should not be null");
         LOGGER.info("Updating an order according to the order update request dto - {}", dto);
-        Order order = orderService.update(new OrderUpdateParams(
-                dto.getId(),
-                dto.getCafeTableId(),
-                dto.getOrderStatusType()
-        ));
+        Order order = orderService.update(orderUpdateRequestDtoMapper.apply(dto));
         if(order.getOrderStatusType() != OrderStatusType.OPEN) {
             cafeTableService.markAs(order.getTable().getId(), CafeTableStatusType.FREE);
         }
-        OrderUpdateResponseDto responseDto = new OrderUpdateResponseDto(
-                order.getId(),
-                order.getTable().getId(),
-                order.getOrderStatusType(),
-                LocalDateTime.now()
-        );
+        OrderUpdateResponseDto responseDto = orderUpdateResponseDtoMapper.apply(order);
         LOGGER.info("Successfully updated an order according to the order update request dto - {}, response - {}", dto, responseDto);
         return responseDto;
     }

@@ -1,0 +1,19 @@
+package com.cafe.mapper.order;
+
+import com.cafe.dto.OrderUpdateResponseDto;
+import com.cafe.entity.order.Order;
+
+import java.time.LocalDateTime;
+
+public class OrderUpdateResponseDtoMapperImpl implements OrderUpdateResponseDtoMapper {
+
+    @Override
+    public OrderUpdateResponseDto apply(Order order) {
+        return new OrderUpdateResponseDto(
+                order.getId(),
+                order.getTable().getId(),
+                order.getOrderStatusType(),
+                LocalDateTime.now()
+        );
+    }
+}
