@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-//TODO:ADD PASSWORD
 @Entity
 @Table(name = "USERS")
 public class User {
