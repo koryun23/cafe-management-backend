@@ -79,4 +79,13 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public User getByUsername(String username) {
+        Assert.notNull(username, "username should not be null");
+        LOGGER.info("Retrieving a user having a username of '{}'", username);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        LOGGER.info("Successfully retrieved a user having a username of '{}', result - {}", username, user);
+        return user;
+    }
 }

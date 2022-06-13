@@ -12,4 +12,6 @@ public interface UserService {
     Optional<User> findById(Long id);
 
     boolean existsByPasswordOrUsername(String rawPassword, String username);
+
+    User getByUsername(String username);
 }
