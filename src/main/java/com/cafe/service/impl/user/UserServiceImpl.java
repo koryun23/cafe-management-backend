@@ -8,10 +8,12 @@ import com.cafe.service.core.user.UserService;
 import io.jsonwebtoken.lang.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,9 +21,11 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -33,6 +37,7 @@ public class UserServiceImpl implements UserService {
                 params.getFirstName(),
                 params.getSecondName(),
                 params.getUsername(),
+                passwordEncoder.encode(params.getPassword()),
                 LocalDateTime.now()
         ));
         LOGGER.info("Successfully created a new user according to the user creation params - {}, result - {}", params, user);
@@ -57,5 +62,21 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(id);
         LOGGER.info("Successfully retrieved an optional of a user having an id of {}", id);
         return userOptional;
+    }
+
+    @Override
+    public boolean existsByPasswordOrUsername(String rawPassword, String username) {
+        Assert.notNull(rawPassword, "Raw password should not be null");
+        Assert.hasText(rawPassword, "Raw password should not be empty");
+        Assert.notNull(username, "Username should not be null");
+        Assert.hasText(username, "Username should not be empty");
+        LOGGER.info("Checking if a user with the given password exists");
+        List<User> allUsers = userRepository.findAll();
+        for(User user : allUsers) {
+            if(passwordEncoder.matches(rawPassword, user.getPassword()) || username.equals(user.getUsername())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

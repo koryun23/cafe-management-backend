@@ -2,9 +2,11 @@ package com.cafe.mapper.product;
 
 import com.cafe.dto.ProductRegistrationResponseDto;
 import com.cafe.entity.product.Product;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class ProductRegistrationResponseDtoMapperImpl implements ProductRegistrationResponseDtoMapper {
     @Override
     public ProductRegistrationResponseDto apply(Product product) {

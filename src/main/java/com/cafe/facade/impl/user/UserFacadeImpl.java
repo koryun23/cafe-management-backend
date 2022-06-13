@@ -8,6 +8,7 @@ import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.entity.user.User;
+import com.cafe.entity.user.UserRole;
 import com.cafe.entity.user.UserRoleType;
 import com.cafe.facade.core.user.UserFacade;
 import com.cafe.service.core.order.OrderCreationParams;
@@ -30,6 +31,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserFacadeImpl implements UserFacade {
@@ -48,10 +51,16 @@ public class UserFacadeImpl implements UserFacade {
     public UserRegistrationResponseDto registerUser(UserRegistrationRequestDto dto) {
         Assert.notNull(dto, "User registration request dto should not be null");
         LOGGER.info("Registering a new user according to the user registration request dto - {}", dto);
+        if(userService.existsByPasswordOrUsername(dto.getPassword(), dto.getUsername())) {
+            return new UserRegistrationResponseDto(
+                    List.of("Cannot register as on of the given credentials is already taken")
+            );
+        }
         User user = userService.create(new UserCreationParams(
                 dto.getFirstName(),
                 dto.getSecondName(),
-                dto.getUsername()
+                dto.getUsername(),
+                dto.getPassword()
         ));
 
         for(UserRoleType roleType : dto.getRoleList()) {
@@ -60,12 +69,13 @@ public class UserFacadeImpl implements UserFacade {
 
         UserRegistrationResponseDto responseDto = new UserRegistrationResponseDto(
                 user.getUsername(),
+                user.getPassword(),
                 user.getFirstName(),
                 user.getSecondName(),
+                dto.getRoleList(),
                 LocalDateTime.now()
         );
         LOGGER.info("Successfully registered a new user according to the user registration request dto - {}, result - {}", dto, responseDto);
         return responseDto;
     }
-
 }

@@ -9,12 +9,14 @@ import java.util.Objects;
 public class UserRegistrationRequestDto {
 
     private String username;
+    private String password;
     private String firstName;
     private String secondName;
     private List<UserRoleType> roleList;
 
-    public UserRegistrationRequestDto(String username, String firstName, String secondName, List<UserRoleType> roleList) {
+    public UserRegistrationRequestDto(String username, String password, String firstName, String secondName, List<UserRoleType> roleList) {
         this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
         this.roleList = roleList;
@@ -52,17 +54,29 @@ public class UserRegistrationRequestDto {
         this.roleList = roleList;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserRegistrationRequestDto that = (UserRegistrationRequestDto) o;
-        return Objects.equals(username, that.username) && Objects.equals(firstName, that.firstName) && Objects.equals(secondName, that.secondName) && Objects.equals(roleList, that.roleList);
+        return Objects.equals(username, that.username) &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(secondName, that.secondName) &&
+                Objects.equals(roleList, that.roleList) &&
+                Objects.equals(password, that.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, firstName, secondName, roleList);
+        return Objects.hash(username, firstName, secondName, roleList, password);
     }
 
     @Override

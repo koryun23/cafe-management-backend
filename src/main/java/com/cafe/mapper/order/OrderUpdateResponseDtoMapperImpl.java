@@ -2,9 +2,11 @@ package com.cafe.mapper.order;
 
 import com.cafe.dto.OrderUpdateResponseDto;
 import com.cafe.entity.order.Order;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class OrderUpdateResponseDtoMapperImpl implements OrderUpdateResponseDtoMapper {
 
     @Override

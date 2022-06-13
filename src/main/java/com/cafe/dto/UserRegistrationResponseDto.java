@@ -1,5 +1,8 @@
 package com.cafe.dto;
 
+import com.cafe.entity.user.UserRoleType;
+import org.springframework.context.support.BeanDefinitionDsl;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -7,15 +10,24 @@ import java.util.Objects;
 public class UserRegistrationResponseDto {
 
     private String username;
+    private String password;
     private String firstName;
     private String secondName;
+    private List<UserRoleType> roleList;
     private LocalDateTime registeredAt;
 
     private List<String> errors;
-    public UserRegistrationResponseDto(String username, String firstName, String secondName, LocalDateTime registeredAt) {
+    public UserRegistrationResponseDto(String username,
+                                       String password,
+                                       String firstName,
+                                       String secondName,
+                                       List<UserRoleType> roleList,
+                                       LocalDateTime registeredAt) {
         this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
+        this.roleList = roleList;
         this.registeredAt = registeredAt;
     }
 
@@ -55,6 +67,30 @@ public class UserRegistrationResponseDto {
         this.registeredAt = registeredAt;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<UserRoleType> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<UserRoleType> roleList) {
+        this.roleList = roleList;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,7 +110,9 @@ public class UserRegistrationResponseDto {
                 "username='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
+                ", password=" + password +
                 ", registeredAt=" + registeredAt +
+                ", errors=" + errors +
                 '}';
     }
 }

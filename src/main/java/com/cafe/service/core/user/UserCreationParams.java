@@ -6,11 +6,13 @@ public class UserCreationParams {
     private String firstName;
     private String secondName;
     private String username;
+    private String password;
 
-    public UserCreationParams(String firstName, String secondName, String username) {
+    public UserCreationParams(String firstName, String secondName, String username, String password) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.username = username;
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -37,17 +39,28 @@ public class UserCreationParams {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserCreationParams that = (UserCreationParams) o;
-        return Objects.equals(firstName, that.firstName) && Objects.equals(secondName, that.secondName) && Objects.equals(username, that.username);
+        return Objects.equals(firstName, that.firstName) &&
+                Objects.equals(secondName, that.secondName) &&
+                Objects.equals(username, that.username) &&
+                Objects.equals(password, that.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, secondName, username);
+        return Objects.hash(firstName, secondName, username, password);
     }
 
     @Override

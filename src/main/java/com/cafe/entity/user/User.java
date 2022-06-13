@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+//TODO:ADD PASSWORD
 @Entity
 @Table(name = "USERS")
 public class User {
@@ -29,13 +30,17 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column
+    private String password;
+
     public User() {
     }
 
-    public User(String firstName, String secondName, String username, LocalDateTime createdAt) {
+    public User(String firstName, String secondName, String username, String password, LocalDateTime createdAt) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.username = username;
+        this.password = password;
         this.createdAt = createdAt;
     }
 
@@ -87,17 +92,31 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(secondName, user.secondName) && Objects.equals(username, user.username) && Objects.equals(userRoleList, user.userRoleList) && Objects.equals(createdAt, user.createdAt);
+        return Objects.equals(id, user.id) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(secondName, user.secondName) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(userRoleList, user.userRoleList) &&
+                Objects.equals(createdAt, user.createdAt) &&
+                Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, secondName, username, userRoleList, createdAt);
+        return Objects.hash(id, firstName, secondName, username, userRoleList, createdAt, password);
     }
 
     @Override
