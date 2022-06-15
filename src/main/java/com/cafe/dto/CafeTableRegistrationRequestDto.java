@@ -10,11 +10,13 @@ public class CafeTableRegistrationRequestDto {
     private Integer numberOfSeats;
     private String code;
 
-    public CafeTableRegistrationRequestDto(Integer numberOfSeats,
-                                           String code) {
+    public CafeTableRegistrationRequestDto(Integer numberOfSeats, String code) {
         this.cafeTableStatusType = CafeTableStatusType.FREE;
         this.numberOfSeats = numberOfSeats;
         this.code = code;
+    }
+
+    public CafeTableRegistrationRequestDto() {
     }
 
     public CafeTableStatusType getCafeTableStatusType() {

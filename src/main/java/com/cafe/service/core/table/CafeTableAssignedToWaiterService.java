@@ -14,4 +14,6 @@ public interface CafeTableAssignedToWaiterService {
     CafeTableAssignedToWaiter getById(Long id);
 
     List<CafeTableAssignedToWaiter> findAllByWaiterId(Long id);
+
+    Optional<CafeTableAssignedToWaiter> findByCafeTableId(Long id);
 }

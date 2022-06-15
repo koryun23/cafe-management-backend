@@ -37,6 +37,9 @@ public class CafeTableAssignedToWaiter {
         this.waiter = waiter;
     }
 
+    public CafeTableAssignedToWaiter() {
+    }
+
     public Long getId() {
         return id;
     }

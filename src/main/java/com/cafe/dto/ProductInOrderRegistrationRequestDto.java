@@ -14,6 +14,9 @@ public class ProductInOrderRegistrationRequestDto {
         this.amount = amount;
     }
 
+    public ProductInOrderRegistrationRequestDto() {
+    }
+
     public Long getProductId() {
         return productId;
     }

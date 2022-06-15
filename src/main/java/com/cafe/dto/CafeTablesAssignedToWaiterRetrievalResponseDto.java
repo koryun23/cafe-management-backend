@@ -11,6 +11,9 @@ public class CafeTablesAssignedToWaiterRetrievalResponseDto {
         this.cafeTableAssignedToWaiterList = cafeTableAssignedToWaiterList;
     }
 
+    public CafeTablesAssignedToWaiterRetrievalResponseDto() {
+    }
+
     public List<CafeTableAssignedToWaiter> getCafeTableAssignedToWaiterList() {
         return cafeTableAssignedToWaiterList;
     }

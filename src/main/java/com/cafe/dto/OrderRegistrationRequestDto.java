@@ -8,9 +8,12 @@ public class OrderRegistrationRequestDto {
     private Long cafeTableId;
     private OrderStatusType orderStatusType;
 
-    public OrderRegistrationRequestDto(Long cafeTableId, OrderStatusType orderStatusType) {
+    public OrderRegistrationRequestDto(Long cafeTableId) {
         this.cafeTableId = cafeTableId;
-        this.orderStatusType = orderStatusType;
+        this.orderStatusType = OrderStatusType.OPEN;
+    }
+
+    public OrderRegistrationRequestDto() {
     }
 
     public Long getCafeTableId() {

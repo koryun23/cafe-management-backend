@@ -12,6 +12,7 @@ public class ProductRegistrationResponseDto {
     private LocalDateTime registeredAt;
 
     private List<String> errors;
+
     public ProductRegistrationResponseDto(String name, Integer price, Integer amount, LocalDateTime registeredAt) {
         this.name = name;
         this.price = price;
@@ -23,6 +24,8 @@ public class ProductRegistrationResponseDto {
         this.errors = errors;
     }
 
+    public ProductRegistrationResponseDto() {
+    }
 
     public String getName() {
         return name;

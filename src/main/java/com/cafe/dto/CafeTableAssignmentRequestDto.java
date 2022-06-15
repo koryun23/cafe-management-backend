@@ -12,6 +12,9 @@ public class CafeTableAssignmentRequestDto {
         this.waiterId = waiterId;
     }
 
+    public CafeTableAssignmentRequestDto() {
+    }
+
     public Long getTableId() {
         return tableId;
     }

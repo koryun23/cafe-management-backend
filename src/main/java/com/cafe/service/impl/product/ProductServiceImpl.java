@@ -98,8 +98,8 @@ public class ProductServiceImpl implements ProductService {
                 params.getPrice(),
                 params.getAmount()
         );
-        product.setId(params.getId());
-
+        String originalName = params.getOriginalName();
+        product.setId(productRepository.findByProductName(originalName).orElseThrow(() -> new ProductNotFoundException(originalName)).getId());
         Product savedProduct = productRepository.save(product);
         LOGGER.info("Successfully updated a product according to the product update params - {}, result - {}", params, savedProduct);
         return savedProduct;

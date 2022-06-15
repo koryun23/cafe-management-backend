@@ -23,8 +23,9 @@ public class ProductController {
         return ResponseEntity.ok(productFacade.registerProduct(dto));
     }
 
-    @PutMapping(path = "/update")
-    public ResponseEntity<ProductUpdateResponseDto> updateProduct(ProductUpdateRequestDto dto) {
+    @PutMapping(path = "/update/{productName}")
+    public ResponseEntity<ProductUpdateResponseDto> updateProduct(@RequestBody ProductUpdateRequestDto dto, @PathVariable String productName) {
+        dto.setOriginalName(productName);
         return ResponseEntity.ok(productFacade.updateProduct(dto));
     }
 }

@@ -5,14 +5,12 @@ import java.util.Objects;
 
 public class ProductUpdateResponseDto {
 
-    private Long id;
     private String name;
     private Integer price;
     private Integer amount;
     private LocalDateTime updatedAt;
 
-    public ProductUpdateResponseDto(Long id, String name, Integer price, Integer amount, LocalDateTime updatedAt) {
-        this.id = id;
+    public ProductUpdateResponseDto(String name, Integer price, Integer amount, LocalDateTime updatedAt) {
         this.name = name;
         this.price = price;
         this.amount = amount;
@@ -51,14 +49,6 @@ public class ProductUpdateResponseDto {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,20 +57,18 @@ public class ProductUpdateResponseDto {
         return Objects.equals(name, that.name) &&
                 Objects.equals(price, that.price) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(updatedAt, that.updatedAt) &&
-                Objects.equals(id, that.id);
+                Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, amount, updatedAt, id);
+        return Objects.hash(name, price, amount, updatedAt);
     }
 
     @Override
     public String toString() {
         return "ProductUpdateResponseDto{" +
-                "id='" + id + '\'' +
-                ",name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", price=" + price +
                 ", amount=" + amount +
                 ", updatedAt=" + updatedAt +

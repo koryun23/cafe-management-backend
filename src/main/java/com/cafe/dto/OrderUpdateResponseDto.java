@@ -22,6 +22,9 @@ public class OrderUpdateResponseDto {
         this.updatedAt = updatedAt;
     }
 
+    public OrderUpdateResponseDto() {
+    }
+
     public OrderUpdateResponseDto(List<String> errors) {
         this.errors = errors;
     }

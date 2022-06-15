@@ -22,6 +22,9 @@ public class UserRegistrationRequestDto {
         this.roleList = roleList;
     }
 
+    public UserRegistrationRequestDto() {
+    }
+
     public String getUsername() {
         return username;
     }

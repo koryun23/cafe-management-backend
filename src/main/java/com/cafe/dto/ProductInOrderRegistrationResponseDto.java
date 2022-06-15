@@ -23,6 +23,9 @@ public class ProductInOrderRegistrationResponseDto {
         this.errors = errors;
     }
 
+    public ProductInOrderRegistrationResponseDto() {
+    }
+
     public Long getProductId() {
         return productId;
     }

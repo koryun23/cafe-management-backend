@@ -35,6 +35,9 @@ public class UserRegistrationResponseDto {
         this.errors = errors;
     }
 
+    public UserRegistrationResponseDto() {
+    }
+
     public String getUsername() {
         return username;
     }

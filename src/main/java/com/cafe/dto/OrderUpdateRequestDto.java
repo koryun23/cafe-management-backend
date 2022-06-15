@@ -16,6 +16,9 @@ public class OrderUpdateRequestDto {
         this.orderStatusType = OrderStatusType.OPEN;
     }
 
+    public OrderUpdateRequestDto() {
+    }
+
     public Long getCafeTableId() {
         return cafeTableId;
     }

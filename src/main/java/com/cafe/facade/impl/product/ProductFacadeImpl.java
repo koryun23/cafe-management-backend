@@ -86,7 +86,7 @@ public class ProductFacadeImpl implements ProductFacade {
         }
         ProductInOrder productInOrder = productInOrderService.create(productInOrderCreationParamsMapper.apply(dto));
         productService.updateProduct(new ProductUpdateParams(
-                product.getId(),
+                product.getProductName(),
                 product.getProductName(),
                 product.getAmount() - dto.getAmount(),
                 product.getPrice()

@@ -25,6 +25,9 @@ public class CafeTableRegistrationResponseDto {
         this.code = code;
     }
 
+    public CafeTableRegistrationResponseDto() {
+    }
+
     public CafeTableRegistrationResponseDto(List<String> errors) {
         this.errors = errors;
     }

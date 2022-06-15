@@ -25,6 +25,9 @@ public class ProductInOrderUpdateResponseDto {
         this.errors = errors;
     }
 
+    public ProductInOrderUpdateResponseDto() {
+    }
+
     public Long getProductId() {
         return productId;
     }

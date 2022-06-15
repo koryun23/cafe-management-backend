@@ -22,6 +22,9 @@ public class CafeTableAssignmentResponseDto {
         this.errors = errors;
     }
 
+    public CafeTableAssignmentResponseDto() {
+    }
+
     public Long getTableId() {
         return tableId;
     }

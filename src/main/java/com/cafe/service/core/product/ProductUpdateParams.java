@@ -3,24 +3,24 @@ package com.cafe.service.core.product;
 import java.util.Objects;
 
 public class ProductUpdateParams {
-    private Long id;
+    private String originalName;
     private String name;
     private Integer amount;
     private Integer price;
 
-    public ProductUpdateParams(Long id, String name, Integer amount, Integer price) {
-        this.id = id;
+    public ProductUpdateParams(String originalName, String name, Integer amount, Integer price) {
+        this.originalName = originalName;
         this.name = name;
         this.amount = amount;
         this.price = price;
     }
 
-    public Long getId() {
-        return id;
+    public String getOriginalName() {
+        return originalName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
     }
 
     public String getName() {
@@ -50,7 +50,7 @@ public class ProductUpdateParams {
     @Override
     public String toString() {
         return "ProductUpdateParams{" +
-                "id=" + id +
+                "originalName=" + originalName +
                 ", name='" + name + '\'' +
                 ", amount=" + amount +
                 ", price=" + price +
@@ -62,11 +62,11 @@ public class ProductUpdateParams {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductUpdateParams that = (ProductUpdateParams) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(amount, that.amount) && Objects.equals(price, that.price);
+        return Objects.equals(originalName, that.originalName) && Objects.equals(name, that.name) && Objects.equals(amount, that.amount) && Objects.equals(price, that.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, amount, price);
+        return Objects.hash(originalName, name, amount, price);
     }
 }

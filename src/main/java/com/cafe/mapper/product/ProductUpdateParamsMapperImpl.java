@@ -9,7 +9,7 @@ public class ProductUpdateParamsMapperImpl implements ProductUpdateParamsMapper 
     @Override
     public ProductUpdateParams apply(ProductUpdateRequestDto dto) {
         return new ProductUpdateParams(
-                dto.getId(),
+                dto.getOriginalName(),
                 dto.getName(),
                 dto.getAmount(),
                 dto.getPrice()

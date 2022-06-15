@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class ProductUpdateRequestDto {
 
-    private Long id;
+    private String originalName;
     private String name;
     private Integer price;
     private Integer amount;
 
-    public ProductUpdateRequestDto(Long id, String name, Integer price, Integer amount) {
-        this.id = id;
+    public ProductUpdateRequestDto(String originalName, String name, Integer price, Integer amount) {
+        this.originalName = originalName;
         this.name = name;
         this.price = price;
         this.amount = amount;
@@ -40,12 +40,12 @@ public class ProductUpdateRequestDto {
         this.amount = amount;
     }
 
-    public Long getId() {
-        return id;
+    public String getOriginalName() {
+        return originalName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ProductUpdateRequestDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductUpdateRequestDto that = (ProductUpdateRequestDto) o;
-        return Objects.equals(id, that.id) &&
+        return Objects.equals(originalName, that.originalName) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(price, that.price) &&
                 Objects.equals(amount, that.amount);
@@ -61,13 +61,13 @@ public class ProductUpdateRequestDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, amount);
+        return Objects.hash(originalName, name, price, amount);
     }
 
     @Override
     public String toString() {
         return "ProductUpdateRequestDto{" +
-                "id=" + id +
+                "originalName=" + originalName +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", amount=" + amount +

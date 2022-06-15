@@ -13,10 +13,14 @@ public class OrderRegistrationResponseDto {
     private LocalDateTime registeredAt;
 
     private List<String> errors;
+
     public OrderRegistrationResponseDto(Long cafeTableId, OrderStatusType orderStatusType, LocalDateTime registeredAt) {
         this.cafeTableId = cafeTableId;
         this.orderStatusType = orderStatusType;
         this.registeredAt = registeredAt;
+    }
+
+    public OrderRegistrationResponseDto() {
     }
 
     public OrderRegistrationResponseDto(List<String> errors) {

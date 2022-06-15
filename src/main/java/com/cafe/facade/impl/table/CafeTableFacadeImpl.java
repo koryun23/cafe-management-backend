@@ -13,6 +13,7 @@ import com.cafe.service.core.table.CafeTableCreationParams;
 import com.cafe.service.core.table.CafeTableService;
 import com.cafe.service.core.user.UserRoleService;
 import com.cafe.service.core.user.UserService;
+import com.cafe.service.impl.table.CafeTableNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -92,6 +93,12 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
         if(cafeTableStatusType != CafeTableStatusType.FREE) {
             return new CafeTableAssignmentResponseDto(
                     List.of(String.format("The table having an id of %d is not free, its status is %s", dto.getTableId(), cafeTableStatusType))
+            );
+        }
+
+        if(cafeTableAssignedToWaiterService.findByCafeTableId(dto.getTableId()).isPresent()) {
+            return new CafeTableAssignmentResponseDto(
+                    List.of(String.format("The table having an id of %d is already assigned to another waiter", dto.getTableId()))
             );
         }
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.create(new CafeTableAssignedToWaiterCreationParams(

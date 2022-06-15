@@ -13,6 +13,9 @@ public class UserListRetrievalResponseDto {
         this.userList = userList;
     }
 
+    public UserListRetrievalResponseDto() {
+    }
+
     public List<UserRegistrationResponseDto> getUserList() {
         return userList;
     }

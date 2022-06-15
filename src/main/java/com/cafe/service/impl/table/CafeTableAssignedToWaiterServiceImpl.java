@@ -73,4 +73,14 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         LOGGER.info("Successfully retrieved all cafe tables assigned to the waiter having an id of {}, result - {}", id, allByWaiterId);
         return allByWaiterId;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<CafeTableAssignedToWaiter> findByCafeTableId(Long id) {
+        Assert.notNull(id, "Cafe table id should not be null");
+        LOGGER.info("Fetching an optional of a cafe table assigned to waiter, id - {}", id);
+        Optional<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterOptional = cafeTableAssignedToWaiterRepository.findByCafeTableId(id);
+        LOGGER.info("Successfully fetched an optional of a cafe table assigned to waiter, given id - {}, result - {}", id, cafeTableAssignedToWaiterOptional);
+        return cafeTableAssignedToWaiterOptional;
+    }
 }

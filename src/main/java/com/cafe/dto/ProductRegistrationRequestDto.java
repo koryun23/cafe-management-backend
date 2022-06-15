@@ -14,6 +14,9 @@ public class ProductRegistrationRequestDto {
         this.amount = amount;
     }
 
+    public ProductRegistrationRequestDto() {
+    }
+
     public String getName() {
         return name;
     }

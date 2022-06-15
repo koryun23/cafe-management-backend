@@ -29,6 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/tables/register").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.GET, "/tables").hasAuthority("WAITER")
                 .antMatchers(HttpMethod.POST, "/TablesWaiters").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.POST, "/orders/register").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.POST, "/ProductInOrder/register").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.PUT, "/ProductInOrder/update").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.PUT, "/orders/update").hasAuthority("WAITER")
                 .anyRequest()
                 .authenticated();
         http.httpBasic();
