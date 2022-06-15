@@ -2,6 +2,7 @@ package com.cafe.service.core.user;
 
 import com.cafe.entity.user.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -14,4 +15,6 @@ public interface UserService {
     boolean existsByPasswordOrUsername(String rawPassword, String username);
 
     User getByUsername(String username);
+
+    List<User> getAllUsers();
 }

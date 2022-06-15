@@ -70,4 +70,26 @@ public class CafeTableServiceImpl implements CafeTableService {
         LOGGER.info("Successfully changed the status of a table having an id of {} to {}, result - {}", id, status , savedCafeTable);
         return savedCafeTable;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<CafeTable> findByCode(String code) {
+        Assert.notNull(code, "Cafe table code should not be null");
+        Assert.hasText(code, "Cafe table code should not be empty");
+        LOGGER.info("Retrieving an optional of a cafe table having a code of {}", code);
+        Optional<CafeTable> cafeTableOptional = cafeTableRepository.findByCode(code);
+        LOGGER.info("Successfully retrieved an optional of a cafe table having a code of {}, result - {}", code, cafeTableOptional);
+        return cafeTableOptional;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsByCode(String code) {
+        Assert.notNull(code, "Cafe table code should not be null");
+        Assert.notNull(code, "Cafe table code should not be empty");
+        LOGGER.info("Checking if a cafe table having a code of {} exists or not", code);
+        boolean result = cafeTableRepository.existsByCode(code);
+        LOGGER.info("Checking if a cafe table having a code of {} exists or not, result - {}", code, result);
+        return result;
+    }
 }

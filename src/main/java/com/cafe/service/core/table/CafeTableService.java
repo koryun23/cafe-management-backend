@@ -14,4 +14,8 @@ public interface CafeTableService {
     Optional<CafeTable> findById(Long id);
 
     CafeTable markAs(Long id, CafeTableStatusType status);
+
+    Optional<CafeTable> findByCode(String code);
+
+    boolean existsByCode(String code);
 }

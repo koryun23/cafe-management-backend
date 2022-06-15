@@ -45,6 +45,11 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
     public CafeTableRegistrationResponseDto register(CafeTableRegistrationRequestDto dto) {
         Assert.notNull(dto, "Cafe table registration response dto should not be null");
         LOGGER.info("Creating a new cafe table according to the cafe table registration request dto - {}", dto);
+        if(cafeTableService.existsByCode(dto.getCode())) {
+            return new CafeTableRegistrationResponseDto(
+                    List.of(String.format("Cannot register a cafe table with a code of %s because that code is already taken", dto.getCode()))
+            );
+        }
         CafeTable cafeTable = cafeTableService.create(new CafeTableCreationParams(
                 dto.getCafeTableStatusType(),
                 dto.getNumberOfSeats(),
@@ -104,11 +109,11 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
     }
 
     @Override
-    public CafeTableListRetrievalResponseDto retrieveCafeTableList(CafeTableListRetrievalRequestDto dto) {
+    public CafeTablesAssignedToWaiterRetrievalResponseDto retrieveCafeTableList(CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
         Assert.notNull(dto, "Cafe table list retrieval request dto should not be null");
         LOGGER.info("Retrieving a list of cafe tables according to the cafe table retrieval request dto - {}", dto);
         List<CafeTableAssignedToWaiter> allByWaiterId = cafeTableAssignedToWaiterService.findAllByWaiterId(dto.getWaiterId());
-        CafeTableListRetrievalResponseDto responseDto = new CafeTableListRetrievalResponseDto(allByWaiterId);
+        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = new CafeTablesAssignedToWaiterRetrievalResponseDto(allByWaiterId);
         LOGGER.info("Successfully retrieved a list of cafe tables according to the cafe table retrieval request dto - {}, result - {}", dto, responseDto);
         return responseDto;
     }

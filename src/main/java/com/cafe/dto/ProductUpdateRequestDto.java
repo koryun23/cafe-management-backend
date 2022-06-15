@@ -53,7 +53,10 @@ public class ProductUpdateRequestDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductUpdateRequestDto that = (ProductUpdateRequestDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(price, that.price) && Objects.equals(amount, that.amount);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(price, that.price) &&
+                Objects.equals(amount, that.amount);
     }
 
     @Override

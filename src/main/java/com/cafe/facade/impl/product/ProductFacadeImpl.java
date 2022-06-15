@@ -76,7 +76,8 @@ public class ProductFacadeImpl implements ProductFacade {
                 List.of(String.format("No product having an id of %s", dto.getProductId()))
             );
         }
-        Integer productAmount = productService.getAmountByProductId(dto.getProductId());
+        Product product = productService.getById(dto.getProductId());
+        Integer productAmount = product.getAmount();
         Integer productInOrderAmount = dto.getAmount();
         if(productAmount < productInOrderAmount) {
             return new ProductInOrderRegistrationResponseDto(
@@ -84,6 +85,12 @@ public class ProductFacadeImpl implements ProductFacade {
             );
         }
         ProductInOrder productInOrder = productInOrderService.create(productInOrderCreationParamsMapper.apply(dto));
+        productService.updateProduct(new ProductUpdateParams(
+                product.getId(),
+                product.getProductName(),
+                product.getAmount() - dto.getAmount(),
+                product.getPrice()
+        ));
         ProductInOrderRegistrationResponseDto responseDto = productInOrderRegistrationResponseDtoMapper.apply(productInOrder);
         LOGGER.info("Successfully registered a new product in order according to the product in order registration dto - {}, resopnse - {}",
                 dto,

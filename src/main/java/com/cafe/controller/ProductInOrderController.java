@@ -5,10 +5,11 @@ import com.cafe.dto.ProductInOrderRegistrationResponseDto;
 import com.cafe.dto.ProductInOrderUpdateRequestDto;
 import com.cafe.dto.ProductInOrderUpdateResponseDto;
 import com.cafe.facade.core.product.ProductFacade;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "ProductInOrder", consumes = "application/json", produces = "application/json")
+@RequestMapping(path = "ProductInOrder", consumes = "application/json", produces = "application/json")
 public class ProductInOrderController {
 
     private final ProductFacade productFacade;
@@ -17,13 +18,13 @@ public class ProductInOrderController {
         this.productFacade = productFacade;
     }
 
-    @PostMapping(value = "/register")
-    public ProductInOrderRegistrationResponseDto registerProductInOrder(@RequestBody ProductInOrderRegistrationRequestDto dto) {
-        return productFacade.registerProductInOrder(dto);
+    @PostMapping(path = "/register")
+    public ResponseEntity<ProductInOrderRegistrationResponseDto> registerProductInOrder(@RequestBody ProductInOrderRegistrationRequestDto dto) {
+        return ResponseEntity.ok(productFacade.registerProductInOrder(dto));
     }
 
-    @PutMapping(value = "/update")
-    public ProductInOrderUpdateResponseDto updateProductInOrder(ProductInOrderUpdateRequestDto dto) {
-        return productFacade.updateProductInOrder(dto);
+    @PutMapping(path = "/update")
+    public ResponseEntity<ProductInOrderUpdateResponseDto> updateProductInOrder(ProductInOrderUpdateRequestDto dto) {
+        return ResponseEntity.ok(productFacade.updateProductInOrder(dto));
     }
 }

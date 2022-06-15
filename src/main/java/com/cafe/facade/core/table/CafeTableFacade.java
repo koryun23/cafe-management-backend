@@ -7,6 +7,6 @@ public interface CafeTableFacade {
 
     CafeTableAssignmentResponseDto assignTableToWaiter(CafeTableAssignmentRequestDto dto);
 
-    CafeTableListRetrievalResponseDto retrieveCafeTableList(CafeTableListRetrievalRequestDto dto);
+    CafeTablesAssignedToWaiterRetrievalResponseDto retrieveCafeTableList(CafeTablesAssignedToWaiterRetrievalRequestDto dto);
 
 }

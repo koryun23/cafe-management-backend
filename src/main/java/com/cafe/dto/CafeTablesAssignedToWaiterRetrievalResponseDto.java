@@ -4,10 +4,10 @@ import com.cafe.entity.table.CafeTableAssignedToWaiter;
 
 import java.util.List;
 
-public class CafeTableListRetrievalResponseDto {
+public class CafeTablesAssignedToWaiterRetrievalResponseDto {
     private List<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterList;
 
-    public CafeTableListRetrievalResponseDto(List<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterList) {
+    public CafeTablesAssignedToWaiterRetrievalResponseDto(List<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterList) {
         this.cafeTableAssignedToWaiterList = cafeTableAssignedToWaiterList;
     }
 

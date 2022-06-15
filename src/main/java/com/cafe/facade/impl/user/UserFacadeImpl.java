@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,26 @@ public class UserFacadeImpl implements UserFacade {
                 LocalDateTime.now()
         );
         LOGGER.info("Successfully registered a new user according to the user registration request dto - {}, result - {}", dto, responseDto);
+        return responseDto;
+    }
+
+    @Override
+    public UserListRetrievalResponseDto getAll() {
+        LOGGER.info("Retrieving all registered users");
+        List<User> allUsers = userService.getAllUsers();
+        List<UserRegistrationResponseDto> allUserDtos = new LinkedList<>();
+        for(User user : allUsers) {
+            allUserDtos.add(new UserRegistrationResponseDto(
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getSecondName(),
+                    user.getUserRoleList().stream().map(UserRole::getUserRoleType).collect(Collectors.toList()),
+                    user.getCreatedAt()
+            ));
+        }
+        UserListRetrievalResponseDto responseDto = new UserListRetrievalResponseDto(allUserDtos);
+        LOGGER.info("Successfully retrieved all registered users, result - {}", responseDto);
         return responseDto;
     }
 }

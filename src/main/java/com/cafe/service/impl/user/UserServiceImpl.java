@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
         return userOptional;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean existsByPasswordOrUsername(String rawPassword, String username) {
         Assert.notNull(rawPassword, "Raw password should not be null");
@@ -80,6 +81,7 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User getByUsername(String username) {
         Assert.notNull(username, "username should not be null");
@@ -87,5 +89,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
         LOGGER.info("Successfully retrieved a user having a username of '{}', result - {}", username, user);
         return user;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<User> getAllUsers() {
+        LOGGER.info("Retrieving all registered users");
+        List<User> allUsers = userRepository.findAll();
+        LOGGER.info("Successfully retrieved all registered users, result - {}", allUsers);
+        return allUsers;
     }
 }

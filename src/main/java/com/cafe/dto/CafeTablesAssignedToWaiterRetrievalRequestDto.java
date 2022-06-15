@@ -2,11 +2,14 @@ package com.cafe.dto;
 
 import java.util.Objects;
 
-public class CafeTableListRetrievalRequestDto {
+public class CafeTablesAssignedToWaiterRetrievalRequestDto {
 
     private Long waiterId;
 
-    public CafeTableListRetrievalRequestDto(Long waiterId) {
+    public CafeTablesAssignedToWaiterRetrievalRequestDto() {
+    }
+
+    public CafeTablesAssignedToWaiterRetrievalRequestDto(Long waiterId) {
         this.waiterId = waiterId;
     }
 
@@ -22,7 +25,7 @@ public class CafeTableListRetrievalRequestDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CafeTableListRetrievalRequestDto that = (CafeTableListRetrievalRequestDto) o;
+        CafeTablesAssignedToWaiterRetrievalRequestDto that = (CafeTablesAssignedToWaiterRetrievalRequestDto) o;
         return Objects.equals(waiterId, that.waiterId);
     }
 

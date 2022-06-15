@@ -3,6 +3,7 @@ package com.cafe.dto;
 import com.cafe.entity.table.CafeTableStatusType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public class CafeTableRegistrationResponseDto {
@@ -12,6 +13,8 @@ public class CafeTableRegistrationResponseDto {
     private String code;
     private LocalDateTime registeredAt;
 
+    private List<String> errors;
+
     public CafeTableRegistrationResponseDto(CafeTableStatusType cafeTableStatusType,
                                             Integer numberOfSeats,
                                             String code,
@@ -20,6 +23,10 @@ public class CafeTableRegistrationResponseDto {
         this.numberOfSeats = numberOfSeats;
         this.registeredAt = registeredAt;
         this.code = code;
+    }
+
+    public CafeTableRegistrationResponseDto(List<String> errors) {
+        this.errors = errors;
     }
 
     public CafeTableStatusType getCafeTableStatusType() {
@@ -54,17 +61,29 @@ public class CafeTableRegistrationResponseDto {
         this.code = code;
     }
 
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CafeTableRegistrationResponseDto that = (CafeTableRegistrationResponseDto) o;
-        return cafeTableStatusType == that.cafeTableStatusType && Objects.equals(numberOfSeats, that.numberOfSeats) && Objects.equals(code, that.code) && Objects.equals(registeredAt, that.registeredAt);
+        return cafeTableStatusType == that.cafeTableStatusType &&
+                Objects.equals(numberOfSeats, that.numberOfSeats) &&
+                Objects.equals(code, that.code) &&
+                Objects.equals(registeredAt, that.registeredAt) &&
+                Objects.equals(errors, that.errors);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableStatusType, numberOfSeats, code, registeredAt);
+        return Objects.hash(cafeTableStatusType, numberOfSeats, code, registeredAt, errors);
     }
 
     @Override
@@ -74,6 +93,7 @@ public class CafeTableRegistrationResponseDto {
                 ", numberOfSeats=" + numberOfSeats +
                 ", code='" + code + '\'' +
                 ", registeredAt=" + registeredAt +
+                ", errors=" + errors +
                 '}';
     }
 }
