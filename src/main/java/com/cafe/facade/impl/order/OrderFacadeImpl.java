@@ -12,6 +12,7 @@ import com.cafe.facade.core.order.OrderFacade;
 import com.cafe.mapper.order.*;
 import com.cafe.service.core.order.OrderService;
 import com.cafe.service.core.table.CafeTableService;
+import com.cafe.service.impl.table.CafeTableNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,8 @@ public class OrderFacadeImpl implements OrderFacade {
     public OrderRegistrationResponseDto register(OrderRegistrationRequestDto dto) {
         Assert.notNull(dto, "Order registration request should not be null");
         LOGGER.info("Registering a new order according to the order registration request dto - {}", dto);
+
+        //TODO: CHECK IF THE REQUESTED TABLE IS ALREADY ASSIGNED TO THE WAITER
         Optional<CafeTable> cafeTableOptional = cafeTableService.findById(dto.getCafeTableId());
         if(cafeTableOptional.isEmpty()) {
             return new OrderRegistrationResponseDto(List.of(String.format("No table found having an id of %d", dto.getCafeTableId())));
@@ -58,6 +61,7 @@ public class OrderFacadeImpl implements OrderFacade {
             return new OrderRegistrationResponseDto(List.of(String.format("The cafe table with an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTable.getCafeTableStatusType())));
         }
         Order order = orderService.create(orderRegistrationRequestDtoMapper.apply(dto));
+        System.out.println(order);
         OrderRegistrationResponseDto orderRegistrationResponseDto = orderRegistrationResponseDtoMapper.apply(order);
         cafeTableService.markAs(order.getTable().getId(), CafeTableStatusType.TAKEN);
         LOGGER.info("Successfully registered a new order according to the order registration request dto - {}, response - {}", dto, orderRegistrationResponseDto);

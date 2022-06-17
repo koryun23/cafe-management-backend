@@ -48,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
                 params.getOrderStatusType(),
                 LocalDateTime.now()
         );
+        order.setId(params.getId());
         Order savedOrder = orderRepository.save(order);
         LOGGER.info("Successfully updated an order according to the order update params - {}, result - {}", params, savedOrder);
         return savedOrder;
