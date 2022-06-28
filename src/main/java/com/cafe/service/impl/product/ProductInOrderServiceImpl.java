@@ -34,7 +34,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         Assert.notNull(params, "Product in order creation params should not be null");
         LOGGER.info("Creating a new product in order according to the Product in order creation params - {}", params);
         ProductInOrder productInOrder = productInOrderRepository.save(new ProductInOrder(
-                productService.getById(params.getProductId()),
+                productService.findByName(params.getProductName()).orElseThrow(() -> new ProductNotFoundException(params.getProductName())),
                 orderService.getById(params.getOrderId()),
                 params.getAmount()
         ));

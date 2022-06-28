@@ -4,21 +4,21 @@ import java.util.Objects;
 
 public class CafeTablesAssignedToWaiterRetrievalRequestDto {
 
-    private Long waiterId;
+    private String waiterUsername;
 
     public CafeTablesAssignedToWaiterRetrievalRequestDto() {
     }
 
-    public CafeTablesAssignedToWaiterRetrievalRequestDto(Long waiterId) {
-        this.waiterId = waiterId;
+    public CafeTablesAssignedToWaiterRetrievalRequestDto(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
     }
 
-    public Long getWaiterId() {
-        return waiterId;
+    public String getWaiterUsername() {
+        return waiterUsername;
     }
 
-    public void setWaiterId(Long waiterId) {
-        this.waiterId = waiterId;
+    public void setWaiterUsername(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
     }
 
     @Override
@@ -26,18 +26,18 @@ public class CafeTablesAssignedToWaiterRetrievalRequestDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CafeTablesAssignedToWaiterRetrievalRequestDto that = (CafeTablesAssignedToWaiterRetrievalRequestDto) o;
-        return Objects.equals(waiterId, that.waiterId);
+        return Objects.equals(waiterUsername, that.waiterUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(waiterId);
+        return Objects.hash(waiterUsername);
     }
 
     @Override
     public String toString() {
         return "CafeTableListRetrievalRequestDto{" +
-                "waiterId=" + waiterId +
+                "waiterUsername=" + waiterUsername +
                 '}';
     }
 }

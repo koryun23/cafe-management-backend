@@ -9,7 +9,7 @@ public class ProductInOrderCreationParamsMapperImpl implements ProductInOrderCre
     @Override
     public ProductInOrderCreationParams apply(ProductInOrderRegistrationRequestDto dto) {
         return new ProductInOrderCreationParams(
-                dto.getProductId(),
+                dto.getProductName(),
                 dto.getOrderId(),
                 dto.getAmount()
         );

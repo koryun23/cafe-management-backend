@@ -82,27 +82,27 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
                     List.of("Cannot assign a cafe table to a user who is not a waiter")
             );
         }
-        Optional<CafeTable> cafeTableOptional = cafeTableService.findById(dto.getTableId());
+        Optional<CafeTable> cafeTableOptional = cafeTableService.findById(dto.getCafeTableId());
         if (cafeTableOptional.isEmpty()) {
             return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("No table found with an id of %d", dto.getTableId()))
+                    List.of(String.format("No table found with an id of %d", dto.getCafeTableId()))
             );
         }
         CafeTable cafeTable = cafeTableOptional.get();
         CafeTableStatusType cafeTableStatusType = cafeTable.getCafeTableStatusType();
         if(cafeTableStatusType != CafeTableStatusType.FREE) {
             return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("The table having an id of %d is not free, its status is %s", dto.getTableId(), cafeTableStatusType))
+                    List.of(String.format("The table having an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTableStatusType))
             );
         }
 
-        if(cafeTableAssignedToWaiterService.findByCafeTableId(dto.getTableId()).isPresent()) {
+        if(cafeTableAssignedToWaiterService.findByCafeTableId(dto.getCafeTableId()).isPresent()) {
             return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("The table having an id of %d is already assigned to another waiter", dto.getTableId()))
+                    List.of(String.format("The table having an id of %d is already assigned to another waiter", dto.getCafeTableId()))
             );
         }
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.create(new CafeTableAssignedToWaiterCreationParams(
-                dto.getTableId(),
+                dto.getCafeTableId(),
                 dto.getWaiterId()
         ));
         CafeTableAssignmentResponseDto responseDto = new CafeTableAssignmentResponseDto(
@@ -111,7 +111,7 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
                 LocalDateTime.now()
         );
         LOGGER.info("Successfully assigned a table with an id of {} to a waiter with an id of {}, response - {}",
-                dto.getTableId(), dto.getWaiterId(), responseDto);
+                dto.getCafeTableId(), dto.getWaiterId(), responseDto);
         return responseDto;
     }
 
@@ -119,7 +119,7 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
     public CafeTablesAssignedToWaiterRetrievalResponseDto retrieveCafeTableList(CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
         Assert.notNull(dto, "Cafe table list retrieval request dto should not be null");
         LOGGER.info("Retrieving a list of cafe tables according to the cafe table retrieval request dto - {}", dto);
-        List<CafeTableAssignedToWaiter> allByWaiterId = cafeTableAssignedToWaiterService.findAllByWaiterId(dto.getWaiterId());
+        List<CafeTableAssignedToWaiter> allByWaiterId = cafeTableAssignedToWaiterService.findAllByWaiterUsername(dto.getWaiterUsername());
         CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = new CafeTablesAssignedToWaiterRetrievalResponseDto(allByWaiterId);
         LOGGER.info("Successfully retrieved a list of cafe tables according to the cafe table retrieval request dto - {}, result - {}", dto, responseDto);
         return responseDto;

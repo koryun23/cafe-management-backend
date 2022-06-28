@@ -4,25 +4,26 @@ import java.util.Objects;
 
 public class ProductInOrderRegistrationRequestDto {
 
-    private Long productId;
+    private String productName;
     private Long orderId;
     private Integer amount;
+    private String waiterUsername;
 
-    public ProductInOrderRegistrationRequestDto(Long productId, Long orderId, Integer amount) {
-        this.productId = productId;
+    public ProductInOrderRegistrationRequestDto(String productName,
+                                                Long orderId,
+                                                Integer amount, String waiterName) {
+        this.productName = productName;
         this.orderId = orderId;
         this.amount = amount;
+        this.waiterUsername = waiterName;
     }
 
-    public ProductInOrderRegistrationRequestDto() {
+    public String getProductName() {
+        return productName;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Long getOrderId() {
@@ -41,25 +42,37 @@ public class ProductInOrderRegistrationRequestDto {
         this.amount = amount;
     }
 
+    public String getWaiterUsername() {
+        return waiterUsername;
+    }
+
+    public void setWaiterUsername(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrderRegistrationRequestDto that = (ProductInOrderRegistrationRequestDto) o;
-        return Objects.equals(productId, that.productId) && Objects.equals(orderId, that.orderId) && Objects.equals(amount, that.amount);
+        return Objects.equals(productName, that.productName) &&
+                Objects.equals(orderId, that.orderId) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(waiterUsername, that.waiterUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, orderId, amount);
+        return Objects.hash(productName, orderId, amount, waiterUsername);
     }
 
     @Override
     public String toString() {
         return "ProductInOrderRegistrationRequestDto{" +
-                "productId=" + productId +
+                "productName='" + productName + '\'' +
                 ", orderId=" + orderId +
                 ", amount=" + amount +
+                ", waiterUsername=" + waiterUsername +
                 '}';
     }
 }

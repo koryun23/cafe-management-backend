@@ -1,5 +1,7 @@
 package com.cafe.controller;
 
+import com.cafe.handler.BasicAuthorizationHttpServletRequestHandler;
+import com.cafe.handler.UsernameAndPasswordHolder;
 import com.cafe.dto.OrderRegistrationRequestDto;
 import com.cafe.dto.OrderRegistrationResponseDto;
 import com.cafe.dto.OrderUpdateRequestDto;
@@ -10,52 +12,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
-import java.util.Base64;
 
 @RestController
 @RequestMapping(path = "orders", consumes = "application/json", produces = "application/json")
 public class OrderController {
 
     private final OrderFacade orderFacade;
-
-    public OrderController(OrderFacade orderFacade) {
+    
+    private final BasicAuthorizationHttpServletRequestHandler basicAuthorizationHttpServletRequestHandler;
+    
+    public OrderController(OrderFacade orderFacade,
+                           BasicAuthorizationHttpServletRequestHandler basicAuthorizationHttpServletRequestHandler) {
         this.orderFacade = orderFacade;
+        this.basicAuthorizationHttpServletRequestHandler = basicAuthorizationHttpServletRequestHandler;
     }
 
-    @PostMapping(path = "/register")
-    public ResponseEntity<OrderRegistrationResponseDto> register(HttpServletRequest request, @RequestBody OrderRegistrationRequestDto dto) {
-        String encodedCredentials = getEncodedCredentials(request);
-        String decode = getDecodedCreadentials(encodedCredentials);
-        int colonIndex = getSeparatorIndex(decode, ":");
-        String username = getUsernameFromDecodedCredentials(decode, colonIndex);
-        String password = getPasswordFromDecodedCredentials(decode, colonIndex);
-        dto.setOrderStatusType(OrderStatusType.OPEN);
+    @PostMapping(path = "/register/{cafeTableId}")
+    public ResponseEntity<OrderRegistrationResponseDto> register(HttpServletRequest request,
+                                                                 @RequestBody OrderRegistrationRequestDto dto,
+                                                                 @PathVariable Long cafeTableId) {
+        String username = basicAuthorizationHttpServletRequestHandler
+                .getUsernameAndPassword(request)
+                .getUsername();
+        dto.setStatus(OrderStatusType.OPEN);
+        dto.setWaiterUsername(username);
+        dto.setCafeTableId(cafeTableId);
         return ResponseEntity.ok(orderFacade.register(dto));
     }
 
-    @PutMapping(path = "/update")
-    public ResponseEntity<OrderUpdateResponseDto> updateOrder(@RequestBody OrderUpdateRequestDto dto) {
+    @PutMapping(path = "/update/{id}")
+    public ResponseEntity<OrderUpdateResponseDto> updateOrder(HttpServletRequest request,
+                                                              @RequestBody OrderUpdateRequestDto dto,
+                                                              @PathVariable Long id) {
+        String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
+        dto.setWaiterUsername(username);
+        dto.setId(id);
         return ResponseEntity.ok(orderFacade.updateOrder(dto));
-    }
-
-    private String getEncodedCredentials(HttpServletRequest request) {
-        return request.getHeader("Authorization").substring(6);
-    }
-
-    private String getDecodedCreadentials(String encodedCredentials) {
-        return new String(Base64.getDecoder().decode(encodedCredentials));
-    }
-
-    private String getUsernameFromDecodedCredentials(String decodedCredentials, int separatorIndex) {
-        return decodedCredentials.substring(0, separatorIndex);
-    }
-
-    private String getPasswordFromDecodedCredentials(String decodedCredentials, int separatorIndex) {
-        return decodedCredentials.substring(separatorIndex + 1);
-    }
-
-    private int getSeparatorIndex(String decodedCredentials, String separator) {
-        return decodedCredentials.indexOf(separator);
     }
 }

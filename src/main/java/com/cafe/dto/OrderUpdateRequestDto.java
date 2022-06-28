@@ -9,11 +9,16 @@ public class OrderUpdateRequestDto {
     private Long id;
     private Long cafeTableId;
     private OrderStatusType orderStatusType;
+    private String waiterUsername;
 
-    public OrderUpdateRequestDto(Long id, Long cafeTableId, OrderStatusType orderStatusType) {
+    public OrderUpdateRequestDto(Long id,
+                                 Long cafeTableId,
+                                 OrderStatusType orderStatusType,
+                                 String waiterUsername) {
         this.id = id;
         this.cafeTableId = cafeTableId;
         this.orderStatusType = orderStatusType;
+        this.waiterUsername = waiterUsername;
     }
 
     public OrderUpdateRequestDto() {
@@ -43,6 +48,14 @@ public class OrderUpdateRequestDto {
         this.id = id;
     }
 
+    public String getWaiterUsername() {
+        return waiterUsername;
+    }
+
+    public void setWaiterUsername(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,7 +63,8 @@ public class OrderUpdateRequestDto {
         OrderUpdateRequestDto that = (OrderUpdateRequestDto) o;
         return Objects.equals(cafeTableId, that.cafeTableId) &&
                 orderStatusType == that.orderStatusType &&
-                Objects.equals(id, that.id);
+                Objects.equals(id, that.id) &&
+                Objects.equals(waiterUsername, that.waiterUsername);
     }
 
     @Override
@@ -64,6 +78,7 @@ public class OrderUpdateRequestDto {
                 "id=" + id +
                 ",cafeTableId=" + cafeTableId +
                 ", orderStatusType=" + orderStatusType +
+                ", waiterUsername=" + waiterUsername +
                 '}';
     }
 }

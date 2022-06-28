@@ -83,4 +83,34 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         LOGGER.info("Successfully fetched an optional of a cafe table assigned to waiter, given id - {}, result - {}", id, cafeTableAssignedToWaiterOptional);
         return cafeTableAssignedToWaiterOptional;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsByWaiterUsername(String username) {
+        Assert.notNull(username, "Waiter username should not be null");
+        LOGGER.info("Checking if a waiter having a username of '{}' exists or not", username);
+        boolean result = cafeTableAssignedToWaiterRepository.existsByWaiterUsername(username);
+        LOGGER.info("Checked if a waiter having a username of '{}' exists or not, result - {}", username, result);
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<CafeTableAssignedToWaiter> findAllByWaiterUsername(String username) {
+        Assert.notNull(username, "Waiter username should not be null");
+        Assert.notNull(username, "Waiter username should not be empty");
+        LOGGER.info("Retrieving a list of cafe tables assigned to waiter according to the waiter username - {}", username);
+        List<CafeTableAssignedToWaiter> allByWaiterUsername = cafeTableAssignedToWaiterRepository.findAllByWaiterUsername(username);
+        LOGGER.info("Successfully retrieved a list of cafe tables assigned to waiter according to the waiter username - {}, result - {}", username, allByWaiterUsername);
+        return allByWaiterUsername;
+    }
+
+    @Transactional
+    @Override
+    public void deleteByCafeTableId(Long cafeTableId) {
+        Assert.notNull(cafeTableId, "Cafe table id should not be null");
+        LOGGER.info("Discharging the cafe table having an id of {} from being served", cafeTableId);
+        cafeTableAssignedToWaiterRepository.deleteByCafeTableId(cafeTableId);
+        LOGGER.info("Successfully discharged the cafe table having an id of {} from being served", cafeTableId);
+    }
 }

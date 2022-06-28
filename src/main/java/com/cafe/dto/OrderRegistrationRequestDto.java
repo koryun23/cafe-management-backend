@@ -5,12 +5,15 @@ import com.cafe.entity.order.OrderStatusType;
 import java.util.Objects;
 
 public class OrderRegistrationRequestDto {
-    private Long cafeTableId;
-    private OrderStatusType orderStatusType;
 
-    public OrderRegistrationRequestDto(Long cafeTableId) {
+    private Long cafeTableId;
+    private OrderStatusType status;
+    private String waiterUsername;
+
+    public OrderRegistrationRequestDto(Long cafeTableId, String waiterUsername) {
         this.cafeTableId = cafeTableId;
-        this.orderStatusType = OrderStatusType.OPEN;
+        this.status = OrderStatusType.OPEN;
+        this.waiterUsername = waiterUsername;
     }
 
     public OrderRegistrationRequestDto() {
@@ -24,12 +27,20 @@ public class OrderRegistrationRequestDto {
         this.cafeTableId = cafeTableId;
     }
 
-    public OrderStatusType getOrderStatusType() {
-        return orderStatusType;
+    public OrderStatusType getStatus() {
+        return status;
     }
 
-    public void setOrderStatusType(OrderStatusType orderStatusType) {
-        this.orderStatusType = orderStatusType;
+    public void setStatus(OrderStatusType status) {
+        this.status = status;
+    }
+
+    public String getWaiterUsername() {
+        return waiterUsername;
+    }
+
+    public void setWaiterUsername(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
     }
 
     @Override
@@ -37,19 +48,21 @@ public class OrderRegistrationRequestDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderRegistrationRequestDto that = (OrderRegistrationRequestDto) o;
-        return Objects.equals(cafeTableId, that.cafeTableId) && orderStatusType == that.orderStatusType;
+        return Objects.equals(cafeTableId, that.cafeTableId) &&
+                status == that.status &&
+                Objects.equals(waiterUsername, that.waiterUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, orderStatusType);
+        return Objects.hash(cafeTableId, status, waiterUsername);
     }
 
     @Override
     public String toString() {
         return "OrderRegistrationRequestDto{" +
                 "cafeTableId=" + cafeTableId +
-                ", orderStatusType=" + orderStatusType +
+                ", status=" + status +
                 '}';
     }
 }

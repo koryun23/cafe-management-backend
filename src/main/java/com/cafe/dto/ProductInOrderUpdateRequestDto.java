@@ -8,12 +8,18 @@ public class ProductInOrderUpdateRequestDto {
     private Long productId;
     private Long orderId;
     private Integer amount;
+    private String waiterUsername;
 
-    public ProductInOrderUpdateRequestDto(Long id, Long productId, Long orderId, Integer amount) {
+    public ProductInOrderUpdateRequestDto(Long id,
+                                          Long productId,
+                                          Long orderId,
+                                          Integer amount,
+                                          String waiterUsername) {
         this.id = id;
         this.productId = productId;
         this.orderId = orderId;
         this.amount = amount;
+        this.waiterUsername = waiterUsername;
     }
 
     public ProductInOrderUpdateRequestDto() {
@@ -51,17 +57,29 @@ public class ProductInOrderUpdateRequestDto {
         this.id = id;
     }
 
+    public String getWaiterUsername() {
+        return waiterUsername;
+    }
+
+    public void setWaiterUsername(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrderUpdateRequestDto that = (ProductInOrderUpdateRequestDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(productId, that.productId) && Objects.equals(orderId, that.orderId) && Objects.equals(amount, that.amount);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(productId, that.productId) &&
+                Objects.equals(orderId, that.orderId) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(waiterUsername, that.waiterUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productId, orderId, amount);
+        return Objects.hash(id, productId, orderId, amount, waiterUsername);
     }
 
     @Override
@@ -71,6 +89,7 @@ public class ProductInOrderUpdateRequestDto {
                 ", productId=" + productId +
                 ", orderId=" + orderId +
                 ", amount=" + amount +
+                ", waiterUsername=" + waiterUsername +
                 '}';
     }
 }

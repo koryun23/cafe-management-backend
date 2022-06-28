@@ -71,17 +71,23 @@ public class ProductFacadeImpl implements ProductFacade {
     public ProductInOrderRegistrationResponseDto registerProductInOrder(ProductInOrderRegistrationRequestDto dto) {
         Assert.notNull(dto, "Product in order registration request dto should not be null");
         LOGGER.info("Registering a new product according to the product in order registration request dto - {}", dto);
-        if(productService.findById(dto.getProductId()).isEmpty()) {
+        Optional<Product> productOptional = productService.findByName(dto.getProductName());
+        if(productOptional.isEmpty()) {
             return new ProductInOrderRegistrationResponseDto(
-                List.of(String.format("No product having an id of %s", dto.getProductId()))
+                List.of(String.format("No product named as: %s", dto.getProductName()))
             );
         }
-        Product product = productService.getById(dto.getProductId());
+        Product product = productOptional.get();
         Integer productAmount = product.getAmount();
         Integer productInOrderAmount = dto.getAmount();
         if(productAmount < productInOrderAmount) {
             return new ProductInOrderRegistrationResponseDto(
                     List.of(String.format("Could not register a product in order because its amount(%d) exceeds the amount of the product(%d)", productInOrderAmount, productAmount))
+            );
+        }
+        if(orderService.findById(dto.getOrderId()).isEmpty()) {
+            return new ProductInOrderRegistrationResponseDto(
+                    List.of(String.format("Could not register a product in order for an order with an id of %d because the order does not exist.", dto.getOrderId()))
             );
         }
         ProductInOrder productInOrder = productInOrderService.create(productInOrderCreationParamsMapper.apply(dto));

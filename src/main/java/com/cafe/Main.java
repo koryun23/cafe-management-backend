@@ -1,8 +1,9 @@
 package com.cafe;
 
-import com.cafe.dto.CafeTableRegistrationRequestDto;
-import com.cafe.dto.UserRegistrationRequestDto;
+import com.cafe.dto.*;
 import com.cafe.entity.user.UserRoleType;
+import com.cafe.facade.core.order.OrderFacade;
+import com.cafe.facade.core.product.ProductFacade;
 import com.cafe.facade.core.table.CafeTableFacade;
 import com.cafe.facade.core.user.UserFacade;
 import org.springframework.boot.SpringApplication;
@@ -21,6 +22,8 @@ public class Main {
 
         UserFacade userFacade = context.getBean(UserFacade.class);
         CafeTableFacade cafeTableFacade = context.getBean(CafeTableFacade.class);
+        ProductFacade productFacade = context.getBean(ProductFacade.class);
+        OrderFacade orderFacade = context.getBean(OrderFacade.class);
 
         System.out.println(userFacade.registerUser(new UserRegistrationRequestDto(
                 "john11",
@@ -51,6 +54,22 @@ public class Main {
                 "abcd1234"
         ));
 
+        productFacade.registerProduct(new ProductRegistrationRequestDto(
+                "BoxMaster",
+                9,
+                400
+        ));
 
+        productFacade.registerProduct(new ProductRegistrationRequestDto(
+                "Pepsi",
+                3,
+                700
+        ));
+
+        cafeTableFacade.assignTableToWaiter(new CafeTableAssignmentRequestDto(
+                1L, 3L
+        ));
+
+        orderFacade.register(new OrderRegistrationRequestDto(1L, "emily31"));
     }
 }
