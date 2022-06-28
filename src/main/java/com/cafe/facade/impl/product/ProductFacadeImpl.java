@@ -128,7 +128,8 @@ public class ProductFacadeImpl implements ProductFacade {
                 dto.getId(),
                 dto.getProductId(),
                 dto.getOrderId(),
-                dto.getAmount()
+                dto.getAmount(),
+                dto.getStatus()
         ));
         ProductInOrderUpdateResponseDto responseDto = new ProductInOrderUpdateResponseDto(
                 productInOrder.getId(),

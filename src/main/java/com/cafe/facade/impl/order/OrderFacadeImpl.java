@@ -6,12 +6,16 @@ import com.cafe.dto.OrderUpdateRequestDto;
 import com.cafe.dto.OrderUpdateResponseDto;
 import com.cafe.entity.order.Order;
 import com.cafe.entity.order.OrderStatusType;
+import com.cafe.entity.product.ProductInOrder;
+import com.cafe.entity.product.ProductInOrderStatusType;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.facade.core.order.OrderFacade;
 import com.cafe.mapper.order.*;
 import com.cafe.service.core.order.OrderService;
+import com.cafe.service.core.product.ProductInOrderService;
+import com.cafe.service.core.product.ProductInOrderUpdateParams;
 import com.cafe.service.core.table.CafeTableAssignedToWaiterService;
 import com.cafe.service.core.table.CafeTableService;
 import com.cafe.service.impl.table.CafeTableAssignedToWaiterException;
@@ -35,6 +39,7 @@ public class OrderFacadeImpl implements OrderFacade {
     private final OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper;
     private final OrderUpdateParamsMapepr orderUpdateRequestDtoMapper;
     private final OrderCreationParamsMapper orderRegistrationRequestDtoMapper;
+    private final ProductInOrderService productInOrderService;
 
     public OrderFacadeImpl(OrderService orderService,
                            CafeTableService cafeTableService,
@@ -42,7 +47,8 @@ public class OrderFacadeImpl implements OrderFacade {
                            OrderRegistrationResponseDtoMapper orderRegistrationResponseDtoMapper,
                            OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper,
                            OrderUpdateParamsMapepr orderUpdateRequestDtoMapper,
-                           OrderCreationParamsMapper orderRegistrationRequestDtoMapper) {
+                           OrderCreationParamsMapper orderRegistrationRequestDtoMapper,
+                           ProductInOrderService productInOrderService) {
         this.orderService = orderService;
         this.cafeTableService = cafeTableService;
         this.cafeTableAssignedToWaiterService = cafeTableAssignedToWaiterService;
@@ -50,6 +56,7 @@ public class OrderFacadeImpl implements OrderFacade {
         this.orderUpdateResponseDtoMapper = orderUpdateResponseDtoMapper;
         this.orderUpdateRequestDtoMapper = orderUpdateRequestDtoMapper;
         this.orderRegistrationRequestDtoMapper = orderRegistrationRequestDtoMapper;
+        this.productInOrderService = productInOrderService;
     }
 
     @Override
@@ -96,6 +103,7 @@ public class OrderFacadeImpl implements OrderFacade {
             ));
         }
         Order order = orderService.update(orderUpdateRequestDtoMapper.apply(dto));
+        System.out.println(order.getOrderStatusType());
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(order.getTable().getId()).orElseThrow(() -> new RuntimeException());// TODO: throw a custom exception instead of runtime exception
         String orderCreatorUsername = cafeTableAssignedToWaiter.getWaiter().getUsername();
         String orderUpdatorUsername = dto.getWaiterUsername();
@@ -107,6 +115,7 @@ public class OrderFacadeImpl implements OrderFacade {
         if(order.getOrderStatusType() != OrderStatusType.OPEN) {
             cafeTableAssignedToWaiterService.deleteByCafeTableId(dto.getCafeTableId());
             cafeTableService.markAs(order.getTable().getId(), CafeTableStatusType.FREE);
+            productInOrderService.markAllAs(order.getId(), ProductInOrderStatusType.CLOSED);
         }
         OrderUpdateResponseDto responseDto = orderUpdateResponseDtoMapper.apply(order);
         LOGGER.info("Successfully updated an order according to the order update request dto - {}, response - {}", dto, responseDto);

@@ -1,6 +1,7 @@
 package com.cafe.service.impl.product;
 
 import com.cafe.entity.product.ProductInOrder;
+import com.cafe.entity.product.ProductInOrderStatusType;
 import com.cafe.repository.ProductInOrderRepository;
 import com.cafe.service.core.order.OrderService;
 import com.cafe.service.core.product.ProductInOrderCreationParams;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.util.List;
 
 
 @Service
@@ -42,6 +45,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         return productInOrder;
     }
 
+    @Transactional
     @Override
     public ProductInOrder update(ProductInOrderUpdateParams params) {
         Assert.notNull(params, "Product in order update params should not be null");
@@ -52,8 +56,27 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
                 params.getAmount()
         );
         productInOrder.setId(params.getId());
+        productInOrder.setProductInOrderStatusType(params.getStatus());
         ProductInOrder savedProductInOrder = productInOrderRepository.save(productInOrder);
         LOGGER.info("Successfully updated a product in order according to the product in order update params - {}, result - {}", params, savedProductInOrder);
         return savedProductInOrder;
+    }
+
+    @Transactional
+    @Override
+    public void markAllAs(Long orderId, ProductInOrderStatusType status) {
+        Assert.notNull(orderId, "order id should not be null");
+        Assert.notNull(status, "Product in order status type should not be null");
+        LOGGER.info("Marking all products in order having an id of {} to {}", orderId, status);
+        List<ProductInOrder> productInOrderList = productInOrderRepository.findAll();
+        for(ProductInOrder productInOrder : productInOrderList) {
+            update(new ProductInOrderUpdateParams(
+                    productInOrder.getId(),
+                    productInOrder.getProduct().getId(),
+                    productInOrder.getOrder().getId(),
+                    productInOrder.getAmount(),
+                    status
+            ));
+        }
     }
 }

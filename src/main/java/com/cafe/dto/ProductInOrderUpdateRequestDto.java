@@ -1,5 +1,7 @@
 package com.cafe.dto;
 
+import com.cafe.entity.product.ProductInOrderStatusType;
+
 import java.util.Objects;
 
 public class ProductInOrderUpdateRequestDto {
@@ -9,17 +11,20 @@ public class ProductInOrderUpdateRequestDto {
     private Long orderId;
     private Integer amount;
     private String waiterUsername;
+    private ProductInOrderStatusType status;
 
     public ProductInOrderUpdateRequestDto(Long id,
                                           Long productId,
                                           Long orderId,
                                           Integer amount,
-                                          String waiterUsername) {
+                                          String waiterUsername,
+                                          ProductInOrderStatusType status) {
         this.id = id;
         this.productId = productId;
         this.orderId = orderId;
         this.amount = amount;
         this.waiterUsername = waiterUsername;
+        this.status = status;
     }
 
     public ProductInOrderUpdateRequestDto() {
@@ -65,6 +70,14 @@ public class ProductInOrderUpdateRequestDto {
         this.waiterUsername = waiterUsername;
     }
 
+    public ProductInOrderStatusType getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductInOrderStatusType status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,12 +87,13 @@ public class ProductInOrderUpdateRequestDto {
                 Objects.equals(productId, that.productId) &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(waiterUsername, that.waiterUsername);
+                Objects.equals(waiterUsername, that.waiterUsername) &&
+                Objects.equals(status, that.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productId, orderId, amount, waiterUsername);
+        return Objects.hash(id, productId, orderId, amount, waiterUsername, status);
     }
 
     @Override
@@ -90,6 +104,7 @@ public class ProductInOrderUpdateRequestDto {
                 ", orderId=" + orderId +
                 ", amount=" + amount +
                 ", waiterUsername=" + waiterUsername +
+                ", status=" + status +
                 '}';
     }
 }
