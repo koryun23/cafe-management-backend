@@ -89,6 +89,12 @@ public class OrderFacadeImpl implements OrderFacade {
     public OrderUpdateResponseDto updateOrder(OrderUpdateRequestDto dto) {
         Assert.notNull(dto, "Order update request dto should not be null");
         LOGGER.info("Updating an order according to the order update request dto - {}", dto);
+        Order orderToUpdate = orderService.getById(dto.getId());
+        if(orderToUpdate.getOrderStatusType() != OrderStatusType.OPEN && dto.getOrderStatusType() == OrderStatusType.OPEN) {
+            return new OrderUpdateResponseDto(List.of(
+                    String.format("Cannot update the status of an order from %s to %s", orderToUpdate.getOrderStatusType(), dto.getOrderStatusType())
+            ));
+        }
         Order order = orderService.update(orderUpdateRequestDtoMapper.apply(dto));
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(order.getTable().getId()).orElseThrow(() -> new RuntimeException());// TODO: throw a custom exception instead of runtime exception
         String orderCreatorUsername = cafeTableAssignedToWaiter.getWaiter().getUsername();

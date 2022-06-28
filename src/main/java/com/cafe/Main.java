@@ -70,6 +70,6 @@ public class Main {
                 1L, 3L
         ));
 
-        orderFacade.register(new OrderRegistrationRequestDto(1L, "emily31"));
+        //orderFacade.register(new OrderRegistrationRequestDto(1L, "emily31"));
     }
 }
