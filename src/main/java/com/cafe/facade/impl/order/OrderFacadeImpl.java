@@ -103,7 +103,6 @@ public class OrderFacadeImpl implements OrderFacade {
             ));
         }
         Order order = orderService.update(orderUpdateRequestDtoMapper.apply(dto));
-        System.out.println(order.getOrderStatusType());
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(order.getTable().getId()).orElseThrow(() -> new RuntimeException());// TODO: throw a custom exception instead of runtime exception
         String orderCreatorUsername = cafeTableAssignedToWaiter.getWaiter().getUsername();
         String orderUpdatorUsername = dto.getWaiterUsername();
@@ -115,8 +114,13 @@ public class OrderFacadeImpl implements OrderFacade {
         if(order.getOrderStatusType() != OrderStatusType.OPEN) {
             cafeTableAssignedToWaiterService.deleteByCafeTableId(dto.getCafeTableId());
             cafeTableService.markAs(order.getTable().getId(), CafeTableStatusType.FREE);
-            productInOrderService.markAllAs(order.getId(), ProductInOrderStatusType.CLOSED);
+            if(order.getOrderStatusType() == OrderStatusType.CLOSED) {
+                productInOrderService.markAllAs(order.getId(), ProductInOrderStatusType.CLOSED);
+            } else if(order.getOrderStatusType() == OrderStatusType.CANCELLED) {
+                productInOrderService.markAllAs(order.getId(), ProductInOrderStatusType.CANCELLED);
+            }
         }
+
         OrderUpdateResponseDto responseDto = orderUpdateResponseDtoMapper.apply(order);
         LOGGER.info("Successfully updated an order according to the order update request dto - {}, response - {}", dto, responseDto);
         return responseDto;

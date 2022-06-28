@@ -97,7 +97,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", productsInOrder=" + productsInOrder +
+                //", productsInOrder=" + productsInOrder +
                 ", table=" + table +
                 ", orderStatusType=" + orderStatusType +
                 ", createdAt=" + createdAt +

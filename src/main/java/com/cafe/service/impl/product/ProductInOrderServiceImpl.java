@@ -1,13 +1,11 @@
 package com.cafe.service.impl.product;
 
+import com.cafe.entity.product.Product;
 import com.cafe.entity.product.ProductInOrder;
 import com.cafe.entity.product.ProductInOrderStatusType;
 import com.cafe.repository.ProductInOrderRepository;
 import com.cafe.service.core.order.OrderService;
-import com.cafe.service.core.product.ProductInOrderCreationParams;
-import com.cafe.service.core.product.ProductInOrderService;
-import com.cafe.service.core.product.ProductInOrderUpdateParams;
-import com.cafe.service.core.product.ProductService;
+import com.cafe.service.core.product.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -77,6 +75,15 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
                     productInOrder.getAmount(),
                     status
             ));
+            if(status == ProductInOrderStatusType.CANCELLED) {
+                Product product = productInOrder.getProduct();
+                productService.updateProduct(new ProductUpdateParams(
+                        product.getProductName(),
+                        product.getProductName(),
+                        product.getAmount() + productInOrder.getAmount(),
+                        product.getPrice()
+                ));
+            }
         }
     }
 }
