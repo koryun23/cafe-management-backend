@@ -7,6 +7,10 @@ import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.entity.user.User;
 import com.cafe.entity.user.UserRoleType;
 import com.cafe.facade.core.table.CafeTableFacade;
+import com.cafe.mapper.table.CafeTableAssignedToWaiterCreationParamsMapper;
+import com.cafe.mapper.table.CafeTableAssignmentResponseDtoMapper;
+import com.cafe.mapper.table.CafeTableCreationParamsMapper;
+import com.cafe.mapper.table.CafeTableRegistrationResponseDtoMapper;
 import com.cafe.service.core.table.CafeTableAssignedToWaiterCreationParams;
 import com.cafe.service.core.table.CafeTableAssignedToWaiterService;
 import com.cafe.service.core.table.CafeTableCreationParams;
@@ -31,15 +35,27 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
     private final UserService userService;
     private final CafeTableAssignedToWaiterService cafeTableAssignedToWaiterService;
     private final UserRoleService userRoleService;
+    private final CafeTableCreationParamsMapper cafeTableCreationParamsMapper;
+    private final CafeTableRegistrationResponseDtoMapper cafeTableRegistrationResponseDtoMapper;
+    private final CafeTableAssignedToWaiterCreationParamsMapper cafeTableAssignedToWaiterCreationParamsMapper;
+    private final CafeTableAssignmentResponseDtoMapper cafeTableAssignmentResponseDtoMapper;
 
     public CafeTableFacadeImpl(CafeTableService cafeTableService,
                                UserService userService,
                                CafeTableAssignedToWaiterService cafeTableAssignedToWaiterService,
-                               UserRoleService userRoleService) {
+                               UserRoleService userRoleService,
+                               CafeTableCreationParamsMapper cafeTableCreationParamsMapper,
+                               CafeTableRegistrationResponseDtoMapper cafeTableRegistrationResponseDtoMapper,
+                               CafeTableAssignedToWaiterCreationParamsMapper cafeTableAssignedToWaiterCreationParamsMapper,
+                               CafeTableAssignmentResponseDtoMapper cafeTableAssignmentResponseDtoMapper) {
         this.cafeTableService = cafeTableService;
         this.userService = userService;
         this.cafeTableAssignedToWaiterService = cafeTableAssignedToWaiterService;
         this.userRoleService = userRoleService;
+        this.cafeTableCreationParamsMapper = cafeTableCreationParamsMapper;
+        this.cafeTableRegistrationResponseDtoMapper = cafeTableRegistrationResponseDtoMapper;
+        this.cafeTableAssignedToWaiterCreationParamsMapper = cafeTableAssignedToWaiterCreationParamsMapper;
+        this.cafeTableAssignmentResponseDtoMapper = cafeTableAssignmentResponseDtoMapper;
     }
 
     @Override
@@ -51,17 +67,8 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
                     List.of(String.format("Cannot register a cafe table with a code of %s because that code is already taken", dto.getCode()))
             );
         }
-        CafeTable cafeTable = cafeTableService.create(new CafeTableCreationParams(
-                dto.getCafeTableStatusType(),
-                dto.getNumberOfSeats(),
-                dto.getCode()
-        ));
-        CafeTableRegistrationResponseDto responseDto = new CafeTableRegistrationResponseDto(
-                cafeTable.getCafeTableStatusType(),
-                cafeTable.getNumberOfSeats(),
-                dto.getCode(),
-                LocalDateTime.now()
-        );
+        CafeTable cafeTable = cafeTableService.create(cafeTableCreationParamsMapper.apply(dto));
+        CafeTableRegistrationResponseDto responseDto = cafeTableRegistrationResponseDtoMapper.apply(cafeTable);
         LOGGER.info("Successfully created a new cafe table according to the cafe table registration request - {}, response - {}", dto, responseDto);
         return responseDto;
     }
@@ -101,15 +108,8 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
                     List.of(String.format("The table having an id of %d is already assigned to another waiter", dto.getCafeTableId()))
             );
         }
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.create(new CafeTableAssignedToWaiterCreationParams(
-                dto.getCafeTableId(),
-                dto.getWaiterId()
-        ));
-        CafeTableAssignmentResponseDto responseDto = new CafeTableAssignmentResponseDto(
-                cafeTableAssignedToWaiter.getCafeTable().getId(),
-                cafeTableAssignedToWaiter.getWaiter().getId(),
-                LocalDateTime.now()
-        );
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.create(cafeTableAssignedToWaiterCreationParamsMapper.apply(dto));
+        CafeTableAssignmentResponseDto responseDto = cafeTableAssignmentResponseDtoMapper.apply(cafeTableAssignedToWaiter);
         LOGGER.info("Successfully assigned a table with an id of {} to a waiter with an id of {}, response - {}",
                 dto.getCafeTableId(), dto.getWaiterId(), responseDto);
         return responseDto;
