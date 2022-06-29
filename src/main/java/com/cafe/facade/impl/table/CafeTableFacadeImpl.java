@@ -77,10 +77,10 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
     public CafeTableAssignmentResponseDto assignTableToWaiter(CafeTableAssignmentRequestDto dto) {
         Assert.notNull(dto, "Cafe table assignment request dto should not be null");
         LOGGER.info("Assigning a table to a waiter according to the cafe table assignment request dto - {}", dto);
-        Optional<User> userOptional = userService.findById(dto.getWaiterId());
+        Optional<User> userOptional = userService.findByUsername(dto.getWaiterUsername());
         if (userOptional.isEmpty()) {
             return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("No user found with an id of %d", dto.getWaiterId()))
+                    List.of(String.format("No user found with a username of %s", dto.getWaiterUsername()))
             );
         }
         User user = userOptional.get();
@@ -110,8 +110,8 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
         }
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.create(cafeTableAssignedToWaiterCreationParamsMapper.apply(dto));
         CafeTableAssignmentResponseDto responseDto = cafeTableAssignmentResponseDtoMapper.apply(cafeTableAssignedToWaiter);
-        LOGGER.info("Successfully assigned a table with an id of {} to a waiter with an id of {}, response - {}",
-                dto.getCafeTableId(), dto.getWaiterId(), responseDto);
+        LOGGER.info("Successfully assigned a table with an id of {} to a waiter with a username of {}, response - {}",
+                dto.getCafeTableId(), dto.getWaiterUsername(), responseDto);
         return responseDto;
     }
 

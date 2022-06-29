@@ -35,12 +35,12 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
     @Override
     public CafeTableAssignedToWaiter create(CafeTableAssignedToWaiterCreationParams params) {
         Assert.notNull(params, "CafeTableAssignedToWaiter creation params should not be null");
-        LOGGER.info("Assigning a table with an id of {} to waiter having an id of {}", params.getCafeTableId(), params.getWaiterId());
+        LOGGER.info("Assigning a table with an id of {} to waiter having a username of {}", params.getCafeTableId(), params.getWaiterUsername());
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterRepository.save(new CafeTableAssignedToWaiter(
                 cafeTableService.getById(params.getCafeTableId()),
-                userService.getById(params.getWaiterId())
+                userService.getByUsername(params.getWaiterUsername())
         ));
-        LOGGER.info("Successfully assigned a table with an id of {} to waiter having an id of {}, result - {}", params.getCafeTableId(), params.getWaiterId(), cafeTableAssignedToWaiter);
+        LOGGER.info("Successfully assigned a table with an id of {} to waiter having a username of {}, result - {}", params.getCafeTableId(), params.getWaiterUsername(), cafeTableAssignedToWaiter);
         return cafeTableAssignedToWaiter;
     }
 

@@ -99,4 +99,15 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("Successfully retrieved all registered users, result - {}", allUsers);
         return allUsers;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<User> findByUsername(String username) {
+        Assert.notNull(username, "Username should not be null");
+        Assert.hasText(username, "Username should not be empty");
+        LOGGER.info("Retrieving an optional of a user having a username of {}", username);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        LOGGER.info("Successfully retrieved an optional of a user having a username of {}, result - {}", username, userOptional);
+        return userOptional;
+    }
 }

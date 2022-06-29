@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class ProductInOrderRegistrationResponseDto {
-    private Long productId;
+    private String productName;
     private Long orderId;
     private Integer amount;
     private LocalDateTime registeredAt;
 
     private List<String> errors;
 
-    public ProductInOrderRegistrationResponseDto(Long productId, Long orderId, Integer amount, LocalDateTime registeredAt) {
-        this.productId = productId;
+    public ProductInOrderRegistrationResponseDto(String productName, Long orderId, Integer amount, LocalDateTime registeredAt) {
+        this.productName = productName;
         this.orderId = orderId;
         this.amount = amount;
         this.registeredAt = registeredAt;
@@ -26,12 +26,12 @@ public class ProductInOrderRegistrationResponseDto {
     public ProductInOrderRegistrationResponseDto() {
     }
 
-    public Long getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Long getOrderId() {
@@ -71,7 +71,7 @@ public class ProductInOrderRegistrationResponseDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrderRegistrationResponseDto that = (ProductInOrderRegistrationResponseDto) o;
-        return Objects.equals(productId, that.productId) &&
+        return Objects.equals(productName, that.productName) &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(amount, that.amount) &&
                 Objects.equals(registeredAt, that.registeredAt) &&
@@ -80,13 +80,13 @@ public class ProductInOrderRegistrationResponseDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, orderId, amount, registeredAt, errors);
+        return Objects.hash(productName, orderId, amount, registeredAt, errors);
     }
 
     @Override
     public String toString() {
         return "ProductInOrderRegistrationResponseDto{" +
-                "productId=" + productId +
+                "productName=" + productName +
                 ", orderId=" + orderId +
                 ", amount=" + amount +
                 ", registeredAt=" + registeredAt +

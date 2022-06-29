@@ -10,7 +10,7 @@ public class CafeTableAssignedToWaiterCreationParamsMapperImpl implements CafeTa
     public CafeTableAssignedToWaiterCreationParams apply(CafeTableAssignmentRequestDto dto) {
         return new CafeTableAssignedToWaiterCreationParams(
                 dto.getCafeTableId(),
-                dto.getWaiterId()
+                dto.getWaiterUsername()
         );
     }
 }

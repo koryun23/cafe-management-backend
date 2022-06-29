@@ -104,4 +104,15 @@ public class ProductServiceImpl implements ProductService {
         LOGGER.info("Successfully updated a product according to the product update params - {}, result - {}", params, savedProduct);
         return savedProduct;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Product getByName(String name) {
+        Assert.notNull(name, "Product name should not be null");
+        Assert.hasText(name, "Product name should not be empty");
+        LOGGER.info("Retrieving a product named as {}", name);
+        Product product = productRepository.findByProductName(name).orElseThrow(() -> new ProductNotFoundException(name));
+        LOGGER.info("Successfully retrieved a product named as {}, result - {}", name, product);
+        return product;
+    }
 }

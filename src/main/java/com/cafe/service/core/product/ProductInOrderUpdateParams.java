@@ -6,18 +6,18 @@ import java.util.Objects;
 
 public class ProductInOrderUpdateParams {
     private Long id;
-    private Long productId;
+    private String productName;
     private Long orderId;
     private Integer amount;
     private ProductInOrderStatusType status;
 
     public ProductInOrderUpdateParams(Long id,
-                                      Long productId,
+                                      String productName,
                                       Long orderId,
                                       Integer amount,
                                       ProductInOrderStatusType status) {
         this.id = id;
-        this.productId = productId;
+        this.productName = productName;
         this.orderId = orderId;
         this.amount = amount;
         this.status = status;
@@ -31,12 +31,12 @@ public class ProductInOrderUpdateParams {
         this.id = id;
     }
 
-    public Long getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Long getOrderId() {
@@ -69,7 +69,7 @@ public class ProductInOrderUpdateParams {
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrderUpdateParams that = (ProductInOrderUpdateParams) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(productId, that.productId) &&
+                Objects.equals(productName, that.productName) &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(amount, that.amount) &&
                 Objects.equals(status, that.status);
@@ -77,14 +77,14 @@ public class ProductInOrderUpdateParams {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productId, orderId, amount, status);
+        return Objects.hash(id, productName, orderId, amount, status);
     }
 
     @Override
     public String toString() {
         return "ProductInOrderUpdateParams{" +
                 "id=" + id +
-                ", productId=" + productId +
+                ", productName=" + productName +
                 ", orderId=" + orderId +
                 ", amount=" + amount +
                 ", status=" + status +

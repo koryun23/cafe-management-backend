@@ -7,15 +7,15 @@ import java.util.Objects;
 public class ProductInOrderUpdateResponseDto {
 
     private Long id;
-    private Long productId;
+    private String productName;
     private Long orderId;
     private Integer amount;
     private LocalDateTime updatedAt;
 
     private List<String> errors;
-    public ProductInOrderUpdateResponseDto(Long id, Long productId, Long orderId, Integer amount, LocalDateTime updatedAt) {
+    public ProductInOrderUpdateResponseDto(Long id, String productName, Long orderId, Integer amount, LocalDateTime updatedAt) {
         this.id = id;
-        this.productId = productId;
+        this.productName = productName;
         this.orderId = orderId;
         this.amount = amount;
         this.updatedAt = updatedAt;
@@ -28,12 +28,12 @@ public class ProductInOrderUpdateResponseDto {
     public ProductInOrderUpdateResponseDto() {
     }
 
-    public Long getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Long getOrderId() {
@@ -80,7 +80,7 @@ public class ProductInOrderUpdateResponseDto {
     public String toString() {
         return "ProductInOrderUpdateResponseDto{" +
                 "id=" + id +
-                ", productId=" + productId +
+                ", productName=" + productName +
                 ", orderId=" + orderId +
                 ", amount=" + amount +
                 ", updatedAt=" + updatedAt +
@@ -93,11 +93,16 @@ public class ProductInOrderUpdateResponseDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrderUpdateResponseDto that = (ProductInOrderUpdateResponseDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(productId, that.productId) && Objects.equals(orderId, that.orderId) && Objects.equals(amount, that.amount) && Objects.equals(updatedAt, that.updatedAt) && Objects.equals(errors, that.errors);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(productName, that.productName) &&
+                Objects.equals(orderId, that.orderId) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(updatedAt, that.updatedAt) &&
+                Objects.equals(errors, that.errors);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productId, orderId, amount, updatedAt, errors);
+        return Objects.hash(id, productName, orderId, amount, updatedAt, errors);
     }
 }

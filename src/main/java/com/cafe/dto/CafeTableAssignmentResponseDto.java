@@ -7,14 +7,14 @@ import java.util.Objects;
 public class CafeTableAssignmentResponseDto {
 
     private Long tableId;
-    private Long waiterId;
+    private String waiterUsername;
     private LocalDateTime assignedAt;
 
     private List<String> errors;
 
-    public CafeTableAssignmentResponseDto(Long tableId, Long waiterId, LocalDateTime assignedAt) {
+    public CafeTableAssignmentResponseDto(Long tableId, String waiterUsername, LocalDateTime assignedAt) {
         this.tableId = tableId;
-        this.waiterId = waiterId;
+        this.waiterUsername = waiterUsername;
         this.assignedAt = assignedAt;
     }
 
@@ -33,12 +33,12 @@ public class CafeTableAssignmentResponseDto {
         this.tableId = tableId;
     }
 
-    public Long getWaiterId() {
-        return waiterId;
+    public String getWaiterUsername() {
+        return waiterUsername;
     }
 
-    public void setWaiterId(Long waiterId) {
-        this.waiterId = waiterId;
+    public void setWaiterUsername(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
     }
 
     public LocalDateTime getAssignedAt() {
@@ -63,21 +63,21 @@ public class CafeTableAssignmentResponseDto {
         if (o == null || getClass() != o.getClass()) return false;
         CafeTableAssignmentResponseDto that = (CafeTableAssignmentResponseDto) o;
         return Objects.equals(tableId, that.tableId) &&
-                Objects.equals(waiterId, that.waiterId) &&
+                Objects.equals(waiterUsername, that.waiterUsername) &&
                 Objects.equals(assignedAt, that.assignedAt) &&
                 Objects.equals(errors, that.errors);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tableId, waiterId, assignedAt, errors);
+        return Objects.hash(tableId, waiterUsername, assignedAt, errors);
     }
 
     @Override
     public String toString() {
         return "CafeTableAssignmentResponseDto{" +
                 "tableId=" + tableId +
-                ", waiterId=" + waiterId +
+                ", waiterUsername=" + waiterUsername +
                 ", assignedAt=" + assignedAt +
                 ", errors=" + errors +
                 '}';

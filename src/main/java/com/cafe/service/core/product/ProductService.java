@@ -18,4 +18,6 @@ public interface ProductService {
     Integer getAmountByProductId(Long id);
 
     Product updateProduct(ProductUpdateParams params);
+
+    Product getByName(String name);
 }

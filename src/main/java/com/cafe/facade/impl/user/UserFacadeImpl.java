@@ -67,9 +67,14 @@ public class UserFacadeImpl implements UserFacade {
         }
         User user = userService.create(userCreationParamsMapper.apply(dto));
 
+        List<UserRole> userRoleList = new LinkedList<>();
+
         for(UserRoleType roleType : dto.getRoleList()) {
-            userRoleService.create(new UserRoleCreationParams(user.getId(), roleType));
+            UserRole userRole = userRoleService.create(new UserRoleCreationParams(user.getId(), roleType));
+            userRoleList.add(userRole);
         }
+
+        user.setUserRoleList(userRoleList);
 
         UserRegistrationResponseDto responseDto = userRegistrationResponseDtoMapper.apply(user);
         LOGGER.info("Successfully registered a new user according to the user registration request dto - {}, result - {}", dto, responseDto);

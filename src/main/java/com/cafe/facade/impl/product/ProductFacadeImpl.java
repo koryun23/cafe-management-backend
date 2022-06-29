@@ -113,8 +113,8 @@ public class ProductFacadeImpl implements ProductFacade {
         if(dto.getAmount() < 0) {
             return new ProductInOrderUpdateResponseDto(List.of(String.format("The amount must be a positive number, actual amount - %d", dto.getAmount())));
         }
-        if(productService.findById(dto.getProductId()).isEmpty()) {
-            return new ProductInOrderUpdateResponseDto(List.of(String.format("No product found having an id of %d", dto.getProductId())));
+        if(productService.findByName(dto.getProductName()).isEmpty()) {
+            return new ProductInOrderUpdateResponseDto(List.of(String.format("No product found named as %s", dto.getProductName())));
         }
         Optional<Order> orderOptional = orderService.findById(dto.getOrderId());
         if(orderOptional.isEmpty()) {
@@ -126,14 +126,14 @@ public class ProductFacadeImpl implements ProductFacade {
         }
         ProductInOrder productInOrder = productInOrderService.update(new ProductInOrderUpdateParams(
                 dto.getId(),
-                dto.getProductId(),
+                dto.getProductName(),
                 dto.getOrderId(),
                 dto.getAmount(),
                 dto.getStatus()
         ));
         ProductInOrderUpdateResponseDto responseDto = new ProductInOrderUpdateResponseDto(
                 productInOrder.getId(),
-                productInOrder.getProduct().getId(),
+                productInOrder.getProduct().getProductName(),
                 productInOrder.getOrder().getId(),
                 productInOrder.getAmount(),
                 LocalDateTime.now()

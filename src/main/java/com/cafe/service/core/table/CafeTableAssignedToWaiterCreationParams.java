@@ -5,11 +5,11 @@ import java.util.Objects;
 public class CafeTableAssignedToWaiterCreationParams {
 
     private Long cafeTableId;
-    private Long waiterId;
+    private String waiterUsername;
 
-    public CafeTableAssignedToWaiterCreationParams(Long cafeTableId, Long waiterId) {
+    public CafeTableAssignedToWaiterCreationParams(Long cafeTableId, String waiterUsername) {
         this.cafeTableId = cafeTableId;
-        this.waiterId = waiterId;
+        this.waiterUsername = waiterUsername;
     }
 
     public Long getCafeTableId() {
@@ -20,12 +20,12 @@ public class CafeTableAssignedToWaiterCreationParams {
         this.cafeTableId = cafeTableId;
     }
 
-    public Long getWaiterId() {
-        return waiterId;
+    public String getWaiterUsername() {
+        return waiterUsername;
     }
 
-    public void setWaiterId(Long waiterId) {
-        this.waiterId = waiterId;
+    public void setWaiterUsername(String waiterId) {
+        this.waiterUsername = waiterUsername;
     }
 
     @Override
@@ -33,19 +33,20 @@ public class CafeTableAssignedToWaiterCreationParams {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CafeTableAssignedToWaiterCreationParams that = (CafeTableAssignedToWaiterCreationParams) o;
-        return Objects.equals(cafeTableId, that.cafeTableId) && Objects.equals(waiterId, that.waiterId);
+        return Objects.equals(cafeTableId, that.cafeTableId) &&
+                Objects.equals(waiterUsername, that.waiterUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, waiterId);
+        return Objects.hash(cafeTableId, waiterUsername);
     }
 
     @Override
     public String toString() {
         return "CafeTableAssignedToWaiterCreationParams{" +
                 "cafeTableId=" + cafeTableId +
-                ", waiterId=" + waiterId +
+                ", waiterUsername=" + waiterUsername +
                 '}';
     }
 }

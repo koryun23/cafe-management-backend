@@ -7,20 +7,20 @@ import java.util.Objects;
 public class ProductInOrderUpdateRequestDto {
 
     private Long id;
-    private Long productId;
+    private String productName;
     private Long orderId;
     private Integer amount;
     private String waiterUsername;
     private ProductInOrderStatusType status;
 
     public ProductInOrderUpdateRequestDto(Long id,
-                                          Long productId,
+                                          String productName,
                                           Long orderId,
                                           Integer amount,
                                           String waiterUsername,
                                           ProductInOrderStatusType status) {
         this.id = id;
-        this.productId = productId;
+        this.productName = productName;
         this.orderId = orderId;
         this.amount = amount;
         this.waiterUsername = waiterUsername;
@@ -30,12 +30,12 @@ public class ProductInOrderUpdateRequestDto {
     public ProductInOrderUpdateRequestDto() {
     }
 
-    public Long getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Long getOrderId() {
@@ -84,7 +84,7 @@ public class ProductInOrderUpdateRequestDto {
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrderUpdateRequestDto that = (ProductInOrderUpdateRequestDto) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(productId, that.productId) &&
+                Objects.equals(productName, that.productName) &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(amount, that.amount) &&
                 Objects.equals(waiterUsername, that.waiterUsername) &&
@@ -93,14 +93,14 @@ public class ProductInOrderUpdateRequestDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productId, orderId, amount, waiterUsername, status);
+        return Objects.hash(id, productName, orderId, amount, waiterUsername, status);
     }
 
     @Override
     public String toString() {
         return "ProductInOrderUpdateRequestDto{" +
                 "id=" + id +
-                ", productId=" + productId +
+                ", productName=" + productName +
                 ", orderId=" + orderId +
                 ", amount=" + amount +
                 ", waiterUsername=" + waiterUsername +

@@ -12,7 +12,7 @@ public class ProductInOrderRegistrationResponseDtoMapperImpl implements ProductI
     @Override
     public ProductInOrderRegistrationResponseDto apply(ProductInOrder productInOrder) {
         return new ProductInOrderRegistrationResponseDto(
-                productInOrder.getProduct().getId(),
+                productInOrder.getProduct().getProductName(),
                 productInOrder.getOrder().getId(),
                 productInOrder.getAmount(),
                 LocalDateTime.now()

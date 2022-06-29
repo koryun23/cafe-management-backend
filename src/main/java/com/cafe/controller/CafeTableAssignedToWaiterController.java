@@ -30,8 +30,7 @@ public class CafeTableAssignedToWaiterController {
     }
 
     @GetMapping
-    public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request,
-                                                                                                             @RequestBody CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
+    public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request, @RequestBody CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
         String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
         dto.setWaiterUsername(username);
         return ResponseEntity.ok(cafeTableFacade.retrieveCafeTableList(dto));

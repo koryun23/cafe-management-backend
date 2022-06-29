@@ -49,7 +49,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         Assert.notNull(params, "Product in order update params should not be null");
         LOGGER.info("Updating a product in order according to the product in order update params - {}", params);
         ProductInOrder productInOrder = new ProductInOrder(
-                productService.getById(params.getProductId()),
+                productService.getByName(params.getProductName()),
                 orderService.getById(params.getOrderId()),
                 params.getAmount()
         );
@@ -70,7 +70,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         for(ProductInOrder productInOrder : productInOrderList) {
             update(new ProductInOrderUpdateParams(
                     productInOrder.getId(),
-                    productInOrder.getProduct().getId(),
+                    productInOrder.getProduct().getProductName(),
                     productInOrder.getOrder().getId(),
                     productInOrder.getAmount(),
                     status

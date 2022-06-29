@@ -5,11 +5,11 @@ import java.util.Objects;
 public class CafeTableAssignmentRequestDto {
 
     private Long cafeTableId;
-    private Long waiterId;
+    private String waiterUsername;
 
-    public CafeTableAssignmentRequestDto(Long tableId, Long waiterId) {
+    public CafeTableAssignmentRequestDto(Long tableId, String waiterUsername) {
         this.cafeTableId = tableId;
-        this.waiterId = waiterId;
+        this.waiterUsername = waiterUsername;
     }
 
     public CafeTableAssignmentRequestDto() {
@@ -23,12 +23,12 @@ public class CafeTableAssignmentRequestDto {
         this.cafeTableId = tableId;
     }
 
-    public Long getWaiterId() {
-        return waiterId;
+    public String getWaiterUsername() {
+        return waiterUsername;
     }
 
-    public void setWaiterId(Long waiterId) {
-        this.waiterId = waiterId;
+    public void setWaiterUsername(String waiterUsername) {
+        this.waiterUsername = waiterUsername;
     }
 
     @Override
@@ -37,19 +37,19 @@ public class CafeTableAssignmentRequestDto {
         if (o == null || getClass() != o.getClass()) return false;
         CafeTableAssignmentRequestDto that = (CafeTableAssignmentRequestDto) o;
         return Objects.equals(cafeTableId, that.cafeTableId) &&
-                Objects.equals(waiterId, that.waiterId);
+                Objects.equals(waiterUsername, that.waiterUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, waiterId);
+        return Objects.hash(cafeTableId, waiterUsername);
     }
 
     @Override
     public String toString() {
         return "CafeTableAssignmentRequestDto{" +
                 "tableId=" + cafeTableId +
-                ", waiterId=" + waiterId +
+                ", waiterUsername=" + waiterUsername +
                 '}';
     }
 }

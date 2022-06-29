@@ -63,18 +63,10 @@ public class OrderFacadeImpl implements OrderFacade {
     public OrderRegistrationResponseDto register(OrderRegistrationRequestDto dto) {
         Assert.notNull(dto, "Order registration request should not be null");
         LOGGER.info("Registering a new order according to the order registration request dto - {}", dto);
-        List<CafeTableAssignedToWaiter> allByWaiterUsername = cafeTableAssignedToWaiterService.findAllByWaiterUsername(dto.getWaiterUsername());
-        if(allByWaiterUsername.size() == 0) {
+        if(!foundTableWithIdAssignedToWaiterWithUsername(dto.getCafeTableId(), dto.getWaiterUsername())) {
             return new OrderRegistrationResponseDto(
-                    List.of(String.format("No cafe table is assigned to the waiter having a username of '%s'", dto.getWaiterUsername()))
+                    List.of(String.format("Table having an id of %d is not assigned to waiter having a username of %s", dto.getCafeTableId(), dto.getWaiterUsername()))
             );
-        }
-        for(CafeTableAssignedToWaiter cafeTableAssignedToWaiter : allByWaiterUsername) {
-            if(cafeTableAssignedToWaiter.getCafeTable().getCafeTableStatusType() == CafeTableStatusType.TAKEN) {
-                return new OrderRegistrationResponseDto(
-                        List.of(String.format("Cannot assign a cafe table to the waiter having a username of '%s' because it is already assigned to the waiter having a username of '%s'", dto.getWaiterUsername(), cafeTableAssignedToWaiter.getWaiter().getUsername()))
-                );
-            }
         }
         Optional<CafeTable> cafeTableOptional = cafeTableService.findById(dto.getCafeTableId());
         if(cafeTableOptional.isEmpty()) {
@@ -124,5 +116,17 @@ public class OrderFacadeImpl implements OrderFacade {
         OrderUpdateResponseDto responseDto = orderUpdateResponseDtoMapper.apply(order);
         LOGGER.info("Successfully updated an order according to the order update request dto - {}, response - {}", dto, responseDto);
         return responseDto;
+    }
+
+    private boolean foundTableWithIdAssignedToWaiterWithUsername(Long tableId, String username) {
+        List<CafeTableAssignedToWaiter> allByWaiterUsername = cafeTableAssignedToWaiterService.findAllByWaiterUsername(username);
+        boolean foundTableWithIdAssignedToWaiterWithUsername = false;
+        for(CafeTableAssignedToWaiter cafeTableAssignedToWaiter : allByWaiterUsername) {
+            if(cafeTableAssignedToWaiter.getCafeTable().getId().equals(tableId)) {
+                foundTableWithIdAssignedToWaiterWithUsername = true;
+                break;
+            }
+        }
+        return foundTableWithIdAssignedToWaiterWithUsername;
     }
 }
