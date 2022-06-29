@@ -11,6 +11,8 @@ import com.cafe.entity.user.User;
 import com.cafe.entity.user.UserRole;
 import com.cafe.entity.user.UserRoleType;
 import com.cafe.facade.core.user.UserFacade;
+import com.cafe.mapper.user.UserCreationParamsMapper;
+import com.cafe.mapper.user.UserRegistrationResponseDtoMapper;
 import com.cafe.service.core.order.OrderCreationParams;
 import com.cafe.service.core.order.OrderService;
 import com.cafe.service.core.product.ProductCreationParams;
@@ -41,11 +43,17 @@ public class UserFacadeImpl implements UserFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFacadeImpl.class);
     private final UserService userService;
     private final UserRoleService userRoleService;
+    private final UserCreationParamsMapper userCreationParamsMapper;
+    private final UserRegistrationResponseDtoMapper userRegistrationResponseDtoMapper;
 
     public UserFacadeImpl(UserService userService,
-                          UserRoleService userRoleService) {
+                          UserRoleService userRoleService,
+                          UserCreationParamsMapper userCreationParamsMapper,
+                          UserRegistrationResponseDtoMapper userRegistrationResponseDtoMapper) {
         this.userService = userService;
         this.userRoleService = userRoleService;
+        this.userCreationParamsMapper = userCreationParamsMapper;
+        this.userRegistrationResponseDtoMapper = userRegistrationResponseDtoMapper;
     }
 
     @Override
@@ -57,25 +65,13 @@ public class UserFacadeImpl implements UserFacade {
                     List.of("Cannot register as on of the given credentials is already taken")
             );
         }
-        User user = userService.create(new UserCreationParams(
-                dto.getFirstName(),
-                dto.getSecondName(),
-                dto.getUsername(),
-                dto.getPassword()
-        ));
+        User user = userService.create(userCreationParamsMapper.apply(dto));
 
         for(UserRoleType roleType : dto.getRoleList()) {
             userRoleService.create(new UserRoleCreationParams(user.getId(), roleType));
         }
 
-        UserRegistrationResponseDto responseDto = new UserRegistrationResponseDto(
-                user.getUsername(),
-                user.getPassword(),
-                user.getFirstName(),
-                user.getSecondName(),
-                dto.getRoleList(),
-                LocalDateTime.now()
-        );
+        UserRegistrationResponseDto responseDto = userRegistrationResponseDtoMapper.apply(user);
         LOGGER.info("Successfully registered a new user according to the user registration request dto - {}, result - {}", dto, responseDto);
         return responseDto;
     }
@@ -86,14 +82,7 @@ public class UserFacadeImpl implements UserFacade {
         List<User> allUsers = userService.getAllUsers();
         List<UserRegistrationResponseDto> allUserDtos = new LinkedList<>();
         for(User user : allUsers) {
-            allUserDtos.add(new UserRegistrationResponseDto(
-                    user.getUsername(),
-                    user.getPassword(),
-                    user.getFirstName(),
-                    user.getSecondName(),
-                    user.getUserRoleList().stream().map(UserRole::getUserRoleType).collect(Collectors.toList()),
-                    user.getCreatedAt()
-            ));
+            allUserDtos.add(userRegistrationResponseDtoMapper.apply(user));
         }
         UserListRetrievalResponseDto responseDto = new UserListRetrievalResponseDto(allUserDtos);
         LOGGER.info("Successfully retrieved all registered users, result - {}", responseDto);
