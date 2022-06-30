@@ -42,7 +42,7 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         ));
         LOGGER.info("Successfully assigned a table with an id of {} to waiter having a username of {}, result - {}", params.getCafeTableId(), params.getWaiterUsername(), cafeTableAssignedToWaiter);
         return cafeTableAssignedToWaiter;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -52,7 +52,7 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         Optional<CafeTableAssignedToWaiter> optional = cafeTableAssignedToWaiterRepository.findById(id);
         LOGGER.info("Successfully retrieved an optional of a table assigned to user, provided id - {}, result - {}", id, optional);
         return optional;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -62,7 +62,7 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterRepository.findById(id).orElseThrow(() -> new CafeTableAssignedToWaiterException(id));
         LOGGER.info("Successfully retrieved a table assigned to user, provided id - {}, result - {}", id, cafeTableAssignedToWaiter);
         return cafeTableAssignedToWaiter;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -72,7 +72,7 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         List<CafeTableAssignedToWaiter> allByWaiterId = cafeTableAssignedToWaiterRepository.findAllByWaiterId(id);
         LOGGER.info("Successfully retrieved all cafe tables assigned to the waiter having an id of {}, result - {}", id, allByWaiterId);
         return allByWaiterId;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -82,17 +82,17 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         Optional<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterOptional = cafeTableAssignedToWaiterRepository.findByCafeTableId(id);
         LOGGER.info("Successfully fetched an optional of a cafe table assigned to waiter, given id - {}, result - {}", id, cafeTableAssignedToWaiterOptional);
         return cafeTableAssignedToWaiterOptional;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
     public boolean existsByWaiterUsername(String username) {
         Assert.notNull(username, "Waiter username should not be null");
-        LOGGER.info("Checking if a waiter having a username of '{}' exists or not", username);
+        LOGGER.info("Checking if a waiter having a username of '{}' has any tables assigned to him/her or not", username);
         boolean result = cafeTableAssignedToWaiterRepository.existsByWaiterUsername(username);
-        LOGGER.info("Checked if a waiter having a username of '{}' exists or not, result - {}", username, result);
+        LOGGER.info("Checked if a waiter having a username of '{}' has any tables assigned to him/her or not, result - {}", username, result);
         return result;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -103,7 +103,7 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         List<CafeTableAssignedToWaiter> allByWaiterUsername = cafeTableAssignedToWaiterRepository.findAllByWaiterUsername(username);
         LOGGER.info("Successfully retrieved a list of cafe tables assigned to waiter according to the waiter username - {}, result - {}", username, allByWaiterUsername);
         return allByWaiterUsername;
-    }
+    } // tested
 
     @Transactional
     @Override

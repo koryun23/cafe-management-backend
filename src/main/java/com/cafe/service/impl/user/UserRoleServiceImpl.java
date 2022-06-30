@@ -32,7 +32,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         UserRole userRole = userRoleRepository.save(new UserRole(userService.getById(params.getUserId()), params.getUserRoleType()));
         LOGGER.info("Successfully created a new new user role according to the user role creation params - {}, result - {}", params, userRole);
         return userRole;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -43,5 +43,5 @@ public class UserRoleServiceImpl implements UserRoleService {
         UserRoleType userRoleType = userRoleRepository.findByUserUsername(username).orElseThrow(() -> new UserNotFoundException(username)).getUserRoleType();
         LOGGER.info("Successfully retrieved the role type of a user with username '{}', result - {}", username, userRoleType);
         return userRoleType;
-    }
+    } // tested
 }

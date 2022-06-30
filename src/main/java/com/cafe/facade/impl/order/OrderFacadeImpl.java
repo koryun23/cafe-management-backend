@@ -95,7 +95,7 @@ public class OrderFacadeImpl implements OrderFacade {
             ));
         }
         Order order = orderService.update(orderUpdateRequestDtoMapper.apply(dto));
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(order.getTable().getId()).orElseThrow(() -> new RuntimeException());// TODO: throw a custom exception instead of runtime exception
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(order.getTable().getId()).orElseThrow(() -> new CafeTableNotFoundException(order.getTable().getId()));
         String orderCreatorUsername = cafeTableAssignedToWaiter.getWaiter().getUsername();
         String orderUpdatorUsername = dto.getWaiterUsername();
         if(!orderCreatorUsername.equals(orderUpdatorUsername)) {

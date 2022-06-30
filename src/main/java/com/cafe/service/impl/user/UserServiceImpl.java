@@ -38,11 +38,11 @@ public class UserServiceImpl implements UserService {
                 params.getSecondName(),
                 params.getUsername(),
                 passwordEncoder.encode(params.getPassword()),
-                LocalDateTime.now()
+                params.getCreatedAt()
         ));
         LOGGER.info("Successfully created a new user according to the user creation params - {}, result - {}", params, user);
         return user;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         LOGGER.info("Successfully retrieved a user having an id of {}", id);
         return user;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(id);
         LOGGER.info("Successfully retrieved an optional of a user having an id of {}", id);
         return userOptional;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         return false;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
         LOGGER.info("Successfully retrieved a user having a username of '{}', result - {}", username, user);
         return user;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         List<User> allUsers = userRepository.findAll();
         LOGGER.info("Successfully retrieved all registered users, result - {}", allUsers);
         return allUsers;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -109,5 +109,5 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findByUsername(username);
         LOGGER.info("Successfully retrieved an optional of a user having a username of {}, result - {}", username, userOptional);
         return userOptional;
-    }
+    } // tested
 }

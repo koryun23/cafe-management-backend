@@ -1,18 +1,26 @@
 package com.cafe.service.core.user;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class UserCreationParams {
+
     private String firstName;
     private String secondName;
     private String username;
     private String password;
+    private LocalDateTime createdAt;
 
-    public UserCreationParams(String firstName, String secondName, String username, String password) {
+    public UserCreationParams(String firstName,
+                              String secondName,
+                              String username,
+                              String password,
+                              LocalDateTime createdAt) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.username = username;
         this.password = password;
+        this.createdAt = createdAt;
     }
 
     public String getFirstName() {
@@ -47,6 +55,14 @@ public class UserCreationParams {
         this.password = password;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,12 +71,13 @@ public class UserCreationParams {
         return Objects.equals(firstName, that.firstName) &&
                 Objects.equals(secondName, that.secondName) &&
                 Objects.equals(username, that.username) &&
-                Objects.equals(password, that.password);
+                Objects.equals(password, that.password) &&
+                Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, secondName, username, password);
+        return Objects.hash(firstName, secondName, username, password, createdAt);
     }
 
     @Override
@@ -69,6 +86,7 @@ public class UserCreationParams {
                 "firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", username='" + username + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }

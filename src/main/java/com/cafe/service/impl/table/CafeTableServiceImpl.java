@@ -28,10 +28,14 @@ public class CafeTableServiceImpl implements CafeTableService {
     public CafeTable create(CafeTableCreationParams params) {
         Assert.notNull(params, "Cafe table creation params object should not be null");
         LOGGER.info("Creating a new cafe table according to the cafe table creation params - {}", params);
-        CafeTable cafeTable = cafeTableRepository.save(new CafeTable(params.getCafeTableStatusType(), params.getNumberOfSeats(), params.getCode()));
+        CafeTable cafeTable = cafeTableRepository.save(new CafeTable(
+                params.getCafeTableStatusType(),
+                params.getNumberOfSeats(),
+                params.getCode())
+        );
         LOGGER.info("Successfully created a new cafe table according to the cafe table creation params - {}, result - {}", params, cafeTable);
         return cafeTable;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -41,7 +45,7 @@ public class CafeTableServiceImpl implements CafeTableService {
         CafeTable cafeTable = cafeTableRepository.findById(id).orElseThrow(() -> new CafeTableNotFoundException(id));
         LOGGER.info("Successfully retrieved a cafe table having an id of {}, result - {}", id, cafeTable);
         return cafeTable;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -51,7 +55,7 @@ public class CafeTableServiceImpl implements CafeTableService {
         Optional<CafeTable> cafeTableOptional = cafeTableRepository.findById(id);
         LOGGER.info("Successfully retrieved an optional of a cafe table with an id of {}, result - {}", id, cafeTableOptional);
         return cafeTableOptional;
-    }
+    } // tested
 
     @Transactional
     @Override
@@ -59,7 +63,7 @@ public class CafeTableServiceImpl implements CafeTableService {
         Assert.notNull(id, "Cafe table id should not be null");
         Assert.notNull(status, "Cafe table status type should not be null");
         LOGGER.info("Changing the status of a table having an id of {} to {}", id, status);
-        CafeTable cafeTable = cafeTableRepository.getById(id);
+        CafeTable cafeTable = cafeTableRepository.findById(id).orElseThrow(() -> new CafeTableNotFoundException(id));
         CafeTable newCafeTable = new CafeTable(
                 status,
                 cafeTable.getNumberOfSeats(),
@@ -80,7 +84,7 @@ public class CafeTableServiceImpl implements CafeTableService {
         Optional<CafeTable> cafeTableOptional = cafeTableRepository.findByCode(code);
         LOGGER.info("Successfully retrieved an optional of a cafe table having a code of {}, result - {}", code, cafeTableOptional);
         return cafeTableOptional;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -91,5 +95,5 @@ public class CafeTableServiceImpl implements CafeTableService {
         boolean result = cafeTableRepository.existsByCode(code);
         LOGGER.info("Checking if a cafe table having a code of {} exists or not, result - {}", code, result);
         return result;
-    }
+    } // tested
 }

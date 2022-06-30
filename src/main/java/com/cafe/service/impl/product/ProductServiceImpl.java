@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
         );
         LOGGER.info("Successfully created a new product according to the product creation params - {}", params);
         return product;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         LOGGER.info("Successfully retrieved a product having an id of {}, result - {}", id, product);
         return product;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> byId = productRepository.findById(id);
         LOGGER.info("Successfully retrieved an optional of a product having an id of {}, result - {}", id, byId);
         return byId;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> productOptional = productRepository.findByProductName(name);
         LOGGER.info("Successfully retrieved an optional of a product named as '{}', result - {}", name, productOptional);
         return productOptional;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
         Integer amount = product.getAmount();
         LOGGER.info("Successfully retrieved the amount of a product named as '{}', result - {}", name, amount);
         return amount;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -87,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
         Integer amount = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id)).getAmount();
         LOGGER.info("Successfully retrieved the amount of the product having an id of {}, result - {}", id, amount);
         return amount;
-    }
+    } // tested
 
     @Override
     public Product updateProduct(ProductUpdateParams params) {
@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
         LOGGER.info("Successfully updated a product according to the product update params - {}, result - {}", params, savedProduct);
         return savedProduct;
-    }
+    } // tested
 
     @Transactional(readOnly = true)
     @Override
@@ -114,5 +114,5 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findByProductName(name).orElseThrow(() -> new ProductNotFoundException(name));
         LOGGER.info("Successfully retrieved a product named as {}, result - {}", name, product);
         return product;
-    }
+    } // tested
 }

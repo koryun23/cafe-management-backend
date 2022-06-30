@@ -41,7 +41,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         ));
         LOGGER.info("Successfully created a new product according to the product creation params - {}, result - {}", params, productInOrder);
         return productInOrder;
-    }
+    } // tested
 
     @Transactional
     @Override
@@ -58,7 +58,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         ProductInOrder savedProductInOrder = productInOrderRepository.save(productInOrder);
         LOGGER.info("Successfully updated a product in order according to the product in order update params - {}, result - {}", params, savedProductInOrder);
         return savedProductInOrder;
-    }
+    } // tested
 
     @Transactional
     @Override
@@ -66,7 +66,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         Assert.notNull(orderId, "order id should not be null");
         Assert.notNull(status, "Product in order status type should not be null");
         LOGGER.info("Marking all products in order having an id of {} to {}", orderId, status);
-        List<ProductInOrder> productInOrderList = productInOrderRepository.findAll();
+        List<ProductInOrder> productInOrderList = productInOrderRepository.findAllByOrderId(orderId);
         for(ProductInOrder productInOrder : productInOrderList) {
             update(new ProductInOrderUpdateParams(
                     productInOrder.getId(),

@@ -33,7 +33,11 @@ public class OrderServiceImpl implements OrderService {
     public Order create(OrderCreationParams params) {
         Assert.notNull(params, "Order creation params object should not be null");
         LOGGER.info("Creating a new order according to the order creation params - {}", params);
-        Order order = orderRepository.save(new Order(cafeTableService.getById(params.getCafeTableId()), params.getOrderStatusType(), LocalDateTime.now()));
+        Order order = orderRepository.save(new Order(
+                cafeTableService.getById(params.getCafeTableId()),
+                params.getOrderStatusType(),
+                params.getCreatedAt()
+        ));
         LOGGER.info("Successfully created a new order according to the order creation params - {}, result - {}", params, order);
         return order;
     }
@@ -62,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         LOGGER.info("Successfully retrieved an order having an id of {}, result - {}", id, order);
         return order;
-    }
+    } // tested
 
     @Override
     public Optional<Order> findById(Long id) {
@@ -71,5 +75,5 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> orderOptional = orderRepository.findById(id);
         LOGGER.info("Successfully retrieved an order having an id of {}, result - {}", id, orderOptional);
         return orderOptional;
-    }
+    } // tested
 }

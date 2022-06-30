@@ -4,6 +4,8 @@ import com.cafe.dto.UserRegistrationRequestDto;
 import com.cafe.service.core.user.UserCreationParams;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class UserCreationParamsMapperImpl implements UserCreationParamsMapper{
     @Override
@@ -12,7 +14,8 @@ public class UserCreationParamsMapperImpl implements UserCreationParamsMapper{
                 dto.getFirstName(),
                 dto.getSecondName(),
                 dto.getUsername(),
-                dto.getPassword()
+                dto.getPassword(),
+                LocalDateTime.now()
         );
     }
 }
