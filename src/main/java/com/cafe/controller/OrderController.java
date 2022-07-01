@@ -1,11 +1,10 @@
 package com.cafe.controller;
 
 import com.cafe.handler.BasicAuthorizationHttpServletRequestHandler;
-import com.cafe.handler.UsernameAndPasswordHolder;
-import com.cafe.dto.OrderRegistrationRequestDto;
-import com.cafe.dto.OrderRegistrationResponseDto;
-import com.cafe.dto.OrderUpdateRequestDto;
-import com.cafe.dto.OrderUpdateResponseDto;
+import com.cafe.dto.request.OrderRegistrationRequestDto;
+import com.cafe.dto.response.OrderRegistrationResponseDto;
+import com.cafe.dto.request.OrderUpdateRequestDto;
+import com.cafe.dto.response.OrderUpdateResponseDto;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.facade.core.order.OrderFacade;
 import org.springframework.http.ResponseEntity;

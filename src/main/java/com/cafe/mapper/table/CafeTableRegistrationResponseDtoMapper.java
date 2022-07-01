@@ -1,6 +1,6 @@
 package com.cafe.mapper.table;
 
-import com.cafe.dto.CafeTableRegistrationResponseDto;
+import com.cafe.dto.response.CafeTableRegistrationResponseDto;
 import com.cafe.entity.table.CafeTable;
 
 import java.util.function.Function;

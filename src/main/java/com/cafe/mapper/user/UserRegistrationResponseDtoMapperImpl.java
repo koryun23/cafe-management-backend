@@ -1,11 +1,10 @@
 package com.cafe.mapper.user;
 
-import com.cafe.dto.UserRegistrationResponseDto;
+import com.cafe.dto.response.UserRegistrationResponseDto;
 import com.cafe.entity.user.User;
 import com.cafe.entity.user.UserRole;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Component

@@ -1,4 +1,4 @@
-package com.cafe.dto;
+package com.cafe.dto.request;
 
 import com.cafe.entity.order.OrderStatusType;
 

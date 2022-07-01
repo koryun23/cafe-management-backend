@@ -1,6 +1,6 @@
 package com.cafe.mapper.product;
 
-import com.cafe.dto.ProductRegistrationRequestDto;
+import com.cafe.dto.request.ProductRegistrationRequestDto;
 import com.cafe.service.core.product.ProductCreationParams;
 import org.springframework.stereotype.Component;
 

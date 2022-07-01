@@ -1,4 +1,4 @@
-package com.cafe.dto;
+package com.cafe.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;

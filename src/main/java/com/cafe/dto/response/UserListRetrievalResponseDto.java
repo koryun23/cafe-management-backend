@@ -1,6 +1,4 @@
-package com.cafe.dto;
-
-import com.cafe.entity.user.User;
+package com.cafe.dto.response;
 
 import java.util.List;
 import java.util.Objects;

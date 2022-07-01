@@ -1,6 +1,6 @@
 package com.cafe.mapper.user;
 
-import com.cafe.dto.UserRegistrationRequestDto;
+import com.cafe.dto.request.UserRegistrationRequestDto;
 import com.cafe.service.core.user.UserCreationParams;
 import org.springframework.stereotype.Component;
 

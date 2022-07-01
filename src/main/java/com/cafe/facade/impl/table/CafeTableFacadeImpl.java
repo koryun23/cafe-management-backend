@@ -1,6 +1,11 @@
 package com.cafe.facade.impl.table;
 
-import com.cafe.dto.*;
+import com.cafe.dto.request.CafeTableAssignmentRequestDto;
+import com.cafe.dto.request.CafeTableRegistrationRequestDto;
+import com.cafe.dto.request.CafeTablesAssignedToWaiterRetrievalRequestDto;
+import com.cafe.dto.response.CafeTableAssignmentResponseDto;
+import com.cafe.dto.response.CafeTableRegistrationResponseDto;
+import com.cafe.dto.response.CafeTablesAssignedToWaiterRetrievalResponseDto;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.entity.table.CafeTableStatusType;
@@ -11,19 +16,15 @@ import com.cafe.mapper.table.CafeTableAssignedToWaiterCreationParamsMapper;
 import com.cafe.mapper.table.CafeTableAssignmentResponseDtoMapper;
 import com.cafe.mapper.table.CafeTableCreationParamsMapper;
 import com.cafe.mapper.table.CafeTableRegistrationResponseDtoMapper;
-import com.cafe.service.core.table.CafeTableAssignedToWaiterCreationParams;
 import com.cafe.service.core.table.CafeTableAssignedToWaiterService;
-import com.cafe.service.core.table.CafeTableCreationParams;
 import com.cafe.service.core.table.CafeTableService;
 import com.cafe.service.core.user.UserRoleService;
 import com.cafe.service.core.user.UserService;
-import com.cafe.service.impl.table.CafeTableNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
 package com.cafe.controller;
 
-import com.cafe.dto.ProductRegistrationRequestDto;
-import com.cafe.dto.ProductRegistrationResponseDto;
-import com.cafe.dto.ProductUpdateRequestDto;
-import com.cafe.dto.ProductUpdateResponseDto;
+import com.cafe.dto.request.ProductRegistrationRequestDto;
+import com.cafe.dto.response.ProductRegistrationResponseDto;
+import com.cafe.dto.request.ProductUpdateRequestDto;
+import com.cafe.dto.response.ProductUpdateResponseDto;
 import com.cafe.facade.core.product.ProductFacade;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

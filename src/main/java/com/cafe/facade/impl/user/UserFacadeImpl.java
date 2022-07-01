@@ -1,29 +1,14 @@
 package com.cafe.facade.impl.user;
 
-import com.cafe.dto.*;
-import com.cafe.entity.order.Order;
-import com.cafe.entity.product.Product;
-import com.cafe.entity.product.ProductInOrder;
-import com.cafe.entity.table.CafeTable;
-import com.cafe.entity.table.CafeTableAssignedToWaiter;
-import com.cafe.entity.table.CafeTableStatusType;
+import com.cafe.dto.request.UserRegistrationRequestDto;
+import com.cafe.dto.response.UserListRetrievalResponseDto;
+import com.cafe.dto.response.UserRegistrationResponseDto;
 import com.cafe.entity.user.User;
 import com.cafe.entity.user.UserRole;
 import com.cafe.entity.user.UserRoleType;
 import com.cafe.facade.core.user.UserFacade;
 import com.cafe.mapper.user.UserCreationParamsMapper;
 import com.cafe.mapper.user.UserRegistrationResponseDtoMapper;
-import com.cafe.service.core.order.OrderCreationParams;
-import com.cafe.service.core.order.OrderService;
-import com.cafe.service.core.product.ProductCreationParams;
-import com.cafe.service.core.product.ProductInOrderCreationParams;
-import com.cafe.service.core.product.ProductInOrderService;
-import com.cafe.service.core.product.ProductService;
-import com.cafe.service.core.table.CafeTableAssignedToWaiterCreationParams;
-import com.cafe.service.core.table.CafeTableAssignedToWaiterService;
-import com.cafe.service.core.table.CafeTableCreationParams;
-import com.cafe.service.core.table.CafeTableService;
-import com.cafe.service.core.user.UserCreationParams;
 import com.cafe.service.core.user.UserRoleCreationParams;
 import com.cafe.service.core.user.UserRoleService;
 import com.cafe.service.core.user.UserService;
@@ -32,10 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class UserFacadeImpl implements UserFacade {

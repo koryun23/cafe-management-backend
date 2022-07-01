@@ -1,20 +1,19 @@
-package com.cafe.dto;
+package com.cafe.dto.request;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class ProductUpdateResponseDto {
+public class ProductUpdateRequestDto {
 
+    private String originalName;
     private String name;
     private Integer price;
     private Integer amount;
-    private LocalDateTime updatedAt;
 
-    public ProductUpdateResponseDto(String name, Integer price, Integer amount, LocalDateTime updatedAt) {
+    public ProductUpdateRequestDto(String originalName, String name, Integer price, Integer amount) {
+        this.originalName = originalName;
         this.name = name;
         this.price = price;
         this.amount = amount;
-        this.updatedAt = updatedAt;
     }
 
     public String getName() {
@@ -41,37 +40,37 @@ public class ProductUpdateResponseDto {
         this.amount = amount;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public String getOriginalName() {
+        return originalName;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductUpdateResponseDto that = (ProductUpdateResponseDto) o;
-        return Objects.equals(name, that.name) &&
+        ProductUpdateRequestDto that = (ProductUpdateRequestDto) o;
+        return Objects.equals(originalName, that.originalName) &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(price, that.price) &&
-                Objects.equals(amount, that.amount) &&
-                Objects.equals(updatedAt, that.updatedAt);
+                Objects.equals(amount, that.amount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, amount, updatedAt);
+        return Objects.hash(originalName, name, price, amount);
     }
 
     @Override
     public String toString() {
-        return "ProductUpdateResponseDto{" +
-                "name='" + name + '\'' +
+        return "ProductUpdateRequestDto{" +
+                "originalName=" + originalName +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", amount=" + amount +
-                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

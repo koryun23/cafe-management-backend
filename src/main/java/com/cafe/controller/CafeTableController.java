@@ -1,7 +1,7 @@
 package com.cafe.controller;
 
-import com.cafe.dto.CafeTableRegistrationRequestDto;
-import com.cafe.dto.CafeTableRegistrationResponseDto;
+import com.cafe.dto.request.CafeTableRegistrationRequestDto;
+import com.cafe.dto.response.CafeTableRegistrationResponseDto;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.facade.core.table.CafeTableFacade;
 import org.springframework.http.ResponseEntity;

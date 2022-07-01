@@ -1,14 +1,10 @@
 package com.cafe;
 
-import com.cafe.dto.*;
+import com.cafe.dto.request.UserRegistrationRequestDto;
 import com.cafe.entity.user.UserRoleType;
-import com.cafe.facade.core.order.OrderFacade;
-import com.cafe.facade.core.product.ProductFacade;
-import com.cafe.facade.core.table.CafeTableFacade;
 import com.cafe.facade.core.user.UserFacade;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 

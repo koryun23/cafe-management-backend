@@ -1,4 +1,4 @@
-package com.cafe.dto;
+package com.cafe.dto.response;
 
 import com.cafe.entity.order.OrderStatusType;
 
@@ -6,24 +6,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class OrderRegistrationResponseDto {
+public class OrderUpdateResponseDto {
 
+    private Long id;
     private Long cafeTableId;
     private OrderStatusType orderStatusType;
-    private LocalDateTime registeredAt;
+    private LocalDateTime updatedAt;
 
     private List<String> errors;
 
-    public OrderRegistrationResponseDto(Long cafeTableId, OrderStatusType orderStatusType, LocalDateTime registeredAt) {
+    public OrderUpdateResponseDto(Long id, Long cafeTableId, OrderStatusType orderStatusType, LocalDateTime updatedAt) {
+        this.id = id;
         this.cafeTableId = cafeTableId;
         this.orderStatusType = orderStatusType;
-        this.registeredAt = registeredAt;
+        this.updatedAt = updatedAt;
     }
 
-    public OrderRegistrationResponseDto() {
+    public OrderUpdateResponseDto() {
     }
 
-    public OrderRegistrationResponseDto(List<String> errors) {
+    public OrderUpdateResponseDto(List<String> errors) {
         this.errors = errors;
     }
 
@@ -43,12 +45,12 @@ public class OrderRegistrationResponseDto {
         this.orderStatusType = orderStatusType;
     }
 
-    public LocalDateTime getRegisteredAt() {
-        return registeredAt;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setRegisteredAt(LocalDateTime registeredAt) {
-        this.registeredAt = registeredAt;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<String> getErrors() {
@@ -59,28 +61,38 @@ public class OrderRegistrationResponseDto {
         this.errors = errors;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderRegistrationResponseDto that = (OrderRegistrationResponseDto) o;
+        OrderUpdateResponseDto that = (OrderUpdateResponseDto) o;
         return Objects.equals(cafeTableId, that.cafeTableId) &&
                 orderStatusType == that.orderStatusType &&
-                Objects.equals(registeredAt, that.registeredAt) &&
-                Objects.equals(errors, that.errors);
+                Objects.equals(updatedAt, that.updatedAt) &&
+                Objects.equals(errors, that.errors) &&
+                Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, orderStatusType, registeredAt, errors);
+        return Objects.hash(cafeTableId, orderStatusType, updatedAt, errors, id);
     }
 
     @Override
     public String toString() {
-        return "OrderRegistrationResponseDto{" +
-                "cafeTableId=" + cafeTableId +
+        return "OrderUpdateResponseDto{" +
+                "id=" + id +
+                ", cafeTableId=" + cafeTableId +
                 ", orderStatusType=" + orderStatusType +
-                ", registeredAt=" + registeredAt +
+                ", updatedAt=" + updatedAt +
                 ", errors=" + errors +
                 '}';
     }

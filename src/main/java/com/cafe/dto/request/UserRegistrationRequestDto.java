@@ -1,6 +1,5 @@
-package com.cafe.dto;
+package com.cafe.dto.request;
 
-import com.cafe.entity.user.UserRole;
 import com.cafe.entity.user.UserRoleType;
 
 import java.util.List;

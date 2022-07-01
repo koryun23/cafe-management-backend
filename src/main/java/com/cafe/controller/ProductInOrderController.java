@@ -1,9 +1,9 @@
 package com.cafe.controller;
 
-import com.cafe.dto.ProductInOrderRegistrationRequestDto;
-import com.cafe.dto.ProductInOrderRegistrationResponseDto;
-import com.cafe.dto.ProductInOrderUpdateRequestDto;
-import com.cafe.dto.ProductInOrderUpdateResponseDto;
+import com.cafe.dto.request.ProductInOrderRegistrationRequestDto;
+import com.cafe.dto.response.ProductInOrderRegistrationResponseDto;
+import com.cafe.dto.request.ProductInOrderUpdateRequestDto;
+import com.cafe.dto.response.ProductInOrderUpdateResponseDto;
 import com.cafe.facade.core.product.ProductFacade;
 import com.cafe.handler.BasicAuthorizationHttpServletRequestHandler;
 import org.springframework.http.ResponseEntity;

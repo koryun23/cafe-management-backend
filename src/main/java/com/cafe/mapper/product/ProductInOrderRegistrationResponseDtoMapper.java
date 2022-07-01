@@ -1,6 +1,6 @@
 package com.cafe.mapper.product;
 
-import com.cafe.dto.ProductInOrderRegistrationResponseDto;
+import com.cafe.dto.response.ProductInOrderRegistrationResponseDto;
 import com.cafe.entity.product.ProductInOrder;
 
 import java.util.function.Function;

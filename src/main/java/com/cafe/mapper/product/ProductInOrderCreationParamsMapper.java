@@ -1,8 +1,7 @@
 package com.cafe.mapper.product;
 
-import com.cafe.dto.ProductInOrderRegistrationRequestDto;
+import com.cafe.dto.request.ProductInOrderRegistrationRequestDto;
 import com.cafe.service.core.product.ProductInOrderCreationParams;
-import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 

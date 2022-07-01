@@ -1,9 +1,9 @@
 package com.cafe.controller;
 
-import com.cafe.dto.CafeTableAssignmentRequestDto;
-import com.cafe.dto.CafeTableAssignmentResponseDto;
-import com.cafe.dto.CafeTablesAssignedToWaiterRetrievalRequestDto;
-import com.cafe.dto.CafeTablesAssignedToWaiterRetrievalResponseDto;
+import com.cafe.dto.request.CafeTableAssignmentRequestDto;
+import com.cafe.dto.response.CafeTableAssignmentResponseDto;
+import com.cafe.dto.request.CafeTablesAssignedToWaiterRetrievalRequestDto;
+import com.cafe.dto.response.CafeTablesAssignedToWaiterRetrievalResponseDto;
 import com.cafe.facade.core.table.CafeTableFacade;
 import com.cafe.handler.BasicAuthorizationHttpServletRequestHandler;
 import org.springframework.http.ResponseEntity;

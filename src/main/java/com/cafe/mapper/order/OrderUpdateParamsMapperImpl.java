@@ -1,6 +1,6 @@
 package com.cafe.mapper.order;
 
-import com.cafe.dto.OrderUpdateRequestDto;
+import com.cafe.dto.request.OrderUpdateRequestDto;
 import com.cafe.service.core.order.OrderUpdateParams;
 import org.springframework.stereotype.Component;
 

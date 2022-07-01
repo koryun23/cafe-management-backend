@@ -1,7 +1,6 @@
-package com.cafe.dto;
+package com.cafe.dto.response;
 
 import com.cafe.entity.user.UserRoleType;
-import org.springframework.context.support.BeanDefinitionDsl;
 
 import java.time.LocalDateTime;
 import java.util.List;
