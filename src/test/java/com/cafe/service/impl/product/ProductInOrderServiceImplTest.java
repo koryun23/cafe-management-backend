@@ -110,4 +110,28 @@ class ProductInOrderServiceImplTest {
         Mockito.verify(productInOrderRepository).save(updatedProductInOrder);
         Mockito.verifyNoMoreInteractions(productService, orderService, productInOrderRepository);
     }
+
+    @Test
+    public void testCreateWhenCreationParamsIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.create(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testUpdateWhenUpdateParamsIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.update(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testMarkAllAsWhenOrderIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.markAllAs(null, ProductInOrderStatusType.CLOSED))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testMarkAllAsWhenStatusIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.markAllAs(1L, null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
 }

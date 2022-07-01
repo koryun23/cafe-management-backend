@@ -191,4 +191,52 @@ class ProductServiceImplTest {
         Mockito.verify(productRepository).findByProductName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
+
+    @Test
+    public void testCreateWhenParamsObjectIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.create(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testGetByIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.getById(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testFindByIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.findById(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testFindByNameWhenNameIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.findByName(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testGetAmountByProductNameWhenNameIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.getAmountByProductName(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testGetAmountByProductIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.getAmountByProductId(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testUpdateProductWhenUpdateParamsIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.updateProduct(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testGetByNameWhenNameIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.getByName(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
 }

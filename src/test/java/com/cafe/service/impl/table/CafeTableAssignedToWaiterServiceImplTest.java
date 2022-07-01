@@ -11,6 +11,7 @@ import com.cafe.service.core.table.CafeTableAssignedToWaiterCreationParams;
 import com.cafe.service.core.table.CafeTableAssignedToWaiterService;
 import com.cafe.service.core.table.CafeTableService;
 import com.cafe.service.core.user.UserService;
+import com.cafe.service.impl.user.UserNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -211,5 +212,77 @@ class CafeTableAssignedToWaiterServiceImplTest {
         Mockito.verify(cafeTableAssignedToWaiterRepository).save(cafeTableAssignedToWaiter);
         Mockito.verify(cafeTableService).getById(1L);
         Mockito.verify(userService).getByUsername("mary21");
+    }
+
+    @Test
+    public void testCreateWhenCafeTableIsNotFound() {
+        Mockito.when(cafeTableService.getById(1L)).thenThrow(CafeTableNotFoundException.class);
+        Assertions.assertThatThrownBy(() -> testSubject.create(new CafeTableAssignedToWaiterCreationParams(
+                1L, "mary21"
+        ))).isExactlyInstanceOf(CafeTableNotFoundException.class);
+        Mockito.verify(cafeTableService).getById(1L);
+        Mockito.verifyNoMoreInteractions(cafeTableService, userService, cafeTableAssignedToWaiterRepository);
+    }
+
+    @Test
+    public void testCreateWhenUserIsNotFound() {
+        CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
+        cafeTable.setId(1L);
+
+        Mockito.when(cafeTableService.getById(1L)).thenReturn(cafeTable);
+        Mockito.when(userService.getByUsername("mary21")).thenThrow(UserNotFoundException.class);
+        Assertions.assertThatThrownBy(() -> testSubject.create(new CafeTableAssignedToWaiterCreationParams(
+                1L, "mary21"
+        ))).isExactlyInstanceOf(UserNotFoundException.class);
+        Mockito.verify(userService).getByUsername("mary21");
+        Mockito.verify(cafeTableService).getById(1L);
+        Mockito.verifyNoMoreInteractions(cafeTableService, userService, cafeTableAssignedToWaiterRepository);
+    }
+    @Test
+    public void testCreateWhenParamsObjectIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.create(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testFindByIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.findById(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testGetByIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.getById(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testFindAllByWaiterIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.findAllByWaiterId(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testFindByCafeTableIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.findByCafeTableId(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testExistsByWaiterUsernameWhenUsernameIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.existsByWaiterUsername(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testFindAllByWaiterUsernameWhenUsernameIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.findAllByWaiterUsername(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testDeleteByCafeTableIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.deleteByCafeTableId(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }

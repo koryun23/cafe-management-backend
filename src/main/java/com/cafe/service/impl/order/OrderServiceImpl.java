@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
         ));
         LOGGER.info("Successfully created a new order according to the order creation params - {}, result - {}", params, order);
         return order;
-    }
+    } // tested
 
     @Transactional
     @Override
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order(
                 cafeTableService.getById(params.getCafeTableId()),
                 params.getOrderStatusType(),
-                LocalDateTime.now()
+                params.getUpdatedAt()
         );
         order.setId(params.getId());
         Order savedOrder = orderRepository.save(order);

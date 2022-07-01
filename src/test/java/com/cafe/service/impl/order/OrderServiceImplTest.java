@@ -7,7 +7,9 @@ import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.repository.OrderRepository;
 import com.cafe.service.core.order.OrderCreationParams;
 import com.cafe.service.core.order.OrderService;
+import com.cafe.service.core.order.OrderUpdateParams;
 import com.cafe.service.core.table.CafeTableService;
+import com.cafe.service.impl.table.CafeTableNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,7 +80,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    public void create() {
+    public void testCreate() {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
@@ -97,5 +99,69 @@ class OrderServiceImplTest {
         Mockito.verify(cafeTableService).getById(1L);
         Mockito.verify(orderRepository).save(order);
         Mockito.verifyNoMoreInteractions(cafeTableService, orderRepository);
+    }
+
+    @Test
+    public void testUpdate() {
+        CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
+        cafeTable.setId(1L);
+
+        Order newOrder = new Order(cafeTable, OrderStatusType.CLOSED, LocalDateTime.MAX);
+        newOrder.setId(1L);
+
+        Mockito.when(cafeTableService.getById(1L)).thenReturn(cafeTable);
+        Mockito.when(orderRepository.save(newOrder)).thenReturn(newOrder);
+
+        Assertions.assertThat(testSubject.update(new OrderUpdateParams(
+                1L, 1L, OrderStatusType.CLOSED, LocalDateTime.MAX
+        ))).isEqualTo(newOrder);
+
+        Mockito.verify(cafeTableService).getById(1L);
+        Mockito.verify(orderRepository).save(newOrder);
+        Mockito.verifyNoMoreInteractions(cafeTableService, orderRepository);
+    }
+
+    @Test
+    public void testCreateWhenParamsIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.create(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testCreateWhenCafeTableIsNotFound() {
+        Mockito.when(cafeTableService.getById(1L)).thenThrow(CafeTableNotFoundException.class);
+        Assertions.assertThatThrownBy(() -> testSubject.create(
+                new OrderCreationParams(1L, OrderStatusType.OPEN, LocalDateTime.MAX)
+        )).isExactlyInstanceOf(CafeTableNotFoundException.class);
+        Mockito.verify(cafeTableService).getById(1L);
+        Mockito.verifyNoMoreInteractions(cafeTableService, orderRepository);
+    }
+
+    @Test
+    public void testUpdateWhenParamsIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.update(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testUpdateWhenCafeTableIsNotFound() {
+        Mockito.when(cafeTableService.getById(1L)).thenThrow(CafeTableNotFoundException.class);
+        Assertions.assertThatThrownBy(() -> testSubject.update(
+                new OrderUpdateParams(1L, 1L, OrderStatusType.OPEN, LocalDateTime.now())
+        )).isExactlyInstanceOf(CafeTableNotFoundException.class);
+        Mockito.verify(cafeTableService).getById(1L);
+        Mockito.verifyNoMoreInteractions(cafeTableService, orderRepository);
+    }
+
+    @Test
+    public void testGetByIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.getById(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testFindByIdWhenIdIsNull() {
+        Assertions.assertThatThrownBy(() -> testSubject.findById(null))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }

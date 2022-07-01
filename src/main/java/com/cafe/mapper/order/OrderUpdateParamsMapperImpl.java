@@ -4,6 +4,8 @@ import com.cafe.dto.OrderUpdateRequestDto;
 import com.cafe.service.core.order.OrderUpdateParams;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class OrderUpdateParamsMapperImpl implements OrderUpdateParamsMapepr {
 
@@ -12,7 +14,8 @@ public class OrderUpdateParamsMapperImpl implements OrderUpdateParamsMapepr {
         return new OrderUpdateParams(
                 dto.getId(),
                 dto.getCafeTableId(),
-                dto.getOrderStatusType()
+                dto.getOrderStatusType(),
+                LocalDateTime.now()
         );
     }
 }
