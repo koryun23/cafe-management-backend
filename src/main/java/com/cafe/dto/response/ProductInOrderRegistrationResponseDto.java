@@ -1,5 +1,7 @@
 package com.cafe.dto.response;
 
+import org.springframework.util.Assert;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -10,17 +12,11 @@ public class ProductInOrderRegistrationResponseDto {
     private Integer amount;
     private LocalDateTime registeredAt;
 
-    private List<String> errors;
-
     public ProductInOrderRegistrationResponseDto(String productName, Long orderId, Integer amount, LocalDateTime registeredAt) {
-        this.productName = productName;
-        this.orderId = orderId;
-        this.amount = amount;
-        this.registeredAt = registeredAt;
-    }
-
-    public ProductInOrderRegistrationResponseDto(List<String> errors) {
-        this.errors = errors;
+        setProductName(productName);
+        setOrderId(orderId);
+        setAmount(amount);
+        setRegisteredAt(registeredAt);
     }
 
     public ProductInOrderRegistrationResponseDto() {
@@ -31,6 +27,8 @@ public class ProductInOrderRegistrationResponseDto {
     }
 
     public void setProductName(String productName) {
+        Assert.notNull(productName, "Product name should not be null");
+        Assert.hasText(productName, "Product name should not be empty");
         this.productName = productName;
     }
 
@@ -39,6 +37,7 @@ public class ProductInOrderRegistrationResponseDto {
     }
 
     public void setOrderId(Long orderId) {
+        Assert.notNull(orderId, "Order id should not be null");
         this.orderId = orderId;
     }
 
@@ -47,6 +46,10 @@ public class ProductInOrderRegistrationResponseDto {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount <= 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 
@@ -55,15 +58,8 @@ public class ProductInOrderRegistrationResponseDto {
     }
 
     public void setRegisteredAt(LocalDateTime registeredAt) {
+        Assert.notNull(registeredAt, "Registration date should not be null");
         this.registeredAt = registeredAt;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     @Override
@@ -74,13 +70,12 @@ public class ProductInOrderRegistrationResponseDto {
         return Objects.equals(productName, that.productName) &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(registeredAt, that.registeredAt) &&
-                Objects.equals(errors, that.errors);
+                Objects.equals(registeredAt, that.registeredAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productName, orderId, amount, registeredAt, errors);
+        return Objects.hash(productName, orderId, amount, registeredAt);
     }
 
     @Override
@@ -90,7 +85,6 @@ public class ProductInOrderRegistrationResponseDto {
                 ", orderId=" + orderId +
                 ", amount=" + amount +
                 ", registeredAt=" + registeredAt +
-                ", errors=" + errors +
                 '}';
     }
 }

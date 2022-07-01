@@ -1,6 +1,7 @@
 package com.cafe.entity.table;
 
 import com.cafe.entity.order.Order;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -33,9 +34,9 @@ public class CafeTable {
     public CafeTable(CafeTableStatusType cafeTableStatusType,
                      Integer numberOfSeats,
                      String code) {
-        this.cafeTableStatusType = cafeTableStatusType;
-        this.numberOfSeats = numberOfSeats;
-        this.code = code;
+        setCafeTableStatusType(cafeTableStatusType);
+        setNumberOfSeats(numberOfSeats);
+        setCode(code);
     }
 
     public Long getId() {
@@ -43,6 +44,7 @@ public class CafeTable {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -51,6 +53,7 @@ public class CafeTable {
     }
 
     public void setOrder(Order order) {
+        Assert.notNull(order, "Order should not be null");
         this.order = order;
     }
 
@@ -59,6 +62,10 @@ public class CafeTable {
     }
 
     public void setNumberOfSeats(Integer numberOfSeats) {
+        Assert.notNull(numberOfSeats, "Number of seats should not be null");
+        if(numberOfSeats <= 0) {
+            throw new IllegalArgumentException("Number of seats should be > 0");
+        }
         this.numberOfSeats = numberOfSeats;
     }
 
@@ -71,10 +78,13 @@ public class CafeTable {
     }
 
     public void setCode(String code) {
+        Assert.notNull(code, "Code should not be null");
+        Assert.notNull(code, "Code should not be empty");
         this.code = code;
     }
 
     public void setCafeTableStatusType(CafeTableStatusType cafeTableStatusType) {
+        Assert.notNull(cafeTableStatusType, "Cafe table status type should not be null");
         this.cafeTableStatusType = cafeTableStatusType;
     }
 
@@ -95,7 +105,6 @@ public class CafeTable {
     public String toString() {
         return "CafeTable{" +
                 "id=" + id +
-                //", order=" + order +
                 ", cafeTableStatusType=" + cafeTableStatusType +
                 ", numberOfSeats=" + numberOfSeats +
                 ", code='" + code + '\'' +

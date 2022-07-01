@@ -1,5 +1,7 @@
 package com.cafe.dto.request;
 
+import org.springframework.util.Assert;
+
 import java.util.Objects;
 
 public class CafeTableAssignmentRequestDto {
@@ -8,8 +10,8 @@ public class CafeTableAssignmentRequestDto {
     private String waiterUsername;
 
     public CafeTableAssignmentRequestDto(Long tableId, String waiterUsername) {
-        this.cafeTableId = tableId;
-        this.waiterUsername = waiterUsername;
+        setCafeTableId(tableId);
+        setWaiterUsername(waiterUsername);
     }
 
     public CafeTableAssignmentRequestDto() {
@@ -20,6 +22,7 @@ public class CafeTableAssignmentRequestDto {
     }
 
     public void setCafeTableId(Long tableId) {
+        Assert.notNull(tableId, "Table id should not be null");
         this.cafeTableId = tableId;
     }
 
@@ -28,6 +31,8 @@ public class CafeTableAssignmentRequestDto {
     }
 
     public void setWaiterUsername(String waiterUsername) {
+        Assert.notNull(waiterUsername, "Waiter username should not be null");
+        Assert.hasText(waiterUsername, "Waiter username should not be empty");
         this.waiterUsername = waiterUsername;
     }
 

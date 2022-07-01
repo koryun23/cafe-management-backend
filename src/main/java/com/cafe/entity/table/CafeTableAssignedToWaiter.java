@@ -1,6 +1,7 @@
 package com.cafe.entity.table;
 
 import com.cafe.entity.user.User;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -33,8 +34,8 @@ public class CafeTableAssignedToWaiter {
     private User waiter;
 
     public CafeTableAssignedToWaiter(CafeTable cafeTable, User waiter) {
-        this.cafeTable = cafeTable;
-        this.waiter = waiter;
+        setCafeTable(cafeTable);
+        setWaiter(waiter);
     }
 
     public CafeTableAssignedToWaiter() {
@@ -45,6 +46,7 @@ public class CafeTableAssignedToWaiter {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "Id should not be null");
         this.id = id;
     }
 
@@ -53,6 +55,7 @@ public class CafeTableAssignedToWaiter {
     }
 
     public void setCafeTable(CafeTable cafeTable) {
+        Assert.notNull(cafeTable, "Cafe table should not be null");
         this.cafeTable = cafeTable;
     }
 
@@ -61,6 +64,7 @@ public class CafeTableAssignedToWaiter {
     }
 
     public void setWaiter(User waiter) {
+        Assert.notNull(waiter, "Waiter should not be null");
         this.waiter = waiter;
     }
 

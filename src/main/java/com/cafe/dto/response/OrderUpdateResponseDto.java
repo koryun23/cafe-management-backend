@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.order.OrderStatusType;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,20 +14,14 @@ public class OrderUpdateResponseDto {
     private OrderStatusType orderStatusType;
     private LocalDateTime updatedAt;
 
-    private List<String> errors;
-
     public OrderUpdateResponseDto(Long id, Long cafeTableId, OrderStatusType orderStatusType, LocalDateTime updatedAt) {
-        this.id = id;
-        this.cafeTableId = cafeTableId;
-        this.orderStatusType = orderStatusType;
-        this.updatedAt = updatedAt;
+        setId(id);
+        setCafeTableId(cafeTableId);
+        setOrderStatusType(orderStatusType);
+        setUpdatedAt(updatedAt);
     }
 
     public OrderUpdateResponseDto() {
-    }
-
-    public OrderUpdateResponseDto(List<String> errors) {
-        this.errors = errors;
     }
 
     public Long getCafeTableId() {
@@ -34,6 +29,7 @@ public class OrderUpdateResponseDto {
     }
 
     public void setCafeTableId(Long cafeTableId) {
+        Assert.notNull(cafeTableId, "Cafe table id should not be null");
         this.cafeTableId = cafeTableId;
     }
 
@@ -42,6 +38,7 @@ public class OrderUpdateResponseDto {
     }
 
     public void setOrderStatusType(OrderStatusType orderStatusType) {
+        Assert.notNull(orderStatusType, "Order status type should not be null");
         this.orderStatusType = orderStatusType;
     }
 
@@ -50,15 +47,8 @@ public class OrderUpdateResponseDto {
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
+        Assert.notNull(updatedAt, "Updating date should not be null");
         this.updatedAt = updatedAt;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     public Long getId() {
@@ -66,6 +56,7 @@ public class OrderUpdateResponseDto {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -77,13 +68,12 @@ public class OrderUpdateResponseDto {
         return Objects.equals(cafeTableId, that.cafeTableId) &&
                 orderStatusType == that.orderStatusType &&
                 Objects.equals(updatedAt, that.updatedAt) &&
-                Objects.equals(errors, that.errors) &&
                 Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, orderStatusType, updatedAt, errors, id);
+        return Objects.hash(cafeTableId, orderStatusType, updatedAt, id);
     }
 
     @Override
@@ -93,7 +83,6 @@ public class OrderUpdateResponseDto {
                 ", cafeTableId=" + cafeTableId +
                 ", orderStatusType=" + orderStatusType +
                 ", updatedAt=" + updatedAt +
-                ", errors=" + errors +
                 '}';
     }
 }

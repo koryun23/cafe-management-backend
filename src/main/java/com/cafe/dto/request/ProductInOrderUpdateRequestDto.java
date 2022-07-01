@@ -1,6 +1,7 @@
 package com.cafe.dto.request;
 
 import com.cafe.entity.product.ProductInOrderStatusType;
+import org.springframework.util.Assert;
 
 import java.util.Objects;
 
@@ -19,12 +20,12 @@ public class ProductInOrderUpdateRequestDto {
                                           Integer amount,
                                           String waiterUsername,
                                           ProductInOrderStatusType status) {
-        this.id = id;
-        this.productName = productName;
-        this.orderId = orderId;
-        this.amount = amount;
-        this.waiterUsername = waiterUsername;
-        this.status = status;
+        setId(id);
+        setProductName(productName);
+        setOrderId(orderId);
+        setAmount(amount);
+        setWaiterUsername(waiterUsername);
+        setStatus(status);
     }
 
     public ProductInOrderUpdateRequestDto() {
@@ -35,6 +36,8 @@ public class ProductInOrderUpdateRequestDto {
     }
 
     public void setProductName(String productName) {
+        Assert.notNull(productName, "Product name should not be null");
+        Assert.hasText(productName, "Product name should not be empty");
         this.productName = productName;
     }
 
@@ -43,6 +46,7 @@ public class ProductInOrderUpdateRequestDto {
     }
 
     public void setOrderId(Long orderId) {
+        Assert.notNull(orderId, "Order id should not be null");
         this.orderId = orderId;
     }
 
@@ -51,6 +55,10 @@ public class ProductInOrderUpdateRequestDto {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount <= 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 
@@ -59,6 +67,7 @@ public class ProductInOrderUpdateRequestDto {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -67,6 +76,8 @@ public class ProductInOrderUpdateRequestDto {
     }
 
     public void setWaiterUsername(String waiterUsername) {
+        Assert.notNull(waiterUsername, "Waiter username should not be null");
+        Assert.hasText(waiterUsername, "Waiter username should not be empty");
         this.waiterUsername = waiterUsername;
     }
 
@@ -75,6 +86,7 @@ public class ProductInOrderUpdateRequestDto {
     }
 
     public void setStatus(ProductInOrderStatusType status) {
+        Assert.notNull(status, "Product in order status type should not be empty");
         this.status = status;
     }
 

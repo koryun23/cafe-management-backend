@@ -1,5 +1,7 @@
 package com.cafe.dto.request;
 
+import io.jsonwebtoken.lang.Assert;
+
 import java.util.Objects;
 
 public class CafeTablesAssignedToWaiterRetrievalRequestDto {
@@ -10,7 +12,7 @@ public class CafeTablesAssignedToWaiterRetrievalRequestDto {
     }
 
     public CafeTablesAssignedToWaiterRetrievalRequestDto(String waiterUsername) {
-        this.waiterUsername = waiterUsername;
+        setWaiterUsername(waiterUsername);
     }
 
     public String getWaiterUsername() {
@@ -18,6 +20,8 @@ public class CafeTablesAssignedToWaiterRetrievalRequestDto {
     }
 
     public void setWaiterUsername(String waiterUsername) {
+        Assert.notNull(waiterUsername, "Waiter username should not be null");
+        Assert.hasText(waiterUsername, "Waiter username should not be empty");
         this.waiterUsername = waiterUsername;
     }
 

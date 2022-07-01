@@ -1,6 +1,7 @@
 package com.cafe.dto.request;
 
 import com.cafe.entity.order.OrderStatusType;
+import org.springframework.util.Assert;
 
 import java.util.Objects;
 
@@ -11,9 +12,9 @@ public class OrderRegistrationRequestDto {
     private String waiterUsername;
 
     public OrderRegistrationRequestDto(Long cafeTableId, String waiterUsername) {
-        this.cafeTableId = cafeTableId;
-        this.status = OrderStatusType.OPEN;
-        this.waiterUsername = waiterUsername;
+        setCafeTableId(cafeTableId);
+        setWaiterUsername(waiterUsername);
+        setStatus(OrderStatusType.OPEN);
     }
 
     public OrderRegistrationRequestDto() {
@@ -24,6 +25,7 @@ public class OrderRegistrationRequestDto {
     }
 
     public void setCafeTableId(Long cafeTableId) {
+        Assert.notNull(cafeTableId, "Cafe table id should not be null");
         this.cafeTableId = cafeTableId;
     }
 
@@ -32,6 +34,7 @@ public class OrderRegistrationRequestDto {
     }
 
     public void setStatus(OrderStatusType status) {
+        Assert.notNull(status, "order status type should not be null");
         this.status = status;
     }
 
@@ -40,6 +43,8 @@ public class OrderRegistrationRequestDto {
     }
 
     public void setWaiterUsername(String waiterUsername) {
+        Assert.notNull(waiterUsername, "waiter username should not be null");
+        Assert.hasText(waiterUsername, "waiter username should not be empty");
         this.waiterUsername = waiterUsername;
     }
 

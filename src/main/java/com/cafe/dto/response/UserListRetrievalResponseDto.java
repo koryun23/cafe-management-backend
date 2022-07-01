@@ -1,5 +1,7 @@
 package com.cafe.dto.response;
 
+import org.springframework.util.Assert;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,7 +10,7 @@ public class UserListRetrievalResponseDto {
     private List<UserRegistrationResponseDto> userList;
 
     public UserListRetrievalResponseDto(List<UserRegistrationResponseDto> userList) {
-        this.userList = userList;
+        setUserList(userList);
     }
 
     public UserListRetrievalResponseDto() {
@@ -19,6 +21,7 @@ public class UserListRetrievalResponseDto {
     }
 
     public void setUserList(List<UserRegistrationResponseDto> userList) {
+        Assert.notNull(userList, "user list should not be null");
         this.userList = userList;
     }
 

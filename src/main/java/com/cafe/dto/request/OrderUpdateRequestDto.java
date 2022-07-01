@@ -1,6 +1,7 @@
 package com.cafe.dto.request;
 
 import com.cafe.entity.order.OrderStatusType;
+import org.springframework.util.Assert;
 
 import java.util.Objects;
 
@@ -15,10 +16,10 @@ public class OrderUpdateRequestDto {
                                  Long cafeTableId,
                                  OrderStatusType orderStatusType,
                                  String waiterUsername) {
-        this.id = id;
-        this.cafeTableId = cafeTableId;
-        this.orderStatusType = orderStatusType;
-        this.waiterUsername = waiterUsername;
+        setId(id);
+        setCafeTableId(cafeTableId);
+        setOrderStatusType(orderStatusType);
+        setWaiterUsername(waiterUsername);
     }
 
     public OrderUpdateRequestDto() {
@@ -29,6 +30,7 @@ public class OrderUpdateRequestDto {
     }
 
     public void setCafeTableId(Long cafeTableId) {
+        Assert.notNull(cafeTableId, "Cafe table id should not be null");
         this.cafeTableId = cafeTableId;
     }
 
@@ -37,6 +39,7 @@ public class OrderUpdateRequestDto {
     }
 
     public void setOrderStatusType(OrderStatusType orderStatusType) {
+        Assert.notNull(orderStatusType, "Order status type should not be null");
         this.orderStatusType = orderStatusType;
     }
 
@@ -45,6 +48,7 @@ public class OrderUpdateRequestDto {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -53,6 +57,8 @@ public class OrderUpdateRequestDto {
     }
 
     public void setWaiterUsername(String waiterUsername) {
+        Assert.notNull(waiterUsername, "Waiter username should not be null");
+        Assert.hasText(waiterUsername, "Waiter username should not be empty");
         this.waiterUsername = waiterUsername;
     }
 

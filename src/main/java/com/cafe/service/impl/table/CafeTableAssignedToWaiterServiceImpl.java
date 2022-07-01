@@ -26,6 +26,9 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
     public CafeTableAssignedToWaiterServiceImpl(CafeTableAssignedToWaiterRepository cafeTableAssignedToWaiterRepository,
                                                 CafeTableService cafeTableService,
                                                 UserService userService) {
+        Assert.notNull(cafeTableAssignedToWaiterRepository, "cafe table assigned to waiter repository should not be null");
+        Assert.notNull(cafeTableService, "cafe table service should not be null");
+        Assert.notNull(userService, "user service should not be null");
         this.cafeTableAssignedToWaiterRepository = cafeTableAssignedToWaiterRepository;
         this.cafeTableService = cafeTableService;
         this.userService = userService;

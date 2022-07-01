@@ -1,5 +1,7 @@
 package com.cafe.entity.user;
 
+import org.springframework.util.Assert;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -24,8 +26,8 @@ public class UserRole {
     private UserRoleType userRoleType;
 
     public UserRole(User user, UserRoleType userRoleType) {
-        this.user = user;
-        this.userRoleType = userRoleType;
+        setUser(user);
+        setUserRoleType(userRoleType);
     }
 
     public UserRole() {
@@ -36,6 +38,7 @@ public class UserRole {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -44,6 +47,7 @@ public class UserRole {
     }
 
     public void setUser(User user) {
+        Assert.notNull(user, "user should not be null");
         this.user = user;
     }
 
@@ -52,6 +56,7 @@ public class UserRole {
     }
 
     public void setUserRoleType(UserRoleType userRoleType) {
+        Assert.notNull(userRoleType, "user role type should not be null");
         this.userRoleType = userRoleType;
     }
 

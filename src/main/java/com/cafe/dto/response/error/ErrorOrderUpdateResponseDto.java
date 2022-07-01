@@ -2,6 +2,7 @@ package com.cafe.dto.response.error;
 
 import com.cafe.dto.response.OrderUpdateResponseDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
@@ -9,11 +10,11 @@ import java.util.Objects;
 public class ErrorOrderUpdateResponseDto extends OrderUpdateResponseDto {
 
     private List<String> errors;
-    private HttpStatus status;
+    private HttpStatus httpStatus;
 
     public ErrorOrderUpdateResponseDto(List<String> errors, HttpStatus status) {
-        this.errors = errors;
-        this.status = status;
+        setErrors(errors);
+        setHttpStatus(httpStatus);
     }
 
     public List<String> getErrors() {
@@ -21,15 +22,17 @@ public class ErrorOrderUpdateResponseDto extends OrderUpdateResponseDto {
     }
 
     public void setErrors(List<String> errors) {
+        Assert.notNull(errors, "error list should not be null");
         this.errors = errors;
     }
 
-    public HttpStatus getStatus() {
-        return status;
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 
-    public void setStatus(HttpStatus status) {
-        this.status = status;
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "Http status should not be null");
+        this.httpStatus = httpStatus;
     }
 
     @Override
@@ -38,19 +41,19 @@ public class ErrorOrderUpdateResponseDto extends OrderUpdateResponseDto {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ErrorOrderUpdateResponseDto that = (ErrorOrderUpdateResponseDto) o;
-        return Objects.equals(errors, that.errors) && status == that.status;
+        return Objects.equals(errors, that.errors) && httpStatus == that.httpStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), errors, status);
+        return Objects.hash(super.hashCode(), errors, httpStatus);
     }
 
     @Override
     public String toString() {
         return "ErrorOrderUpdateResponseDto{" +
                 "errors=" + errors +
-                ", status=" + status +
+                ", httpStatus=" + httpStatus +
                 '}';
     }
 }

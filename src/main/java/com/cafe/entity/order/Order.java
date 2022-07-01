@@ -2,6 +2,7 @@ package com.cafe.entity.order;
 
 import com.cafe.entity.product.ProductInOrder;
 import com.cafe.entity.table.CafeTable;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,9 +36,9 @@ public class Order {
     }
 
     public Order(CafeTable table, OrderStatusType orderStatusType, LocalDateTime createdAt) {
-        this.table = table;
-        this.orderStatusType = orderStatusType;
-        this.createdAt = createdAt;
+        setTable(table);
+        setOrderStatusType(orderStatusType);
+        setCreatedAt(createdAt);
     }
 
     public Long getId() {
@@ -45,6 +46,7 @@ public class Order {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -53,6 +55,7 @@ public class Order {
     }
 
     public void setProductsInOrder(List<ProductInOrder> productsInOrder) {
+        Assert.notNull(productsInOrder, "Product in order list should not be null");
         this.productsInOrder = productsInOrder;
     }
 
@@ -61,6 +64,7 @@ public class Order {
     }
 
     public void setTable(CafeTable table) {
+        Assert.notNull(table, "Cafe table should not be null");
         this.table = table;
     }
 
@@ -69,6 +73,7 @@ public class Order {
     }
 
     public void setOrderStatusType(OrderStatusType orderStatusType) {
+        Assert.notNull(orderStatusType, "order status type should not be null");
         this.orderStatusType = orderStatusType;
     }
 
@@ -77,6 +82,7 @@ public class Order {
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
+        Assert.notNull(createdAt, "creation date should not be null");
         this.createdAt = createdAt;
     }
 

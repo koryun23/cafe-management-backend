@@ -1,5 +1,7 @@
 package com.cafe.dto.request;
 
+import org.springframework.util.Assert;
+
 import java.util.Objects;
 
 public class ProductRegistrationRequestDto {
@@ -9,9 +11,9 @@ public class ProductRegistrationRequestDto {
     private Integer amount;
 
     public ProductRegistrationRequestDto(String name, Integer price, Integer amount) {
-        this.name = name;
-        this.price = price;
-        this.amount = amount;
+        setName(name);
+        setPrice(price);
+        setAmount(amount);
     }
 
     public ProductRegistrationRequestDto() {
@@ -22,6 +24,8 @@ public class ProductRegistrationRequestDto {
     }
 
     public void setName(String name) {
+        Assert.notNull(name, "Name should not be null");
+        Assert.hasText(name, "Name should not be empty");
         this.name = name;
     }
 
@@ -30,6 +34,10 @@ public class ProductRegistrationRequestDto {
     }
 
     public void setPrice(Integer price) {
+        Assert.notNull(price, "Price should not be null");
+        if(price <= 0) {
+            throw new IllegalArgumentException("Price should be > 0");
+        }
         this.price = price;
     }
 
@@ -38,6 +46,10 @@ public class ProductRegistrationRequestDto {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount <= 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 

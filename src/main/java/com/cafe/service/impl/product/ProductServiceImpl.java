@@ -22,6 +22,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     public ProductServiceImpl(ProductRepository productRepository) {
+        Assert.notNull(productRepository, "product repository should not be null");
         this.productRepository = productRepository;
     }
 

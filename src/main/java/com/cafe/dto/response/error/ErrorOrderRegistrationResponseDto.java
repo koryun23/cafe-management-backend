@@ -2,6 +2,7 @@ package com.cafe.dto.response.error;
 
 import com.cafe.dto.response.OrderRegistrationResponseDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +12,9 @@ public class ErrorOrderRegistrationResponseDto extends OrderRegistrationResponse
     private List<String> errors;
     private HttpStatus status;
 
-    public ErrorOrderRegistrationResponseDto(List<String> errors, HttpStatus status) {
-        this.errors = errors;
-        this.status = status;
+    public ErrorOrderRegistrationResponseDto(List<String> errors, HttpStatus httpStatus) {
+        setErrors(errors);
+        setHttpStatus(httpStatus);
     }
 
     public List<String> getErrors() {
@@ -21,14 +22,16 @@ public class ErrorOrderRegistrationResponseDto extends OrderRegistrationResponse
     }
 
     public void setErrors(List<String> errors) {
+        Assert.notNull(errors, "error list should not be null");
         this.errors = errors;
     }
 
-    public HttpStatus getStatus() {
+    public HttpStatus getHttpStatus() {
         return status;
     }
 
-    public void setStatus(HttpStatus status) {
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "Http status should not be null");
         this.status = status;
     }
 

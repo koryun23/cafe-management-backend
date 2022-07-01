@@ -1,5 +1,7 @@
 package com.cafe.dto.response;
 
+import org.springframework.util.Assert;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -14,10 +16,10 @@ public class ProductUpdateResponseDto {
     }
 
     public ProductUpdateResponseDto(String name, Integer price, Integer amount, LocalDateTime updatedAt) {
-        this.name = name;
-        this.price = price;
-        this.amount = amount;
-        this.updatedAt = updatedAt;
+        setName(name);
+        setPrice(price);
+        setAmount(amount);
+        setUpdatedAt(updatedAt);
     }
 
     public String getName() {
@@ -25,6 +27,8 @@ public class ProductUpdateResponseDto {
     }
 
     public void setName(String name) {
+        Assert.notNull(name, "name should not be null");
+        Assert.hasText(name, "name should not be empty");
         this.name = name;
     }
 
@@ -33,6 +37,10 @@ public class ProductUpdateResponseDto {
     }
 
     public void setPrice(Integer price) {
+        Assert.notNull(price, "Price should not be null");
+        if(price <= 0) {
+            throw new IllegalArgumentException("Price should be > 0");
+        }
         this.price = price;
     }
 
@@ -41,6 +49,10 @@ public class ProductUpdateResponseDto {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount < 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 
@@ -49,6 +61,7 @@ public class ProductUpdateResponseDto {
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
+        Assert.notNull(updatedAt, "Updating date should not be null");
         this.updatedAt = updatedAt;
     }
 

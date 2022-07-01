@@ -1,5 +1,7 @@
 package com.cafe.dto.response;
 
+import io.jsonwebtoken.lang.Assert;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -10,16 +12,10 @@ public class CafeTableAssignmentResponseDto {
     private String waiterUsername;
     private LocalDateTime assignedAt;
 
-    private List<String> errors;
-
     public CafeTableAssignmentResponseDto(Long tableId, String waiterUsername, LocalDateTime assignedAt) {
-        this.tableId = tableId;
-        this.waiterUsername = waiterUsername;
-        this.assignedAt = assignedAt;
-    }
-
-    public CafeTableAssignmentResponseDto(List<String> errors) {
-        this.errors = errors;
+        setTableId(tableId);
+        setWaiterUsername(waiterUsername);
+        setAssignedAt(assignedAt);
     }
 
     public CafeTableAssignmentResponseDto() {
@@ -30,6 +26,7 @@ public class CafeTableAssignmentResponseDto {
     }
 
     public void setTableId(Long tableId) {
+        Assert.notNull(tableId, "Table id should not be null");
         this.tableId = tableId;
     }
 
@@ -38,6 +35,8 @@ public class CafeTableAssignmentResponseDto {
     }
 
     public void setWaiterUsername(String waiterUsername) {
+        Assert.notNull(waiterUsername, "Waiter username should not be null");
+        Assert.hasText(waiterUsername, "Waiter username should not be empty");
         this.waiterUsername = waiterUsername;
     }
 
@@ -46,15 +45,8 @@ public class CafeTableAssignmentResponseDto {
     }
 
     public void setAssignedAt(LocalDateTime assignedAt) {
+        Assert.notNull(assignedAt, "Assignation date object should not be null");
         this.assignedAt = assignedAt;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     @Override
@@ -64,13 +56,12 @@ public class CafeTableAssignmentResponseDto {
         CafeTableAssignmentResponseDto that = (CafeTableAssignmentResponseDto) o;
         return Objects.equals(tableId, that.tableId) &&
                 Objects.equals(waiterUsername, that.waiterUsername) &&
-                Objects.equals(assignedAt, that.assignedAt) &&
-                Objects.equals(errors, that.errors);
+                Objects.equals(assignedAt, that.assignedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tableId, waiterUsername, assignedAt, errors);
+        return Objects.hash(tableId, waiterUsername, assignedAt);
     }
 
     @Override
@@ -79,7 +70,6 @@ public class CafeTableAssignmentResponseDto {
                 "tableId=" + tableId +
                 ", waiterUsername=" + waiterUsername +
                 ", assignedAt=" + assignedAt +
-                ", errors=" + errors +
                 '}';
     }
 

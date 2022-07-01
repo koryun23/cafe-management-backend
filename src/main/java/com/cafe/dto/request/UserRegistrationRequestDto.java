@@ -1,6 +1,7 @@
 package com.cafe.dto.request;
 
 import com.cafe.entity.user.UserRoleType;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,12 +14,16 @@ public class UserRegistrationRequestDto {
     private String secondName;
     private List<UserRoleType> roleList;
 
-    public UserRegistrationRequestDto(String username, String password, String firstName, String secondName, List<UserRoleType> roleList) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.roleList = roleList;
+    public UserRegistrationRequestDto(String username,
+                                      String password,
+                                      String firstName,
+                                      String secondName,
+                                      List<UserRoleType> roleList) {
+        setUsername(username);
+        setPassword(password);
+        setFirstName(firstName);
+        setSecondName(secondName);
+        setRoleList(roleList);
     }
 
     public UserRegistrationRequestDto() {
@@ -29,6 +34,8 @@ public class UserRegistrationRequestDto {
     }
 
     public void setUsername(String username) {
+        Assert.notNull(username, "username should not be null");
+        Assert.hasText(username, "Username should not be empty");
         this.username = username;
     }
 
@@ -37,6 +44,8 @@ public class UserRegistrationRequestDto {
     }
 
     public void setFirstName(String firstName) {
+        Assert.notNull(firstName, "First name should not be null");
+        Assert.hasText(firstName, "First name should not be empty");
         this.firstName = firstName;
     }
 
@@ -45,6 +54,8 @@ public class UserRegistrationRequestDto {
     }
 
     public void setSecondName(String secondName) {
+        Assert.notNull(secondName, "Second name should not be null");
+        Assert.hasText(secondName, "Second name should not be empty");
         this.secondName = secondName;
     }
 
@@ -53,6 +64,7 @@ public class UserRegistrationRequestDto {
     }
 
     public void setRoleList(List<UserRoleType> roleList) {
+        Assert.notNull(roleList, "role list should not be null");
         this.roleList = roleList;
     }
 
@@ -61,6 +73,8 @@ public class UserRegistrationRequestDto {
     }
 
     public void setPassword(String password) {
+        Assert.notNull(password, "Password should not be null");
+        Assert.hasText(password, "Password should not be empty");
         this.password = password;
     }
 

@@ -1,5 +1,7 @@
 package com.cafe.dto.response;
 
+import io.jsonwebtoken.lang.Assert;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -12,17 +14,12 @@ public class ProductInOrderUpdateResponseDto {
     private Integer amount;
     private LocalDateTime updatedAt;
 
-    private List<String> errors;
     public ProductInOrderUpdateResponseDto(Long id, String productName, Long orderId, Integer amount, LocalDateTime updatedAt) {
-        this.id = id;
-        this.productName = productName;
-        this.orderId = orderId;
-        this.amount = amount;
-        this.updatedAt = updatedAt;
-    }
-
-    public ProductInOrderUpdateResponseDto(List<String> errors) {
-        this.errors = errors;
+        setId(id);
+        setProductName(productName);
+        setOrderId(orderId);
+        setAmount(amount);
+        setUpdatedAt(updatedAt);
     }
 
     public ProductInOrderUpdateResponseDto() {
@@ -33,6 +30,8 @@ public class ProductInOrderUpdateResponseDto {
     }
 
     public void setProductName(String productName) {
+        Assert.notNull(productName, "Product name should not be null");
+        Assert.hasText(productName, "Product name should not be empty");
         this.productName = productName;
     }
 
@@ -41,6 +40,7 @@ public class ProductInOrderUpdateResponseDto {
     }
 
     public void setOrderId(Long orderId) {
+        Assert.notNull(orderId, "Order id should not be null");
         this.orderId = orderId;
     }
 
@@ -49,6 +49,10 @@ public class ProductInOrderUpdateResponseDto {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount <= 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 
@@ -57,15 +61,8 @@ public class ProductInOrderUpdateResponseDto {
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
+        Assert.notNull(updatedAt, "Updating date should not be null");
         this.updatedAt = updatedAt;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     public Long getId() {
@@ -73,6 +70,7 @@ public class ProductInOrderUpdateResponseDto {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -84,7 +82,6 @@ public class ProductInOrderUpdateResponseDto {
                 ", orderId=" + orderId +
                 ", amount=" + amount +
                 ", updatedAt=" + updatedAt +
-                ", errors=" + errors +
                 '}';
     }
 
@@ -97,12 +94,11 @@ public class ProductInOrderUpdateResponseDto {
                 Objects.equals(productName, that.productName) &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(updatedAt, that.updatedAt) &&
-                Objects.equals(errors, that.errors);
+                Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productName, orderId, amount, updatedAt, errors);
+        return Objects.hash(id, productName, orderId, amount, updatedAt);
     }
 }

@@ -1,5 +1,7 @@
 package com.cafe.entity.user;
 
+import org.springframework.util.Assert;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,11 +38,11 @@ public class User {
     }
 
     public User(String firstName, String secondName, String username, String password, LocalDateTime createdAt) {
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.username = username;
-        this.password = password;
-        this.createdAt = createdAt;
+        setFirstName(firstName);
+        setSecondName(secondName);
+        setUsername(username);
+        setPassword(password);
+        setCreatedAt(createdAt);
     }
 
     public Long getId() {
@@ -48,6 +50,7 @@ public class User {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "Id should not be null");
         this.id = id;
     }
 
@@ -56,6 +59,8 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
+        Assert.notNull(firstName, "First name should not be null");
+        Assert.hasText(firstName, "First name should not be empty");
         this.firstName = firstName;
     }
 
@@ -64,6 +69,8 @@ public class User {
     }
 
     public void setSecondName(String secondName) {
+        Assert.notNull(secondName, "Second name should not be null");
+        Assert.hasText(secondName, "Second name should not be empty");
         this.secondName = secondName;
     }
 
@@ -72,6 +79,8 @@ public class User {
     }
 
     public void setUsername(String username) {
+        Assert.notNull(username, "Username should not be null");
+        Assert.hasText(username, "Username should not be empty");
         this.username = username;
     }
 
@@ -80,6 +89,7 @@ public class User {
     }
 
     public void setUserRoleList(List<UserRole> userRoleList) {
+        Assert.notNull(userRoleList, "User role list should not be null");
         this.userRoleList = userRoleList;
     }
 
@@ -88,6 +98,7 @@ public class User {
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
+        Assert.notNull(createdAt, "Creation date should not be null");
         this.createdAt = createdAt;
     }
 
@@ -96,6 +107,8 @@ public class User {
     }
 
     public void setPassword(String password) {
+        Assert.notNull(password, "password should not be null");
+        Assert.hasText(password, "password should not be empty");
         this.password = password;
     }
 

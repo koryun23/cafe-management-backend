@@ -1,5 +1,7 @@
 package com.cafe.entity.product;
 
+import org.springframework.util.Assert;
+
 import javax.persistence.*;
 import javax.persistence.Table;
 import java.util.Objects;
@@ -26,9 +28,9 @@ public class Product {
     }
 
     public Product(String productName, Integer price, Integer amount) {
-        this.productName = productName;
-        this.price = price;
-        this.amount = amount;
+        setProductName(productName);
+        setPrice(price);
+        setAmount(amount);
     }
 
     public Long getId() {
@@ -36,6 +38,7 @@ public class Product {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -44,6 +47,8 @@ public class Product {
     }
 
     public void setProductName(String productName) {
+        Assert.notNull(productName, "Product name should not be null");
+        Assert.hasText(productName, "Product name should not be empty");
         this.productName = productName;
     }
 
@@ -52,6 +57,10 @@ public class Product {
     }
 
     public void setPrice(Integer price) {
+        Assert.notNull(price, "Price should not be null");
+        if(price <= 0) {
+            throw new IllegalArgumentException("Price should be > 0");
+        }
         this.price = price;
     }
 
@@ -60,6 +69,10 @@ public class Product {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount <= 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 

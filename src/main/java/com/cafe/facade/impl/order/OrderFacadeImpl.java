@@ -4,6 +4,8 @@ import com.cafe.dto.request.OrderRegistrationRequestDto;
 import com.cafe.dto.response.OrderRegistrationResponseDto;
 import com.cafe.dto.request.OrderUpdateRequestDto;
 import com.cafe.dto.response.OrderUpdateResponseDto;
+import com.cafe.dto.response.error.ErrorOrderRegistrationResponseDto;
+import com.cafe.dto.response.error.ErrorOrderUpdateResponseDto;
 import com.cafe.entity.order.Order;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.product.ProductInOrderStatusType;
@@ -19,6 +21,7 @@ import com.cafe.service.core.table.CafeTableService;
 import com.cafe.service.impl.table.CafeTableNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -43,15 +46,23 @@ public class OrderFacadeImpl implements OrderFacade {
                            CafeTableAssignedToWaiterService cafeTableAssignedToWaiterService,
                            OrderRegistrationResponseDtoMapper orderRegistrationResponseDtoMapper,
                            OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper,
-                           OrderUpdateParamsMapepr orderUpdateRequestDtoMapper,
+                           OrderUpdateParamsMapepr orderUpdateParamsMapper,
                            OrderCreationParamsMapper orderRegistrationRequestDtoMapper,
                            ProductInOrderService productInOrderService) {
+        Assert.notNull(orderService, "order service should not be null");
+        Assert.notNull(cafeTableService, "cafe table service should not be null");
+        Assert.notNull(cafeTableAssignedToWaiterService, "cafe table assigned to waiter service should not be null");
+        Assert.notNull(orderRegistrationRequestDtoMapper, "order registration request dto mapper should not be null");
+        Assert.notNull(orderUpdateResponseDtoMapper, "order update response dto mapper should not be null");
+        Assert.notNull(orderUpdateParamsMapper, "order update params mapper should not be null");
+        Assert.notNull(orderRegistrationRequestDtoMapper, "order registration request dto mapper should not be null");
+        Assert.notNull(productInOrderService, "product in order service should not be null");
         this.orderService = orderService;
         this.cafeTableService = cafeTableService;
         this.cafeTableAssignedToWaiterService = cafeTableAssignedToWaiterService;
         this.orderRegistrationResponseDtoMapper = orderRegistrationResponseDtoMapper;
         this.orderUpdateResponseDtoMapper = orderUpdateResponseDtoMapper;
-        this.orderUpdateRequestDtoMapper = orderUpdateRequestDtoMapper;
+        this.orderUpdateRequestDtoMapper = orderUpdateParamsMapper;
         this.orderRegistrationRequestDtoMapper = orderRegistrationRequestDtoMapper;
         this.productInOrderService = productInOrderService;
     }
@@ -61,17 +72,24 @@ public class OrderFacadeImpl implements OrderFacade {
         Assert.notNull(dto, "Order registration request should not be null");
         LOGGER.info("Registering a new order according to the order registration request dto - {}", dto);
         if(!foundTableWithIdAssignedToWaiterWithUsername(dto.getCafeTableId(), dto.getWaiterUsername())) {
-            return new OrderRegistrationResponseDto(
-                    List.of(String.format("Table having an id of %d is not assigned to waiter having a username of %s", dto.getCafeTableId(), dto.getWaiterUsername()))
+            return new ErrorOrderRegistrationResponseDto(
+                    List.of(String.format("Table having an id of %d is not assigned to waiter having a username of %s", dto.getCafeTableId(), dto.getWaiterUsername())),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
         Optional<CafeTable> cafeTableOptional = cafeTableService.findById(dto.getCafeTableId());
         if(cafeTableOptional.isEmpty()) {
-            return new OrderRegistrationResponseDto(List.of(String.format("No table found having an id of %d", dto.getCafeTableId())));
+            return new ErrorOrderRegistrationResponseDto(
+                    List.of(String.format("No table found having an id of %d", dto.getCafeTableId())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
         }
         CafeTable cafeTable = cafeTableOptional.get();
         if(cafeTable.getCafeTableStatusType() != CafeTableStatusType.FREE) {
-            return new OrderRegistrationResponseDto(List.of(String.format("The cafe table with an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTable.getCafeTableStatusType())));
+            return new ErrorOrderRegistrationResponseDto(
+                    List.of(String.format("The cafe table with an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTable.getCafeTableStatusType())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
         }
         Order order = orderService.create(orderRegistrationRequestDtoMapper.apply(dto));
         System.out.println(order);
@@ -87,17 +105,19 @@ public class OrderFacadeImpl implements OrderFacade {
         LOGGER.info("Updating an order according to the order update request dto - {}", dto);
         Order orderToUpdate = orderService.getById(dto.getId());
         if(orderToUpdate.getOrderStatusType() != OrderStatusType.OPEN && dto.getOrderStatusType() == OrderStatusType.OPEN) {
-            return new OrderUpdateResponseDto(List.of(
-                    String.format("Cannot update the status of an order from %s to %s", orderToUpdate.getOrderStatusType(), dto.getOrderStatusType())
-            ));
+            return new ErrorOrderUpdateResponseDto(
+                    List.of(String.format("Cannot update the status of an order from %s to %s", orderToUpdate.getOrderStatusType(), dto.getOrderStatusType())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
         }
         Order order = orderService.update(orderUpdateRequestDtoMapper.apply(dto));
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(order.getTable().getId()).orElseThrow(() -> new CafeTableNotFoundException(order.getTable().getId()));
         String orderCreatorUsername = cafeTableAssignedToWaiter.getWaiter().getUsername();
         String orderUpdatorUsername = dto.getWaiterUsername();
         if(!orderCreatorUsername.equals(orderUpdatorUsername)) {
-            return new OrderUpdateResponseDto(
-                    List.of(String.format("Waiter with the username of %s cannot update an order created by a waiter with a username of %s", orderUpdatorUsername, orderCreatorUsername))
+            return new ErrorOrderUpdateResponseDto(
+                    List.of(String.format("Waiter with the username of %s cannot update an order created by a waiter with a username of %s", orderUpdatorUsername, orderCreatorUsername)),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
         if(order.getOrderStatusType() != OrderStatusType.OPEN) {

@@ -1,5 +1,7 @@
 package com.cafe.dto.response;
 
+import org.springframework.util.Assert;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -11,17 +13,11 @@ public class ProductRegistrationResponseDto {
     private Integer amount;
     private LocalDateTime registeredAt;
 
-    private List<String> errors;
-
     public ProductRegistrationResponseDto(String name, Integer price, Integer amount, LocalDateTime registeredAt) {
-        this.name = name;
-        this.price = price;
-        this.amount = amount;
-        this.registeredAt = registeredAt;
-    }
-
-    public ProductRegistrationResponseDto(List<String> errors) {
-        this.errors = errors;
+        setName(name);
+        setPrice(price);
+        setAmount(amount);
+        setRegisteredAt(registeredAt);
     }
 
     public ProductRegistrationResponseDto() {
@@ -32,6 +28,8 @@ public class ProductRegistrationResponseDto {
     }
 
     public void setName(String name) {
+        Assert.notNull(name, "Product name should not be null");
+        Assert.hasText(name, "Product name should not be empty");
         this.name = name;
     }
 
@@ -40,6 +38,10 @@ public class ProductRegistrationResponseDto {
     }
 
     public void setPrice(Integer price) {
+        Assert.notNull(price, "price should not be null");
+        if(price <= 0) {
+            throw new IllegalArgumentException("price should be > 0");
+        }
         this.price = price;
     }
 
@@ -48,6 +50,7 @@ public class ProductRegistrationResponseDto {
     }
 
     public void setRegisteredAt(LocalDateTime registeredAt) {
+        Assert.notNull(registeredAt, "registration date should not be null");
         this.registeredAt = registeredAt;
     }
 
@@ -56,15 +59,11 @@ public class ProductRegistrationResponseDto {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount < 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     @Override
@@ -75,13 +74,12 @@ public class ProductRegistrationResponseDto {
         return Objects.equals(name, that.name) &&
                 Objects.equals(price, that.price) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(registeredAt, that.registeredAt) &&
-                Objects.equals(errors, that.errors);
+                Objects.equals(registeredAt, that.registeredAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, amount, registeredAt, errors);
+        return Objects.hash(name, price, amount, registeredAt);
     }
 
     @Override
@@ -91,7 +89,6 @@ public class ProductRegistrationResponseDto {
                 ", price=" + price +
                 ", amount=" + amount +
                 ", registeredAt=" + registeredAt +
-                ", errors=" + errors +
                 '}';
     }
 }

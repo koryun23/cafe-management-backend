@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.order.OrderStatusType;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,19 +13,13 @@ public class OrderRegistrationResponseDto {
     private OrderStatusType orderStatusType;
     private LocalDateTime registeredAt;
 
-    private List<String> errors;
-
     public OrderRegistrationResponseDto(Long cafeTableId, OrderStatusType orderStatusType, LocalDateTime registeredAt) {
-        this.cafeTableId = cafeTableId;
-        this.orderStatusType = orderStatusType;
-        this.registeredAt = registeredAt;
+        setCafeTableId(cafeTableId);
+        setOrderStatusType(orderStatusType);
+        setRegisteredAt(registeredAt);
     }
 
     public OrderRegistrationResponseDto() {
-    }
-
-    public OrderRegistrationResponseDto(List<String> errors) {
-        this.errors = errors;
     }
 
     public Long getCafeTableId() {
@@ -32,6 +27,7 @@ public class OrderRegistrationResponseDto {
     }
 
     public void setCafeTableId(Long cafeTableId) {
+        Assert.notNull(cafeTableId, "Cafe table id should not be null");
         this.cafeTableId = cafeTableId;
     }
 
@@ -40,6 +36,7 @@ public class OrderRegistrationResponseDto {
     }
 
     public void setOrderStatusType(OrderStatusType orderStatusType) {
+        Assert.notNull(orderStatusType, "order status type should not be null");
         this.orderStatusType = orderStatusType;
     }
 
@@ -48,15 +45,8 @@ public class OrderRegistrationResponseDto {
     }
 
     public void setRegisteredAt(LocalDateTime registeredAt) {
+        Assert.notNull(registeredAt, "registration date should not be null");
         this.registeredAt = registeredAt;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     @Override
@@ -66,13 +56,12 @@ public class OrderRegistrationResponseDto {
         OrderRegistrationResponseDto that = (OrderRegistrationResponseDto) o;
         return Objects.equals(cafeTableId, that.cafeTableId) &&
                 orderStatusType == that.orderStatusType &&
-                Objects.equals(registeredAt, that.registeredAt) &&
-                Objects.equals(errors, that.errors);
+                Objects.equals(registeredAt, that.registeredAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, orderStatusType, registeredAt, errors);
+        return Objects.hash(cafeTableId, orderStatusType, registeredAt);
     }
 
     @Override
@@ -81,7 +70,6 @@ public class OrderRegistrationResponseDto {
                 "cafeTableId=" + cafeTableId +
                 ", orderStatusType=" + orderStatusType +
                 ", registeredAt=" + registeredAt +
-                ", errors=" + errors +
                 '}';
     }
 }

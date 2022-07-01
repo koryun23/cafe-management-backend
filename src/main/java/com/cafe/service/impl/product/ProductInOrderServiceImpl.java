@@ -24,6 +24,9 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
     private final OrderService orderService;
 
     public ProductInOrderServiceImpl(ProductInOrderRepository productInOrderRepository, ProductService productService, OrderService orderService) {
+        Assert.notNull(productInOrderRepository, "product in order repository should not be null");
+        Assert.notNull(productService, "product service should not be null");
+        Assert.notNull(orderService, "order service should not be null");
         this.productInOrderRepository = productInOrderRepository;
         this.productService = productService;
         this.orderService = orderService;

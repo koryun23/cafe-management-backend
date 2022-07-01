@@ -6,6 +6,8 @@ import com.cafe.dto.request.CafeTablesAssignedToWaiterRetrievalRequestDto;
 import com.cafe.dto.response.CafeTableAssignmentResponseDto;
 import com.cafe.dto.response.CafeTableRegistrationResponseDto;
 import com.cafe.dto.response.CafeTablesAssignedToWaiterRetrievalResponseDto;
+import com.cafe.dto.response.error.ErrorCafeTableAssignmentResponseDto;
+import com.cafe.dto.response.error.ErrorCafeTableRegistrationResponseDto;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.entity.table.CafeTableStatusType;
@@ -22,6 +24,7 @@ import com.cafe.service.core.user.UserRoleService;
 import com.cafe.service.core.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -49,6 +52,13 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
                                CafeTableRegistrationResponseDtoMapper cafeTableRegistrationResponseDtoMapper,
                                CafeTableAssignedToWaiterCreationParamsMapper cafeTableAssignedToWaiterCreationParamsMapper,
                                CafeTableAssignmentResponseDtoMapper cafeTableAssignmentResponseDtoMapper) {
+        Assert.notNull(cafeTableService, "Cafe table service should not be null");
+        Assert.notNull(userService, "User service should not be null");
+        Assert.notNull(cafeTableAssignedToWaiterService, "Cafe table assigned to waiter service should not be null");
+        Assert.notNull(userRoleService, "userRoleService should not be null");
+        Assert.notNull(cafeTableCreationParamsMapper, "cafe table creation params mapper should not be null");
+        Assert.notNull(cafeTableAssignedToWaiterCreationParamsMapper, "cafe table assigned to waiter creation params mapper should not be null");
+        Assert.notNull(cafeTableAssignmentResponseDtoMapper, "cafe table assignment response dto mapper");
         this.cafeTableService = cafeTableService;
         this.userService = userService;
         this.cafeTableAssignedToWaiterService = cafeTableAssignedToWaiterService;
@@ -64,8 +74,9 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
         Assert.notNull(dto, "Cafe table registration response dto should not be null");
         LOGGER.info("Creating a new cafe table according to the cafe table registration request dto - {}", dto);
         if(cafeTableService.existsByCode(dto.getCode())) {
-            return new CafeTableRegistrationResponseDto(
-                    List.of(String.format("Cannot register a cafe table with a code of %s because that code is already taken", dto.getCode()))
+            return new ErrorCafeTableRegistrationResponseDto(
+                    List.of(String.format("Cannot register a cafe table with a code of %s because that code is already taken", dto.getCode())),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
         CafeTable cafeTable = cafeTableService.create(cafeTableCreationParamsMapper.apply(dto));
@@ -80,33 +91,38 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
         LOGGER.info("Assigning a table to a waiter according to the cafe table assignment request dto - {}", dto);
         Optional<User> userOptional = userService.findByUsername(dto.getWaiterUsername());
         if (userOptional.isEmpty()) {
-            return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("No user found with a username of %s", dto.getWaiterUsername()))
+            return new ErrorCafeTableAssignmentResponseDto(
+                    List.of(String.format("No user found with a username of %s", dto.getWaiterUsername())),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
         User user = userOptional.get();
         if (userRoleService.getRoleType(user.getUsername()) != UserRoleType.WAITER) {
-            return new CafeTableAssignmentResponseDto(
-                    List.of("Cannot assign a cafe table to a user who is not a waiter")
+            return new ErrorCafeTableAssignmentResponseDto(
+                    List.of("Cannot assign a cafe table to a user who is not a waiter"),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
         Optional<CafeTable> cafeTableOptional = cafeTableService.findById(dto.getCafeTableId());
         if (cafeTableOptional.isEmpty()) {
-            return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("No table found with an id of %d", dto.getCafeTableId()))
+            return new ErrorCafeTableAssignmentResponseDto(
+                    List.of(String.format("No table found with an id of %d", dto.getCafeTableId())),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
         CafeTable cafeTable = cafeTableOptional.get();
         CafeTableStatusType cafeTableStatusType = cafeTable.getCafeTableStatusType();
         if(cafeTableStatusType != CafeTableStatusType.FREE) {
-            return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("The table having an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTableStatusType))
+            return new ErrorCafeTableAssignmentResponseDto(
+                    List.of(String.format("The table having an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTableStatusType)),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
 
         if(cafeTableAssignedToWaiterService.findByCafeTableId(dto.getCafeTableId()).isPresent()) {
-            return new CafeTableAssignmentResponseDto(
-                    List.of(String.format("The table having an id of %d is already assigned to another waiter", dto.getCafeTableId()))
+            return new ErrorCafeTableAssignmentResponseDto(
+                    List.of(String.format("The table having an id of %d is already assigned to another waiter", dto.getCafeTableId())),
+                    HttpStatus.NOT_ACCEPTABLE
             );
         }
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.create(cafeTableAssignedToWaiterCreationParamsMapper.apply(dto));

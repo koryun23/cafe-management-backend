@@ -1,6 +1,8 @@
 package com.cafe.entity.product;
 
 import com.cafe.entity.order.Order;
+import net.bytebuddy.pool.TypePool;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.Table;
@@ -31,10 +33,9 @@ public class ProductInOrder {
     private ProductInOrderStatusType productInOrderStatusType;
 
     public ProductInOrder(Product product, Order order, Integer amount) {
-        this.product = product;
-        this.order = order;
-        this.amount = amount;
-        this.productInOrderStatusType = ProductInOrderStatusType.ACTIVE;
+        setProduct(product);
+        setOrder(order);
+        setAmount(amount);
     }
 
     public ProductInOrder() {
@@ -45,6 +46,7 @@ public class ProductInOrder {
     }
 
     public void setId(Long id) {
+        Assert.notNull(id, "id should not be null");
         this.id = id;
     }
 
@@ -53,6 +55,7 @@ public class ProductInOrder {
     }
 
     public void setProduct(Product product) {
+        Assert.notNull(product, "Product should not be null");
         this.product = product;
     }
 
@@ -61,6 +64,7 @@ public class ProductInOrder {
     }
 
     public void setOrder(Order order) {
+        Assert.notNull(order, "Order should not be null");
         this.order = order;
     }
 
@@ -69,6 +73,10 @@ public class ProductInOrder {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount <= 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 
@@ -77,6 +85,7 @@ public class ProductInOrder {
     }
 
     public void setProductInOrderStatusType(ProductInOrderStatusType productInOrderStatusType) {
+        Assert.notNull(productInOrderStatusType, "Product in order status type should not be null");
         this.productInOrderStatusType = productInOrderStatusType;
     }
 

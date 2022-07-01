@@ -24,6 +24,8 @@ public class OrderServiceImpl implements OrderService {
     private final CafeTableService cafeTableService;
 
     public OrderServiceImpl(OrderRepository orderRepository, CafeTableService cafeTableService) {
+        Assert.notNull(orderRepository, "Order repository should not be null");
+        Assert.notNull(cafeTableService, "Cafe table service should not be null");
         this.orderRepository = orderRepository;
         this.cafeTableService = cafeTableService;
     }

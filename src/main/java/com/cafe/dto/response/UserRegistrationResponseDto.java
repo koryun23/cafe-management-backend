@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.user.UserRoleType;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,23 +16,18 @@ public class UserRegistrationResponseDto {
     private List<UserRoleType> roleList;
     private LocalDateTime registeredAt;
 
-    private List<String> errors;
     public UserRegistrationResponseDto(String username,
                                        String password,
                                        String firstName,
                                        String secondName,
                                        List<UserRoleType> roleList,
                                        LocalDateTime registeredAt) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.roleList = roleList;
-        this.registeredAt = registeredAt;
-    }
-
-    public UserRegistrationResponseDto(List<String> errors) {
-        this.errors = errors;
+        setUsername(username);
+        setPassword(password);
+        setFirstName(firstName);
+        setSecondName(secondName);
+        setRoleList(roleList);
+        setRegisteredAt(registeredAt);
     }
 
     public UserRegistrationResponseDto() {
@@ -42,6 +38,8 @@ public class UserRegistrationResponseDto {
     }
 
     public void setUsername(String username) {
+        Assert.notNull(username, "username should not be null");
+        Assert.hasText(username, "username should not be empty");
         this.username = username;
     }
 
@@ -50,6 +48,8 @@ public class UserRegistrationResponseDto {
     }
 
     public void setFirstName(String firstName) {
+        Assert.notNull(firstName, "First Name should not be null");
+        Assert.hasText(firstName, "First name should not be empty");
         this.firstName = firstName;
     }
 
@@ -58,6 +58,8 @@ public class UserRegistrationResponseDto {
     }
 
     public void setSecondName(String secondName) {
+        Assert.notNull(firstName, "Second Name should not be null");
+        Assert.hasText(firstName, "Second name should not be empty");
         this.secondName = secondName;
     }
 
@@ -66,6 +68,7 @@ public class UserRegistrationResponseDto {
     }
 
     public void setRegisteredAt(LocalDateTime registeredAt) {
+        Assert.notNull(registeredAt, "registration date should not be null");
         this.registeredAt = registeredAt;
     }
 
@@ -74,6 +77,8 @@ public class UserRegistrationResponseDto {
     }
 
     public void setPassword(String password) {
+        Assert.notNull(firstName, "password should not be null");
+        Assert.hasText(firstName, "password should not be empty");
         this.password = password;
     }
 
@@ -82,15 +87,8 @@ public class UserRegistrationResponseDto {
     }
 
     public void setRoleList(List<UserRoleType> roleList) {
+        Assert.notNull(roleList, "User role type list should not be null");
         this.roleList = roleList;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     @Override
@@ -98,7 +96,10 @@ public class UserRegistrationResponseDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserRegistrationResponseDto that = (UserRegistrationResponseDto) o;
-        return Objects.equals(username, that.username) && Objects.equals(firstName, that.firstName) && Objects.equals(secondName, that.secondName) && Objects.equals(registeredAt, that.registeredAt);
+        return Objects.equals(username, that.username) &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(secondName, that.secondName) &&
+                Objects.equals(registeredAt, that.registeredAt);
     }
 
     @Override
@@ -114,7 +115,6 @@ public class UserRegistrationResponseDto {
                 ", secondName='" + secondName + '\'' +
                 ", password=" + password +
                 ", registeredAt=" + registeredAt +
-                ", errors=" + errors +
                 '}';
     }
 }

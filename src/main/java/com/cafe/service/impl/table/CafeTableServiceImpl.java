@@ -20,6 +20,7 @@ public class CafeTableServiceImpl implements CafeTableService {
     private final CafeTableRepository cafeTableRepository;
 
     public CafeTableServiceImpl(CafeTableRepository cafeTableRepository) {
+        Assert.notNull(cafeTableRepository, "cafe table repository should not be null");
         this.cafeTableRepository = cafeTableRepository;
     }
 

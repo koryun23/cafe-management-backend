@@ -1,6 +1,7 @@
 package com.cafe.dto.request;
 
 import com.cafe.entity.table.CafeTableStatusType;
+import io.jsonwebtoken.lang.Assert;
 
 import java.util.Objects;
 
@@ -11,9 +12,9 @@ public class CafeTableRegistrationRequestDto {
     private String code;
 
     public CafeTableRegistrationRequestDto(Integer numberOfSeats, String code) {
-        this.cafeTableStatusType = CafeTableStatusType.FREE;
-        this.numberOfSeats = numberOfSeats;
-        this.code = code;
+        setCafeTableStatusType(CafeTableStatusType.FREE);
+        setNumberOfSeats(numberOfSeats);
+        setCode(code);
     }
 
     public CafeTableRegistrationRequestDto() {
@@ -24,6 +25,7 @@ public class CafeTableRegistrationRequestDto {
     }
 
     public void setCafeTableStatusType(CafeTableStatusType cafeTableStatusType) {
+        Assert.notNull(cafeTableStatusType, "Cafe table status type should not be null");
         this.cafeTableStatusType = cafeTableStatusType;
     }
 
@@ -32,6 +34,10 @@ public class CafeTableRegistrationRequestDto {
     }
 
     public void setNumberOfSeats(Integer numberOfSeats) {
+        Assert.notNull(numberOfSeats, "Number of seats should not be null");
+        if(numberOfSeats <= 0) {
+            throw new IllegalArgumentException("Number of seats should be > 0");
+        }
         this.numberOfSeats = numberOfSeats;
     }
 
@@ -40,6 +46,8 @@ public class CafeTableRegistrationRequestDto {
     }
 
     public void setCode(String code) {
+        Assert.notNull(code, "Code should not be null");
+        Assert.hasText(code, "Code should not be empty");
         this.code = code;
     }
 

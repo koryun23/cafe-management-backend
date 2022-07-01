@@ -1,5 +1,7 @@
 package com.cafe.dto.request;
 
+import org.springframework.util.Assert;
+
 import java.util.Objects;
 
 public class ProductInOrderRegistrationRequestDto {
@@ -11,11 +13,12 @@ public class ProductInOrderRegistrationRequestDto {
 
     public ProductInOrderRegistrationRequestDto(String productName,
                                                 Long orderId,
-                                                Integer amount, String waiterName) {
-        this.productName = productName;
-        this.orderId = orderId;
-        this.amount = amount;
-        this.waiterUsername = waiterName;
+                                                Integer amount,
+                                                String waiterUsername) {
+        setProductName(productName);
+        setOrderId(orderId);
+        setAmount(amount);
+        setWaiterUsername(waiterUsername);
     }
 
     public String getProductName() {
@@ -23,6 +26,8 @@ public class ProductInOrderRegistrationRequestDto {
     }
 
     public void setProductName(String productName) {
+        Assert.notNull(productName, "Product name should not be null");
+        Assert.hasText(productName, "Product name should not be empty");
         this.productName = productName;
     }
 
@@ -31,6 +36,7 @@ public class ProductInOrderRegistrationRequestDto {
     }
 
     public void setOrderId(Long orderId) {
+        Assert.notNull(orderId, "Order id should not be null");
         this.orderId = orderId;
     }
 
@@ -39,6 +45,10 @@ public class ProductInOrderRegistrationRequestDto {
     }
 
     public void setAmount(Integer amount) {
+        Assert.notNull(amount, "Amount should not be null");
+        if(amount <= 0) {
+            throw new IllegalArgumentException("Amount should be > 0");
+        }
         this.amount = amount;
     }
 
@@ -47,6 +57,8 @@ public class ProductInOrderRegistrationRequestDto {
     }
 
     public void setWaiterUsername(String waiterUsername) {
+        Assert.notNull(waiterUsername, "Waiter username should not be null");
+        Assert.hasText(waiterUsername, "Waiter username should not be empty");
         this.waiterUsername = waiterUsername;
     }
 

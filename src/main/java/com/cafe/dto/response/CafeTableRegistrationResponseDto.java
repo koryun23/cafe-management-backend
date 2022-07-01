@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.table.CafeTableStatusType;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,23 +14,17 @@ public class CafeTableRegistrationResponseDto {
     private String code;
     private LocalDateTime registeredAt;
 
-    private List<String> errors;
-
     public CafeTableRegistrationResponseDto(CafeTableStatusType cafeTableStatusType,
                                             Integer numberOfSeats,
                                             String code,
                                             LocalDateTime registeredAt) {
-        this.cafeTableStatusType = cafeTableStatusType;
-        this.numberOfSeats = numberOfSeats;
-        this.registeredAt = registeredAt;
-        this.code = code;
+        setCafeTableStatusType(cafeTableStatusType);
+        setNumberOfSeats(numberOfSeats);
+        setRegisteredAt(registeredAt);
+        setCode(code);
     }
 
     public CafeTableRegistrationResponseDto() {
-    }
-
-    public CafeTableRegistrationResponseDto(List<String> errors) {
-        this.errors = errors;
     }
 
     public CafeTableStatusType getCafeTableStatusType() {
@@ -37,6 +32,7 @@ public class CafeTableRegistrationResponseDto {
     }
 
     public void setCafeTableStatusType(CafeTableStatusType cafeTableStatusType) {
+        Assert.notNull(cafeTableStatusType, "Cafe table status type should not be null");
         this.cafeTableStatusType = cafeTableStatusType;
     }
 
@@ -45,6 +41,10 @@ public class CafeTableRegistrationResponseDto {
     }
 
     public void setNumberOfSeats(Integer numberOfSeats) {
+        Assert.notNull(numberOfSeats, "Number of seats should not be null");
+        if(numberOfSeats <= 0) {
+            throw new IllegalArgumentException("Number of seats should be > 0");
+        }
         this.numberOfSeats = numberOfSeats;
     }
 
@@ -53,6 +53,7 @@ public class CafeTableRegistrationResponseDto {
     }
 
     public void setRegisteredAt(LocalDateTime registeredAt) {
+        Assert.notNull(registeredAt, "Registration date should not be null");
         this.registeredAt = registeredAt;
     }
 
@@ -61,17 +62,10 @@ public class CafeTableRegistrationResponseDto {
     }
 
     public void setCode(String code) {
+        Assert.notNull(code, "Cafe table code should not be null");
+        Assert.hasText(code, "Cafe table code should not be empty");
         this.code = code;
     }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,13 +74,12 @@ public class CafeTableRegistrationResponseDto {
         return cafeTableStatusType == that.cafeTableStatusType &&
                 Objects.equals(numberOfSeats, that.numberOfSeats) &&
                 Objects.equals(code, that.code) &&
-                Objects.equals(registeredAt, that.registeredAt) &&
-                Objects.equals(errors, that.errors);
+                Objects.equals(registeredAt, that.registeredAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableStatusType, numberOfSeats, code, registeredAt, errors);
+        return Objects.hash(cafeTableStatusType, numberOfSeats, code, registeredAt);
     }
 
     @Override
@@ -96,7 +89,6 @@ public class CafeTableRegistrationResponseDto {
                 ", numberOfSeats=" + numberOfSeats +
                 ", code='" + code + '\'' +
                 ", registeredAt=" + registeredAt +
-                ", errors=" + errors +
                 '}';
     }
 }
