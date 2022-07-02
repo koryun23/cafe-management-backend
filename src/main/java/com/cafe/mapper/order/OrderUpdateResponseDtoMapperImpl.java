@@ -2,6 +2,7 @@ package com.cafe.mapper.order;
 
 import com.cafe.dto.response.OrderUpdateResponseDto;
 import com.cafe.entity.order.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,8 @@ public class OrderUpdateResponseDtoMapperImpl implements OrderUpdateResponseDtoM
                 order.getId(),
                 order.getTable().getId(),
                 order.getOrderStatusType(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                HttpStatus.OK
         );
     }
 }

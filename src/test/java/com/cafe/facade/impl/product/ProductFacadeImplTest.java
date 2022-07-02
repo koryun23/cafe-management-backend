@@ -32,6 +32,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -124,7 +125,7 @@ class ProductFacadeImplTest {
         Product product = new Product("Pepsi", 4, 400, LocalDateTime.MAX);
         product.setId(1L);
 
-        ProductRegistrationResponseDto responseDto = new ProductRegistrationResponseDto("Pepsi", 4, 400, LocalDateTime.MAX);
+        ProductRegistrationResponseDto responseDto = new ProductRegistrationResponseDto("Pepsi", 4, 400, LocalDateTime.MAX, HttpStatus.OK);
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.empty());
         Mockito.when(productCreationParamsMapper.apply(requestDto)).thenReturn(creationParams);
         Mockito.when(productService.create(creationParams)).thenReturn(product);
@@ -210,7 +211,7 @@ class ProductFacadeImplTest {
         Product updatedProduct = new Product("Pepsi", 400, 4, LocalDateTime.MAX);
         updatedProduct.setId(1L);
 
-        ProductUpdateResponseDto responseDto = new ProductUpdateResponseDto("Pepsi", 4, 400, LocalDateTime.MAX);
+        ProductUpdateResponseDto responseDto = new ProductUpdateResponseDto("Pepsi", 4, 400, LocalDateTime.MAX, HttpStatus.OK);
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.of(updatedProduct));
         Mockito.when(productUpdateParamsMapper.apply(requestDto)).thenReturn(productUpdateParams);
         Mockito.when(productService.updateProduct(productUpdateParams)).thenReturn(updatedProduct);
@@ -364,7 +365,7 @@ class ProductFacadeImplTest {
         );
 
         ProductInOrderRegistrationResponseDto responseDto = new ProductInOrderRegistrationResponseDto(
-                "Pepsi", 1L, 3, LocalDateTime.MAX
+                "Pepsi", 1L, 3, LocalDateTime.MAX, HttpStatus.OK
         );
 
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.of(product));
@@ -538,7 +539,7 @@ class ProductFacadeImplTest {
         );
 
         ProductInOrderUpdateResponseDto responseDto = new ProductInOrderUpdateResponseDto(
-                1L, "Pepsi", 1L, 3, LocalDateTime.MAX
+                1L, "Pepsi", 1L, 3, LocalDateTime.MAX, HttpStatus.OK
         );
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.of(product));
         Mockito.when(orderService.findById(1L)).thenReturn(Optional.of(order));

@@ -1,5 +1,6 @@
 package com.cafe.dto.response;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -7,16 +8,23 @@ import java.util.List;
 import java.util.Objects;
 
 public class ProductInOrderRegistrationResponseDto {
+
     private String productName;
     private Long orderId;
     private Integer amount;
     private LocalDateTime registeredAt;
+    private HttpStatus httpStatus;
 
-    public ProductInOrderRegistrationResponseDto(String productName, Long orderId, Integer amount, LocalDateTime registeredAt) {
+    public ProductInOrderRegistrationResponseDto(String productName,
+                                                 Long orderId,
+                                                 Integer amount,
+                                                 LocalDateTime registeredAt,
+                                                 HttpStatus httpStatus) {
         setProductName(productName);
         setOrderId(orderId);
         setAmount(amount);
         setRegisteredAt(registeredAt);
+        setHttpStatus(httpStatus);
     }
 
     public ProductInOrderRegistrationResponseDto() {
@@ -60,6 +68,15 @@ public class ProductInOrderRegistrationResponseDto {
     public void setRegisteredAt(LocalDateTime registeredAt) {
         Assert.notNull(registeredAt, "Registration date should not be null");
         this.registeredAt = registeredAt;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "Http status should not be null");
+        this.httpStatus = httpStatus;
     }
 
     @Override

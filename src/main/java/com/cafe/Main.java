@@ -19,12 +19,11 @@ public class Main {
         UserFacade userFacade = context.getBean(UserFacade.class);
 
         System.out.println(userFacade.registerUser(new UserRegistrationRequestDto(
-                "john11",
-                "pwd11",
+                "ADMIN",
+                "ADMIN",
                 "John",
                 "Williams",
                 List.of(UserRoleType.MANAGER)
         )));
-
     }
 }

@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.order.OrderStatusType;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -12,11 +13,16 @@ public class OrderRegistrationResponseDto {
     private Long cafeTableId;
     private OrderStatusType orderStatusType;
     private LocalDateTime registeredAt;
+    private HttpStatus httpStatus;
 
-    public OrderRegistrationResponseDto(Long cafeTableId, OrderStatusType orderStatusType, LocalDateTime registeredAt) {
+    public OrderRegistrationResponseDto(Long cafeTableId,
+                                        OrderStatusType orderStatusType,
+                                        LocalDateTime registeredAt,
+                                        HttpStatus httpStatus) {
         setCafeTableId(cafeTableId);
         setOrderStatusType(orderStatusType);
         setRegisteredAt(registeredAt);
+        setHttpStatus(httpStatus);
     }
 
     public OrderRegistrationResponseDto() {
@@ -49,6 +55,15 @@ public class OrderRegistrationResponseDto {
         this.registeredAt = registeredAt;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "Http status should not be null");
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,12 +71,13 @@ public class OrderRegistrationResponseDto {
         OrderRegistrationResponseDto that = (OrderRegistrationResponseDto) o;
         return Objects.equals(cafeTableId, that.cafeTableId) &&
                 orderStatusType == that.orderStatusType &&
-                Objects.equals(registeredAt, that.registeredAt);
+                Objects.equals(registeredAt, that.registeredAt) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, orderStatusType, registeredAt);
+        return Objects.hash(cafeTableId, orderStatusType, registeredAt, httpStatus);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.cafe.mapper.table;
 
 import com.cafe.dto.response.CafeTableAssignmentResponseDto;
 import com.cafe.entity.table.CafeTableAssignedToWaiter;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,8 @@ public class CafeTableAssignmentResponseDtoMapperImpl implements CafeTableAssign
         return new CafeTableAssignmentResponseDto(
                 cafeTableAssignedToWaiter.getCafeTable().getId(),
                 cafeTableAssignedToWaiter.getWaiter().getUsername(),
-                cafeTableAssignedToWaiter.getAssignedAt()
+                cafeTableAssignedToWaiter.getAssignedAt(),
+                HttpStatus.OK
         );
     }
 }

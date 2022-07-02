@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import io.jsonwebtoken.lang.Assert;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,13 +14,20 @@ public class ProductInOrderUpdateResponseDto {
     private Long orderId;
     private Integer amount;
     private LocalDateTime updatedAt;
+    private HttpStatus httpStatus;
 
-    public ProductInOrderUpdateResponseDto(Long id, String productName, Long orderId, Integer amount, LocalDateTime updatedAt) {
+    public ProductInOrderUpdateResponseDto(Long id,
+                                           String productName,
+                                           Long orderId,
+                                           Integer amount,
+                                           LocalDateTime updatedAt,
+                                           HttpStatus httpStatus) {
         setId(id);
         setProductName(productName);
         setOrderId(orderId);
         setAmount(amount);
         setUpdatedAt(updatedAt);
+        setHttpStatus(httpStatus);
     }
 
     public ProductInOrderUpdateResponseDto() {
@@ -74,6 +82,15 @@ public class ProductInOrderUpdateResponseDto {
         this.id = id;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "Http status should not be null");
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public String toString() {
         return "ProductInOrderUpdateResponseDto{" +
@@ -94,11 +111,12 @@ public class ProductInOrderUpdateResponseDto {
                 Objects.equals(productName, that.productName) &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(updatedAt, that.updatedAt);
+                Objects.equals(updatedAt, that.updatedAt) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productName, orderId, amount, updatedAt);
+        return Objects.hash(id, productName, orderId, amount, updatedAt, httpStatus);
     }
 }

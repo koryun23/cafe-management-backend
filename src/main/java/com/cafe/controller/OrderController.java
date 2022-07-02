@@ -36,7 +36,10 @@ public class OrderController {
         dto.setStatus(OrderStatusType.OPEN);
         dto.setWaiterUsername(username);
         dto.setCafeTableId(cafeTableId);
-        return ResponseEntity.ok(orderFacade.register(dto));
+        OrderRegistrationResponseDto responseDto = orderFacade.register(dto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 
     @PutMapping(path = "/update/{id}")
@@ -46,6 +49,9 @@ public class OrderController {
         String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
         dto.setWaiterUsername(username);
         dto.setId(id);
-        return ResponseEntity.ok(orderFacade.updateOrder(dto));
+        OrderUpdateResponseDto responseDto = orderFacade.updateOrder(dto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 }

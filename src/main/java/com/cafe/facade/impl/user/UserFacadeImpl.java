@@ -79,7 +79,7 @@ public class UserFacadeImpl implements UserFacade {
         for(User user : allUsers) {
             allUserDtos.add(userRegistrationResponseDtoMapper.apply(user));
         }
-        UserListRetrievalResponseDto responseDto = new UserListRetrievalResponseDto(allUserDtos);
+        UserListRetrievalResponseDto responseDto = new UserListRetrievalResponseDto(allUserDtos, HttpStatus.OK);
         LOGGER.info("Successfully retrieved all registered users, result - {}", responseDto);
         return responseDto;
     }

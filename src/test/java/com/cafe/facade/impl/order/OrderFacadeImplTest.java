@@ -219,7 +219,7 @@ class OrderFacadeImplTest {
         Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
-        OrderRegistrationResponseDto responseDto = new OrderRegistrationResponseDto(1L, OrderStatusType.OPEN, LocalDateTime.MAX);
+        OrderRegistrationResponseDto responseDto = new OrderRegistrationResponseDto(1L, OrderStatusType.OPEN, LocalDateTime.MAX, HttpStatus.OK);
 
         Mockito.when(cafeTableService.findById(1L)).thenReturn(Optional.of(cafeTable));
         Mockito.when(cafeTableAssignedToWaiterService.findAllByWaiterUsername("john11"))
@@ -370,7 +370,7 @@ class OrderFacadeImplTest {
 
         OrderUpdateParams updateParams = new OrderUpdateParams(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX);
 
-        OrderUpdateResponseDto responseDto = new OrderUpdateResponseDto(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX);
+        OrderUpdateResponseDto responseDto = new OrderUpdateResponseDto(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX, HttpStatus.OK);
         Mockito.when(orderService.findById(1L)).thenReturn(Optional.of(order));
         Mockito.when(cafeTableAssignedToWaiterService.findByCafeTableId(1L)).thenReturn(Optional.of(cafeTableAssignedToWaiter));
         Mockito.when(orderUpdateParamsMapper.apply(requestDto)).thenReturn(updateParams);
@@ -418,7 +418,7 @@ class OrderFacadeImplTest {
 
         OrderUpdateParams updateParams = new OrderUpdateParams(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX);
 
-        OrderUpdateResponseDto responseDto = new OrderUpdateResponseDto(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX);
+        OrderUpdateResponseDto responseDto = new OrderUpdateResponseDto(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX, HttpStatus.OK);
         Mockito.when(orderService.findById(1L)).thenReturn(Optional.of(order));
         Mockito.when(cafeTableAssignedToWaiterService.findByCafeTableId(1L)).thenReturn(Optional.of(cafeTableAssignedToWaiter));
         Mockito.when(orderUpdateParamsMapper.apply(requestDto)).thenReturn(updateParams);
@@ -469,7 +469,7 @@ class OrderFacadeImplTest {
 
         OrderUpdateParams updateParams = new OrderUpdateParams(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX);
 
-        OrderUpdateResponseDto responseDto = new OrderUpdateResponseDto(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX);
+        OrderUpdateResponseDto responseDto = new OrderUpdateResponseDto(1L, 1L, OrderStatusType.OPEN, LocalDateTime.MAX, HttpStatus.OK);
         Mockito.when(orderService.findById(1L)).thenReturn(Optional.of(order));
         Mockito.when(cafeTableAssignedToWaiterService.findByCafeTableId(1L)).thenReturn(Optional.of(cafeTableAssignedToWaiter));
         Mockito.when(orderUpdateParamsMapper.apply(requestDto)).thenReturn(updateParams);

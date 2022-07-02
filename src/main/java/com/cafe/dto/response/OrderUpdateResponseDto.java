@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.order.OrderStatusType;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -13,12 +14,18 @@ public class OrderUpdateResponseDto {
     private Long cafeTableId;
     private OrderStatusType orderStatusType;
     private LocalDateTime updatedAt;
+    private HttpStatus httpStatus;
 
-    public OrderUpdateResponseDto(Long id, Long cafeTableId, OrderStatusType orderStatusType, LocalDateTime updatedAt) {
+    public OrderUpdateResponseDto(Long id,
+                                  Long cafeTableId,
+                                  OrderStatusType orderStatusType,
+                                  LocalDateTime updatedAt,
+                                  HttpStatus httpStatus) {
         setId(id);
         setCafeTableId(cafeTableId);
         setOrderStatusType(orderStatusType);
         setUpdatedAt(updatedAt);
+        setHttpStatus(httpStatus);
     }
 
     public OrderUpdateResponseDto() {
@@ -60,6 +67,14 @@ public class OrderUpdateResponseDto {
         this.id = id;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,12 +83,13 @@ public class OrderUpdateResponseDto {
         return Objects.equals(cafeTableId, that.cafeTableId) &&
                 orderStatusType == that.orderStatusType &&
                 Objects.equals(updatedAt, that.updatedAt) &&
-                Objects.equals(id, that.id);
+                Objects.equals(id, that.id) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableId, orderStatusType, updatedAt, id);
+        return Objects.hash(cafeTableId, orderStatusType, updatedAt, id, httpStatus);
     }
 
     @Override

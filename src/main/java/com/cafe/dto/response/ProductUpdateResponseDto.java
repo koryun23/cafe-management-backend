@@ -1,5 +1,6 @@
 package com.cafe.dto.response;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -11,15 +12,17 @@ public class ProductUpdateResponseDto {
     private Integer price;
     private Integer amount;
     private LocalDateTime updatedAt;
+    private HttpStatus httpStatus;
 
     public ProductUpdateResponseDto() {
     }
 
-    public ProductUpdateResponseDto(String name, Integer price, Integer amount, LocalDateTime updatedAt) {
+    public ProductUpdateResponseDto(String name, Integer price, Integer amount, LocalDateTime updatedAt, HttpStatus httpStatus) {
         setName(name);
         setPrice(price);
         setAmount(amount);
         setUpdatedAt(updatedAt);
+        setHttpStatus(httpStatus);
     }
 
     public String getName() {
@@ -65,6 +68,15 @@ public class ProductUpdateResponseDto {
         this.updatedAt = updatedAt;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "http status should not be null");
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,12 +85,13 @@ public class ProductUpdateResponseDto {
         return Objects.equals(name, that.name) &&
                 Objects.equals(price, that.price) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(updatedAt, that.updatedAt);
+                Objects.equals(updatedAt, that.updatedAt) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, amount, updatedAt);
+        return Objects.hash(name, price, amount, updatedAt, httpStatus);
     }
 
     @Override

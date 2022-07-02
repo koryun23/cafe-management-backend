@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import io.jsonwebtoken.lang.Assert;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,11 +12,16 @@ public class CafeTableAssignmentResponseDto {
     private Long tableId;
     private String waiterUsername;
     private LocalDateTime assignedAt;
+    private HttpStatus httpStatus;
 
-    public CafeTableAssignmentResponseDto(Long tableId, String waiterUsername, LocalDateTime assignedAt) {
+    public CafeTableAssignmentResponseDto(Long tableId,
+                                          String waiterUsername,
+                                          LocalDateTime assignedAt,
+                                          HttpStatus httpStatus) {
         setTableId(tableId);
         setWaiterUsername(waiterUsername);
         setAssignedAt(assignedAt);
+        setHttpStatus(httpStatus);
     }
 
     public CafeTableAssignmentResponseDto() {
@@ -49,6 +55,15 @@ public class CafeTableAssignmentResponseDto {
         this.assignedAt = assignedAt;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "Http status should not be null");
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,12 +71,13 @@ public class CafeTableAssignmentResponseDto {
         CafeTableAssignmentResponseDto that = (CafeTableAssignmentResponseDto) o;
         return Objects.equals(tableId, that.tableId) &&
                 Objects.equals(waiterUsername, that.waiterUsername) &&
-                Objects.equals(assignedAt, that.assignedAt);
+                Objects.equals(assignedAt, that.assignedAt) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tableId, waiterUsername, assignedAt);
+        return Objects.hash(tableId, waiterUsername, assignedAt, httpStatus);
     }
 
     @Override

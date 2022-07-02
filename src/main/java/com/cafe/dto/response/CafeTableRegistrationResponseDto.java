@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.table.CafeTableStatusType;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -13,15 +14,18 @@ public class CafeTableRegistrationResponseDto {
     private Integer numberOfSeats;
     private String code;
     private LocalDateTime registeredAt;
+    private HttpStatus httpStatus;
 
     public CafeTableRegistrationResponseDto(CafeTableStatusType cafeTableStatusType,
                                             Integer numberOfSeats,
                                             String code,
-                                            LocalDateTime registeredAt) {
+                                            LocalDateTime registeredAt,
+                                            HttpStatus httpStatus) {
         setCafeTableStatusType(cafeTableStatusType);
         setNumberOfSeats(numberOfSeats);
         setRegisteredAt(registeredAt);
         setCode(code);
+        setHttpStatus(httpStatus);
     }
 
     public CafeTableRegistrationResponseDto() {
@@ -66,6 +70,15 @@ public class CafeTableRegistrationResponseDto {
         Assert.hasText(code, "Cafe table code should not be empty");
         this.code = code;
     }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,12 +87,13 @@ public class CafeTableRegistrationResponseDto {
         return cafeTableStatusType == that.cafeTableStatusType &&
                 Objects.equals(numberOfSeats, that.numberOfSeats) &&
                 Objects.equals(code, that.code) &&
-                Objects.equals(registeredAt, that.registeredAt);
+                Objects.equals(registeredAt, that.registeredAt) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cafeTableStatusType, numberOfSeats, code, registeredAt);
+        return Objects.hash(cafeTableStatusType, numberOfSeats, code, registeredAt, httpStatus);
     }
 
     @Override

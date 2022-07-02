@@ -1,5 +1,6 @@
 package com.cafe.dto.response;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -12,12 +13,18 @@ public class ProductRegistrationResponseDto {
     private Integer price;
     private Integer amount;
     private LocalDateTime registeredAt;
+    private HttpStatus httpStatus;
 
-    public ProductRegistrationResponseDto(String name, Integer price, Integer amount, LocalDateTime registeredAt) {
+    public ProductRegistrationResponseDto(String name,
+                                          Integer price,
+                                          Integer amount,
+                                          LocalDateTime registeredAt,
+                                          HttpStatus httpStatus) {
         setName(name);
         setPrice(price);
         setAmount(amount);
         setRegisteredAt(registeredAt);
+        setHttpStatus(httpStatus);
     }
 
     public ProductRegistrationResponseDto() {
@@ -66,6 +73,14 @@ public class ProductRegistrationResponseDto {
         this.amount = amount;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,12 +89,13 @@ public class ProductRegistrationResponseDto {
         return Objects.equals(name, that.name) &&
                 Objects.equals(price, that.price) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(registeredAt, that.registeredAt);
+                Objects.equals(registeredAt, that.registeredAt) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, amount, registeredAt);
+        return Objects.hash(name, price, amount, registeredAt, httpStatus);
     }
 
     @Override

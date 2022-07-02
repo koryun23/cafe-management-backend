@@ -26,13 +26,17 @@ public class CafeTableAssignedToWaiterController {
 
     @PostMapping(path = "/assign")
     public ResponseEntity<CafeTableAssignmentResponseDto> assignCafeTableToWaiter(@RequestBody CafeTableAssignmentRequestDto requestDto) {
-        return ResponseEntity.ok(cafeTableFacade.assignTableToWaiter(requestDto));
+        CafeTableAssignmentResponseDto responseDto = cafeTableFacade.assignTableToWaiter(requestDto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 
     @GetMapping
     public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request, @RequestBody CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
         String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
         dto.setWaiterUsername(username);
-        return ResponseEntity.ok(cafeTableFacade.retrieveCafeTableList(dto));
+        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = cafeTableFacade.retrieveCafeTableList(dto);
+        return ResponseEntity.status(responseDto.getHttpStatus()).body(responseDto);
     }
 }

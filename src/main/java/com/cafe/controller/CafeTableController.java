@@ -20,6 +20,9 @@ public class CafeTableController {
     @PostMapping(path = "/register")
     public ResponseEntity<CafeTableRegistrationResponseDto> register(@RequestBody CafeTableRegistrationRequestDto requestDto) {
         requestDto.setCafeTableStatusType(CafeTableStatusType.FREE);
-        return ResponseEntity.ok(cafeTableFacade.register(requestDto));
+        CafeTableRegistrationResponseDto responseDto = cafeTableFacade.register(requestDto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 }

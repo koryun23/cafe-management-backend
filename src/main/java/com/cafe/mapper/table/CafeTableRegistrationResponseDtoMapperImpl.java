@@ -2,6 +2,7 @@ package com.cafe.mapper.table;
 
 import com.cafe.dto.response.CafeTableRegistrationResponseDto;
 import com.cafe.entity.table.CafeTable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,8 @@ public class CafeTableRegistrationResponseDtoMapperImpl implements CafeTableRegi
                 cafeTable.getCafeTableStatusType(),
                 cafeTable.getNumberOfSeats(),
                 cafeTable.getCode(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                HttpStatus.OK
         );
     }
 }

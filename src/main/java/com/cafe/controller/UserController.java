@@ -20,12 +20,16 @@ public class UserController {
     @PostMapping(path = "/register")
     public ResponseEntity<UserRegistrationResponseDto> register(@RequestBody UserRegistrationRequestDto requestDto) {
         UserRegistrationResponseDto registrationResponseDto = userFacade.registerUser(requestDto);
-        return ResponseEntity.ok(registrationResponseDto);
+        return ResponseEntity
+                .status(registrationResponseDto.getHttpStatus())
+                .body(registrationResponseDto);
     }
 
     @GetMapping
     public ResponseEntity<UserListRetrievalResponseDto> fetchAll() {
         UserListRetrievalResponseDto userFetchResponseDto = userFacade.getAll();
-        return ResponseEntity.ok(userFetchResponseDto);
+        return ResponseEntity
+                .status(userFetchResponseDto.getHttpStatus())
+                .body(userFetchResponseDto);
     }
 }

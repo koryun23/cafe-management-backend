@@ -31,7 +31,10 @@ public class ProductInOrderController {
         String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
         dto.setWaiterUsername(username);
         dto.setOrderId(orderId);
-        return ResponseEntity.ok(productFacade.registerProductInOrder(dto));
+        ProductInOrderRegistrationResponseDto responseDto = productFacade.registerProductInOrder(dto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 
     @PutMapping(path = "/update/{productInOrderId}")
@@ -41,6 +44,9 @@ public class ProductInOrderController {
         String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
         dto.setWaiterUsername(username);
         dto.setId(productInOrderId);
-        return ResponseEntity.ok(productFacade.updateProductInOrder(dto));
+        ProductInOrderUpdateResponseDto responseDto = productFacade.updateProductInOrder(dto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 }

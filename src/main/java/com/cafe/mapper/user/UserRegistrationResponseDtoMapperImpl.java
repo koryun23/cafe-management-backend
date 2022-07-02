@@ -3,6 +3,7 @@ package com.cafe.mapper.user;
 import com.cafe.dto.response.UserRegistrationResponseDto;
 import com.cafe.entity.user.User;
 import com.cafe.entity.user.UserRole;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -17,7 +18,8 @@ public class UserRegistrationResponseDtoMapperImpl implements UserRegistrationRe
                 user.getFirstName(),
                 user.getSecondName(),
                 user.getUserRoleList().stream().map(UserRole::getUserRoleType).collect(Collectors.toList()),
-                user.getCreatedAt()
+                user.getCreatedAt(),
+                HttpStatus.OK
         );
     }
 }

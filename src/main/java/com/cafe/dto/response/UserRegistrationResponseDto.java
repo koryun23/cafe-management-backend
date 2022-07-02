@@ -1,6 +1,7 @@
 package com.cafe.dto.response;
 
 import com.cafe.entity.user.UserRoleType;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -15,19 +16,22 @@ public class UserRegistrationResponseDto {
     private String secondName;
     private List<UserRoleType> roleList;
     private LocalDateTime registeredAt;
+    private HttpStatus httpStatus;
 
     public UserRegistrationResponseDto(String username,
                                        String password,
                                        String firstName,
                                        String secondName,
                                        List<UserRoleType> roleList,
-                                       LocalDateTime registeredAt) {
+                                       LocalDateTime registeredAt,
+                                       HttpStatus httpStatus) {
         setUsername(username);
         setPassword(password);
         setFirstName(firstName);
         setSecondName(secondName);
         setRoleList(roleList);
         setRegisteredAt(registeredAt);
+        setHttpStatus(httpStatus);
     }
 
     public UserRegistrationResponseDto() {
@@ -91,6 +95,15 @@ public class UserRegistrationResponseDto {
         this.roleList = roleList;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        Assert.notNull(httpStatus, "http status should not be null");
+        this.httpStatus = httpStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,12 +112,13 @@ public class UserRegistrationResponseDto {
         return Objects.equals(username, that.username) &&
                 Objects.equals(firstName, that.firstName) &&
                 Objects.equals(secondName, that.secondName) &&
-                Objects.equals(registeredAt, that.registeredAt);
+                Objects.equals(registeredAt, that.registeredAt) &&
+                Objects.equals(httpStatus, that.httpStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, firstName, secondName, registeredAt);
+        return Objects.hash(username, firstName, secondName, registeredAt, httpStatus);
     }
 
     @Override

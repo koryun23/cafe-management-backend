@@ -32,6 +32,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -121,7 +122,7 @@ class CafeTableFacadeImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        CafeTableRegistrationResponseDto responseDto = new CafeTableRegistrationResponseDto(CafeTableStatusType.FREE, 5, "qwerty", LocalDateTime.MAX);
+        CafeTableRegistrationResponseDto responseDto = new CafeTableRegistrationResponseDto(CafeTableStatusType.FREE, 5, "qwerty", LocalDateTime.MAX, HttpStatus.OK);
 
         Mockito.when(cafeTableService.existsByCode("qwerty")).thenReturn(false);
         Mockito.when(cafeTableCreationParamsMapper.apply(requestDto)).thenReturn(creationParams);
@@ -335,7 +336,7 @@ class CafeTableFacadeImplTest {
         CafeTableAssignmentRequestDto requestDto = new CafeTableAssignmentRequestDto(1L, "john11");
         CafeTableAssignedToWaiterCreationParams creationParams = new CafeTableAssignedToWaiterCreationParams(1L, "john11", LocalDateTime.MAX);
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, user, LocalDateTime.MAX);
-        CafeTableAssignmentResponseDto responseDto = new CafeTableAssignmentResponseDto(1L, "john11", LocalDateTime.MAX);
+        CafeTableAssignmentResponseDto responseDto = new CafeTableAssignmentResponseDto(1L, "john11", LocalDateTime.MAX, HttpStatus.OK);
 
         Mockito.when(userService.findByUsername("john11")).thenReturn(Optional.of(user));
         Mockito.when(userRoleService.getRoleType("john11")).thenReturn(UserRoleType.WAITER);
@@ -372,7 +373,7 @@ class CafeTableFacadeImplTest {
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
 
-        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = new CafeTablesAssignedToWaiterRetrievalResponseDto(List.of(cafeTableAssignedToWaiter));
+        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = new CafeTablesAssignedToWaiterRetrievalResponseDto(List.of(cafeTableAssignedToWaiter), HttpStatus.OK);
         Mockito.when(cafeTableAssignedToWaiterService.findAllByWaiterUsername("john11")).thenReturn(List.of(cafeTableAssignedToWaiter));
 
         Assertions.assertThat(testSubject.retrieveCafeTableList(new CafeTablesAssignedToWaiterRetrievalRequestDto(

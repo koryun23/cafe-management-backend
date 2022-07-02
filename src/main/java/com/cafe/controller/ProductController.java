@@ -20,12 +20,18 @@ public class ProductController {
 
     @PostMapping(path = "/register")
     public ResponseEntity<ProductRegistrationResponseDto> registerProduct(@RequestBody ProductRegistrationRequestDto dto) {
-        return ResponseEntity.ok(productFacade.registerProduct(dto));
+        ProductRegistrationResponseDto responseDto = productFacade.registerProduct(dto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 
     @PutMapping(path = "/update/{productName}")
     public ResponseEntity<ProductUpdateResponseDto> updateProduct(@RequestBody ProductUpdateRequestDto dto, @PathVariable String productName) {
         dto.setOriginalName(productName);
-        return ResponseEntity.ok(productFacade.updateProduct(dto));
+        ProductUpdateResponseDto responseDto = productFacade.updateProduct(dto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
     }
 }

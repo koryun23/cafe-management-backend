@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -90,7 +91,7 @@ class UserFacadeImplTest {
         userRole.setId(1L);
 
         UserRegistrationResponseDto responseDto = new UserRegistrationResponseDto(
-                "john11", "pwd11", "John", "Smith", List.of(UserRoleType.MANAGER), LocalDateTime.MAX
+                "john11", "pwd11", "John", "Smith", List.of(UserRoleType.MANAGER), LocalDateTime.MAX, HttpStatus.OK
         );
 
         Mockito.when(userService.existsByPasswordOrUsername("pwd11", "john11")).thenReturn(false);
@@ -114,12 +115,12 @@ class UserFacadeImplTest {
         User user = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
         user.setId(1L);
         UserRegistrationResponseDto registrationResponseDto = new UserRegistrationResponseDto(
-                "john11", "pwd11", "John", "Smith", List.of(UserRoleType.MANAGER), LocalDateTime.MAX
+                "john11", "pwd11", "John", "Smith", List.of(UserRoleType.MANAGER), LocalDateTime.MAX, HttpStatus.OK
         );
         Mockito.when(userService.getAllUsers()).thenReturn(List.of(user));
         Mockito.when(userRegistrationResponseDtoMapper.apply(user)).thenReturn(registrationResponseDto);
 
-        Assertions.assertThat(testSubject.getAll()).isEqualTo(new UserListRetrievalResponseDto(List.of(registrationResponseDto)));
+        Assertions.assertThat(testSubject.getAll()).isEqualTo(new UserListRetrievalResponseDto(List.of(registrationResponseDto), HttpStatus.OK));
 
         Mockito.verify(userService).getAllUsers();
         Mockito.verify(userRegistrationResponseDtoMapper).apply(user);

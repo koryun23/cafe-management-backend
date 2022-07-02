@@ -2,6 +2,7 @@ package com.cafe.mapper.product;
 
 import com.cafe.dto.response.ProductInOrderRegistrationResponseDto;
 import com.cafe.entity.product.ProductInOrder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,8 @@ public class ProductInOrderRegistrationResponseDtoMapperImpl implements ProductI
                 productInOrder.getProduct().getProductName(),
                 productInOrder.getOrder().getId(),
                 productInOrder.getAmount(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                HttpStatus.OK
         );
     }
 }
