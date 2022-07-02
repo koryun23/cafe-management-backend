@@ -4,6 +4,7 @@ import com.cafe.entity.user.User;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -33,9 +34,13 @@ public class CafeTableAssignedToWaiter {
     )
     private User waiter;
 
-    public CafeTableAssignedToWaiter(CafeTable cafeTable, User waiter) {
+    @Column(name = "assigned_at", nullable = false)
+    private LocalDateTime assignedAt;
+
+    public CafeTableAssignedToWaiter(CafeTable cafeTable, User waiter, LocalDateTime assignedAt) {
         setCafeTable(cafeTable);
         setWaiter(waiter);
+        setAssignedAt(assignedAt);
     }
 
     public CafeTableAssignedToWaiter() {
@@ -68,12 +73,24 @@ public class CafeTableAssignedToWaiter {
         this.waiter = waiter;
     }
 
+    public LocalDateTime getAssignedAt() {
+        return assignedAt;
+    }
+
+    public void setAssignedAt(LocalDateTime assignedAt) {
+        Assert.notNull(assignedAt, "assignation date should not be null");
+        this.assignedAt = assignedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CafeTableAssignedToWaiter that = (CafeTableAssignedToWaiter) o;
-        return Objects.equals(id, that.id) && Objects.equals(cafeTable, that.cafeTable) && Objects.equals(waiter, that.waiter);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(cafeTable, that.cafeTable) &&
+                Objects.equals(waiter, that.waiter) &&
+                Objects.equals(assignedAt, that.assignedAt);
     }
 
     @Override
@@ -87,6 +104,7 @@ public class CafeTableAssignedToWaiter {
                 "id=" + id +
                 ", cafeTable=" + cafeTable +
                 ", waiter=" + waiter +
+                ", assignedAt=" + assignedAt +
                 '}';
     }
 }

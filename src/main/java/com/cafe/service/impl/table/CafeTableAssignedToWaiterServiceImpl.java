@@ -41,7 +41,8 @@ public class CafeTableAssignedToWaiterServiceImpl implements CafeTableAssignedTo
         LOGGER.info("Assigning a table with an id of {} to waiter having a username of {}", params.getCafeTableId(), params.getWaiterUsername());
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterRepository.save(new CafeTableAssignedToWaiter(
                 cafeTableService.getById(params.getCafeTableId()),
-                userService.getByUsername(params.getWaiterUsername())
+                userService.getByUsername(params.getWaiterUsername()),
+                params.getAssignedAt()
         ));
         LOGGER.info("Successfully assigned a table with an id of {} to waiter having a username of {}, result - {}", params.getCafeTableId(), params.getWaiterUsername(), cafeTableAssignedToWaiter);
         return cafeTableAssignedToWaiter;

@@ -1,5 +1,6 @@
 package com.cafe.service.core.product;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ProductInOrderCreationParams {
@@ -10,10 +11,16 @@ public class ProductInOrderCreationParams {
 
     private Integer amount;
 
-    public ProductInOrderCreationParams(String productName, Long orderId, Integer amount) {
+    private LocalDateTime createdAt;
+
+    public ProductInOrderCreationParams(String productName,
+                                        Long orderId,
+                                        Integer amount,
+                                        LocalDateTime createdAt) {
         this.productName = productName;
         this.orderId = orderId;
         this.amount = amount;
+        this.createdAt = createdAt;
     }
 
     public String getProductName() {
@@ -40,17 +47,28 @@ public class ProductInOrderCreationParams {
         this.amount = amount;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrderCreationParams that = (ProductInOrderCreationParams) o;
-        return Objects.equals(productName, that.productName) && Objects.equals(orderId, that.orderId) && Objects.equals(amount, that.amount);
+        return Objects.equals(productName, that.productName) &&
+                Objects.equals(orderId, that.orderId) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productName, orderId, amount);
+        return Objects.hash(productName, orderId, amount, createdAt);
     }
 
     @Override
@@ -59,6 +77,7 @@ public class ProductInOrderCreationParams {
                 "productName='" + productName + '\'' +
                 ", orderId=" + orderId +
                 ", amount=" + amount +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

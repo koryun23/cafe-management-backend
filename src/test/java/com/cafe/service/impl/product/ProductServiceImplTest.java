@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +42,7 @@ class ProductServiceImplTest {
 
     @Test
     public void testFindByIdWhenProductExists() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         Mockito.when(productRepository.findById(1L)).thenReturn(Optional.of(product));
@@ -61,7 +62,7 @@ class ProductServiceImplTest {
 
     @Test
     public void testFindByNameWhenProductExists() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));
@@ -82,7 +83,7 @@ class ProductServiceImplTest {
 
     @Test
     public void testGetAmountByProductNameWhenProductExists() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));
@@ -103,7 +104,7 @@ class ProductServiceImplTest {
 
     @Test
     public void testGetAmountByProductIdWhenProductExists() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         Mockito.when(productRepository.findById(1L)).thenReturn(Optional.of(product));
@@ -124,7 +125,7 @@ class ProductServiceImplTest {
 
     @Test
     public void testGetByNameWhenProductExists() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));
@@ -145,7 +146,7 @@ class ProductServiceImplTest {
 
     @Test
     public void testGetByIdWhenProductExists() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         Mockito.when(productRepository.findById(1L)).thenReturn(Optional.of(product));
@@ -157,15 +158,15 @@ class ProductServiceImplTest {
 
     @Test
     public void testCreate() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
 
-        Product savedProduct = new Product("Pepsi", 4, 300);
+        Product savedProduct = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         savedProduct.setId(1L);
 
         Mockito.when(productRepository.save(product)).thenReturn(savedProduct);
 
         Assertions.assertThat(testSubject.create(new ProductCreationParams(
-                "Pepsi", 4, 300
+                "Pepsi", 4, 300, LocalDateTime.MAX
         ))).isEqualTo(savedProduct);
 
         Mockito.verify(productRepository).save(product);
@@ -174,10 +175,10 @@ class ProductServiceImplTest {
 
     @Test
     public void testUpdate() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
-        Product updatedProduct = new Product("Pepsi", 4, 500);
+        Product updatedProduct = new Product("Pepsi", 4, 500, LocalDateTime.MAX);
         updatedProduct.setId(1L);
 
         Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));

@@ -4,6 +4,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -24,13 +25,17 @@ public class Product {
     @Column(name = "amount", nullable = false)
     private Integer amount;
 
+    @Column(name = "registered_at", nullable = false)
+    private LocalDateTime registeredAt;
+
     public Product() {
     }
 
-    public Product(String productName, Integer price, Integer amount) {
+    public Product(String productName, Integer price, Integer amount, LocalDateTime registeredAt) {
         setProductName(productName);
         setPrice(price);
         setAmount(amount);
+        setRegisteredAt(registeredAt);
     }
 
     public Long getId() {
@@ -76,6 +81,15 @@ public class Product {
         this.amount = amount;
     }
 
+    public LocalDateTime getRegisteredAt() {
+        return registeredAt;
+    }
+
+    public void setRegisteredAt(LocalDateTime registeredAt) {
+        Assert.notNull(registeredAt, "Registration date should not be null");
+        this.registeredAt = registeredAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,7 +98,8 @@ public class Product {
         return Objects.equals(id, product.id) &&
                 Objects.equals(productName, product.productName) &&
                 Objects.equals(price, product.price) &&
-                Objects.equals(amount, product.amount);
+                Objects.equals(amount, product.amount) &&
+                Objects.equals(registeredAt, product.registeredAt);
     }
 
     @Override
@@ -99,6 +114,7 @@ public class Product {
                 ", productName='" + productName + '\'' +
                 ", price=" + price +
                 ", amount=" + amount +
+                ", registeredAt=" + registeredAt +
                 '}';
     }
 }

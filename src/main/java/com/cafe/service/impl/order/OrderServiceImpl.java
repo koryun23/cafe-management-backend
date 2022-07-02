@@ -1,6 +1,7 @@
 package com.cafe.service.impl.order;
 
 import com.cafe.entity.order.Order;
+import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.repository.OrderRepository;
 import com.cafe.service.core.order.OrderUpdateParams;
 import com.cafe.service.core.table.CafeTableService;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service

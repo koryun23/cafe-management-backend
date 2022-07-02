@@ -40,7 +40,8 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         ProductInOrder productInOrder = productInOrderRepository.save(new ProductInOrder(
                 productService.findByName(params.getProductName()).orElseThrow(() -> new ProductNotFoundException(params.getProductName())),
                 orderService.getById(params.getOrderId()),
-                params.getAmount()
+                params.getAmount(),
+                params.getCreatedAt()
         ));
         LOGGER.info("Successfully created a new product according to the product creation params - {}, result - {}", params, productInOrder);
         return productInOrder;
@@ -51,10 +52,12 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
     public ProductInOrder update(ProductInOrderUpdateParams params) {
         Assert.notNull(params, "Product in order update params should not be null");
         LOGGER.info("Updating a product in order according to the product in order update params - {}", params);
+        ProductInOrder originalProductInOrder = productInOrderRepository.findById(params.getId()).orElseThrow(() -> new ProductInOrderNotFoundException(params.getId()));
         ProductInOrder productInOrder = new ProductInOrder(
                 productService.getByName(params.getProductName()),
                 orderService.getById(params.getOrderId()),
-                params.getAmount()
+                params.getAmount(),
+                originalProductInOrder.getRegisteredAt()
         );
         productInOrder.setId(params.getId());
         productInOrder.setProductInOrderStatusType(params.getStatus());

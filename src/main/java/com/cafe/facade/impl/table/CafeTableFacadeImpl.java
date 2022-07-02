@@ -136,8 +136,8 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
     public CafeTablesAssignedToWaiterRetrievalResponseDto retrieveCafeTableList(CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
         Assert.notNull(dto, "Cafe table list retrieval request dto should not be null");
         LOGGER.info("Retrieving a list of cafe tables according to the cafe table retrieval request dto - {}", dto);
-        List<CafeTableAssignedToWaiter> allByWaiterId = cafeTableAssignedToWaiterService.findAllByWaiterUsername(dto.getWaiterUsername());
-        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = new CafeTablesAssignedToWaiterRetrievalResponseDto(allByWaiterId);
+        List<CafeTableAssignedToWaiter> allByWaiterUsername = cafeTableAssignedToWaiterService.findAllByWaiterUsername(dto.getWaiterUsername());
+        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = new CafeTablesAssignedToWaiterRetrievalResponseDto(allByWaiterUsername);
         LOGGER.info("Successfully retrieved a list of cafe tables according to the cafe table retrieval request dto - {}, result - {}", dto, responseDto);
         return responseDto;
     }

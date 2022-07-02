@@ -66,7 +66,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
         waiter.setUserRoleList(List.of(new UserRole(waiter, UserRoleType.WAITER)));
         waiter.setId(1L);
 
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter);
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
 
         Mockito.when(cafeTableAssignedToWaiterRepository.findById(1L)).thenReturn(Optional.of(cafeTableAssignedToWaiter));
@@ -94,7 +94,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
         waiter.setUserRoleList(List.of(new UserRole(waiter, UserRoleType.WAITER)));
         waiter.setId(1L);
 
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter);
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
 
         Mockito.when(cafeTableAssignedToWaiterRepository.findById(1L)).thenReturn(Optional.of(cafeTableAssignedToWaiter));
@@ -106,7 +106,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
     }
 
     @Test
-    public void findByCafeTableIdWhenCafeTableDoesNotExist() {
+    public void testFindByCafeTableIdWhenCafeTableDoesNotExist() {
         Mockito.when(cafeTableAssignedToWaiterRepository.findByCafeTableId(1L)).thenReturn(Optional.empty());
         Assertions.assertThat(testSubject.findByCafeTableId(1L)).isEqualTo(Optional.empty());
         Mockito.verify(cafeTableAssignedToWaiterRepository).findByCafeTableId(1L);
@@ -114,14 +114,14 @@ class CafeTableAssignedToWaiterServiceImplTest {
     }
 
     @Test
-    public void findByCafeTableIdWhenCafeTableExists() {
+    public void testFindByCafeTableIdWhenCafeTableExists() {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
         User waiter = new User("Mary", "Smith", "mary21", "pwd21", LocalDateTime.MAX);
         waiter.setId(1L);
 
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter);
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
 
         Mockito.when(cafeTableAssignedToWaiterRepository.findByCafeTableId(1L)).thenReturn(Optional.of(cafeTableAssignedToWaiter));
@@ -156,7 +156,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
         User waiter = new User("Mary", "Smith", "mary21", "pwd21", LocalDateTime.MAX);
         waiter.setId(1L);
 
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter);
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
 
         Mockito.when(cafeTableAssignedToWaiterRepository.findAllByWaiterUsername("mary21"))
@@ -176,7 +176,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
         User waiter = new User("Mary", "Smith", "mary21", "pwd21", LocalDateTime.MAX);
         waiter.setId(1L);
 
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter);
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
 
         Mockito.when(cafeTableAssignedToWaiterRepository.findAllByWaiterId(1L))
@@ -196,9 +196,9 @@ class CafeTableAssignedToWaiterServiceImplTest {
         User waiter = new User("Mary", "Smith", "mary21", "pwd21", LocalDateTime.MAX);
         waiter.setId(1L);
 
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter);
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
 
-        CafeTableAssignedToWaiter savedCafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter);
+        CafeTableAssignedToWaiter savedCafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         savedCafeTableAssignedToWaiter.setId(1L);
 
         Mockito.when(cafeTableAssignedToWaiterRepository.save(cafeTableAssignedToWaiter)).thenReturn(savedCafeTableAssignedToWaiter);
@@ -206,7 +206,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
         Mockito.when(userService.getByUsername("mary21")).thenReturn(waiter);
 
         Assertions.assertThat(testSubject.create(
-                new CafeTableAssignedToWaiterCreationParams(1L, "mary21"))
+                new CafeTableAssignedToWaiterCreationParams(1L, "mary21", LocalDateTime.MAX))
         ).isEqualTo(savedCafeTableAssignedToWaiter);
 
         Mockito.verify(cafeTableAssignedToWaiterRepository).save(cafeTableAssignedToWaiter);
@@ -218,7 +218,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
     public void testCreateWhenCafeTableIsNotFound() {
         Mockito.when(cafeTableService.getById(1L)).thenThrow(CafeTableNotFoundException.class);
         Assertions.assertThatThrownBy(() -> testSubject.create(new CafeTableAssignedToWaiterCreationParams(
-                1L, "mary21"
+                1L, "mary21", LocalDateTime.MAX
         ))).isExactlyInstanceOf(CafeTableNotFoundException.class);
         Mockito.verify(cafeTableService).getById(1L);
         Mockito.verifyNoMoreInteractions(cafeTableService, userService, cafeTableAssignedToWaiterRepository);
@@ -232,7 +232,7 @@ class CafeTableAssignedToWaiterServiceImplTest {
         Mockito.when(cafeTableService.getById(1L)).thenReturn(cafeTable);
         Mockito.when(userService.getByUsername("mary21")).thenThrow(UserNotFoundException.class);
         Assertions.assertThatThrownBy(() -> testSubject.create(new CafeTableAssignedToWaiterCreationParams(
-                1L, "mary21"
+                1L, "mary21", LocalDateTime.MAX
         ))).isExactlyInstanceOf(UserNotFoundException.class);
         Mockito.verify(userService).getByUsername("mary21");
         Mockito.verify(cafeTableService).getById(1L);

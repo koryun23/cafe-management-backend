@@ -4,6 +4,8 @@ import com.cafe.dto.request.ProductRegistrationRequestDto;
 import com.cafe.service.core.product.ProductCreationParams;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class ProductCreationParamsMapperImpl implements ProductCreationParamsMapper {
 
@@ -12,7 +14,8 @@ public class ProductCreationParamsMapperImpl implements ProductCreationParamsMap
         return new ProductCreationParams(
                 dto.getName(),
                 dto.getPrice(),
-                dto.getAmount()
+                dto.getAmount(),
+                LocalDateTime.now()
         );
     }
 }

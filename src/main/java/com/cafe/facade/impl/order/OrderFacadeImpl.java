@@ -37,7 +37,7 @@ public class OrderFacadeImpl implements OrderFacade {
     private final CafeTableAssignedToWaiterService cafeTableAssignedToWaiterService;
     private final OrderRegistrationResponseDtoMapper orderRegistrationResponseDtoMapper;
     private final OrderUpdateResponseDtoMapper orderUpdateResponseDtoMapper;
-    private final OrderUpdateParamsMapepr orderUpdateRequestDtoMapper;
+    private final OrderUpdateParamsMapepr orderUpdateParamsMapper;
     private final OrderCreationParamsMapper orderRegistrationRequestDtoMapper;
     private final ProductInOrderService productInOrderService;
 
@@ -62,7 +62,7 @@ public class OrderFacadeImpl implements OrderFacade {
         this.cafeTableAssignedToWaiterService = cafeTableAssignedToWaiterService;
         this.orderRegistrationResponseDtoMapper = orderRegistrationResponseDtoMapper;
         this.orderUpdateResponseDtoMapper = orderUpdateResponseDtoMapper;
-        this.orderUpdateRequestDtoMapper = orderUpdateParamsMapper;
+        this.orderUpdateParamsMapper = orderUpdateParamsMapper;
         this.orderRegistrationRequestDtoMapper = orderRegistrationRequestDtoMapper;
         this.productInOrderService = productInOrderService;
     }
@@ -71,16 +71,16 @@ public class OrderFacadeImpl implements OrderFacade {
     public OrderRegistrationResponseDto register(OrderRegistrationRequestDto dto) {
         Assert.notNull(dto, "Order registration request should not be null");
         LOGGER.info("Registering a new order according to the order registration request dto - {}", dto);
-        if(!foundTableWithIdAssignedToWaiterWithUsername(dto.getCafeTableId(), dto.getWaiterUsername())) {
-            return new ErrorOrderRegistrationResponseDto(
-                    List.of(String.format("Table having an id of %d is not assigned to waiter having a username of %s", dto.getCafeTableId(), dto.getWaiterUsername())),
-                    HttpStatus.NOT_ACCEPTABLE
-            );
-        }
         Optional<CafeTable> cafeTableOptional = cafeTableService.findById(dto.getCafeTableId());
         if(cafeTableOptional.isEmpty()) {
             return new ErrorOrderRegistrationResponseDto(
                     List.of(String.format("No table found having an id of %d", dto.getCafeTableId())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
+        }
+        if(!foundTableWithIdAssignedToWaiterWithUsername(dto.getCafeTableId(), dto.getWaiterUsername())) {
+            return new ErrorOrderRegistrationResponseDto(
+                    List.of(String.format("Table having an id of %d is not assigned to waiter having a username of %s", dto.getCafeTableId(), dto.getWaiterUsername())),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
@@ -92,7 +92,6 @@ public class OrderFacadeImpl implements OrderFacade {
             );
         }
         Order order = orderService.create(orderRegistrationRequestDtoMapper.apply(dto));
-        System.out.println(order);
         OrderRegistrationResponseDto orderRegistrationResponseDto = orderRegistrationResponseDtoMapper.apply(order);
         cafeTableService.markAs(order.getTable().getId(), CafeTableStatusType.TAKEN);
         LOGGER.info("Successfully registered a new order according to the order registration request dto - {}, response - {}", dto, orderRegistrationResponseDto);
@@ -103,15 +102,25 @@ public class OrderFacadeImpl implements OrderFacade {
     public OrderUpdateResponseDto updateOrder(OrderUpdateRequestDto dto) {
         Assert.notNull(dto, "Order update request dto should not be null");
         LOGGER.info("Updating an order according to the order update request dto - {}", dto);
-        Order orderToUpdate = orderService.getById(dto.getId());
+        Optional<Order> orderToUpdateOptional = orderService.findById(dto.getId());
+        if(orderToUpdateOptional.isEmpty()) {
+            return new ErrorOrderUpdateResponseDto(
+                    List.of("Cannot update a non existing order"),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
+        }
+
+        Order orderToUpdate = orderToUpdateOptional.get();
         if(orderToUpdate.getOrderStatusType() != OrderStatusType.OPEN && dto.getOrderStatusType() == OrderStatusType.OPEN) {
             return new ErrorOrderUpdateResponseDto(
                     List.of(String.format("Cannot update the status of an order from %s to %s", orderToUpdate.getOrderStatusType(), dto.getOrderStatusType())),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
-        Order order = orderService.update(orderUpdateRequestDtoMapper.apply(dto));
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(order.getTable().getId()).orElseThrow(() -> new CafeTableNotFoundException(order.getTable().getId()));
+
+        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(
+                orderToUpdate.getTable().getId()).orElseThrow(() -> new CafeTableNotFoundException(orderToUpdate.getTable().getId())
+        );
         String orderCreatorUsername = cafeTableAssignedToWaiter.getWaiter().getUsername();
         String orderUpdatorUsername = dto.getWaiterUsername();
         if(!orderCreatorUsername.equals(orderUpdatorUsername)) {
@@ -120,6 +129,7 @@ public class OrderFacadeImpl implements OrderFacade {
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
+        Order order = orderService.update(orderUpdateParamsMapper.apply(dto));
         if(order.getOrderStatusType() != OrderStatusType.OPEN) {
             cafeTableAssignedToWaiterService.deleteByCafeTableId(dto.getCafeTableId());
             cafeTableService.markAs(order.getTable().getId(), CafeTableStatusType.FREE);
@@ -135,7 +145,7 @@ public class OrderFacadeImpl implements OrderFacade {
         return responseDto;
     }
 
-    private boolean foundTableWithIdAssignedToWaiterWithUsername(Long tableId, String username) {
+    public boolean foundTableWithIdAssignedToWaiterWithUsername(Long tableId, String username) {
         List<CafeTableAssignedToWaiter> allByWaiterUsername = cafeTableAssignedToWaiterService.findAllByWaiterUsername(username);
         boolean foundTableWithIdAssignedToWaiterWithUsername = false;
         for(CafeTableAssignedToWaiter cafeTableAssignedToWaiter : allByWaiterUsername) {

@@ -13,7 +13,7 @@ public class ErrorProductInOrderRegistrationResponseDto extends ProductInOrderRe
     private List<String> errors;
     private HttpStatus httpStatus;
 
-    public ErrorProductInOrderRegistrationResponseDto(List<String> errors, HttpStatus status) {
+    public ErrorProductInOrderRegistrationResponseDto(List<String> errors, HttpStatus httpStatus) {
         setErrors(errors);
         setHttpStatus(httpStatus);
     }

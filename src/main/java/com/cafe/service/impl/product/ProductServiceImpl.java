@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
         Assert.notNull(params, "Product Creation Params should not be null");
         LOGGER.info("Creating a new product according to the product creation params - {}", params);
         Product product = productRepository.save(new Product(
-                params.getProductName(), params.getPrice(), params.getAmount())
+                params.getProductName(), params.getPrice(), params.getAmount(), params.getRegisteredAt())
         );
         LOGGER.info("Successfully created a new product according to the product creation params - {}", params);
         return product;
@@ -94,14 +94,17 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(ProductUpdateParams params) {
         Assert.notNull(params, "Product update params should not be null");
         LOGGER.info("Updating a product according to the product update params - {}", params);
-        Product product = new Product(
+        String originalName = params.getOriginalName();
+        Product product = productRepository.findByProductName(originalName).orElseThrow(() -> new ProductNotFoundException(originalName));
+        Product newProduct = new Product(
                 params.getName(),
                 params.getPrice(),
-                params.getAmount()
+                params.getAmount(),
+                product.getRegisteredAt()
         );
-        String originalName = params.getOriginalName();
-        product.setId(productRepository.findByProductName(originalName).orElseThrow(() -> new ProductNotFoundException(originalName)).getId());
-        Product savedProduct = productRepository.save(product);
+
+        newProduct.setId(product.getId());
+        Product savedProduct = productRepository.save(newProduct);
         LOGGER.info("Successfully updated a product according to the product update params - {}, result - {}", params, savedProduct);
         return savedProduct;
     } // tested

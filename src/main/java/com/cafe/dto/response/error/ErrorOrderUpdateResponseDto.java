@@ -12,7 +12,7 @@ public class ErrorOrderUpdateResponseDto extends OrderUpdateResponseDto {
     private List<String> errors;
     private HttpStatus httpStatus;
 
-    public ErrorOrderUpdateResponseDto(List<String> errors, HttpStatus status) {
+    public ErrorOrderUpdateResponseDto(List<String> errors, HttpStatus httpStatus) {
         setErrors(errors);
         setHttpStatus(httpStatus);
     }

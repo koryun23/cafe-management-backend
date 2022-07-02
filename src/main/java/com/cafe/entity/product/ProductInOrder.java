@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -32,10 +33,14 @@ public class ProductInOrder {
     @Column(name = "status", nullable = false, length = 20)
     private ProductInOrderStatusType productInOrderStatusType;
 
-    public ProductInOrder(Product product, Order order, Integer amount) {
+    @Column(name = "registered_at", nullable = false)
+    private LocalDateTime registeredAt;
+
+    public ProductInOrder(Product product, Order order, Integer amount, LocalDateTime registeredAt) {
         setProduct(product);
         setOrder(order);
         setAmount(amount);
+        setRegisteredAt(registeredAt);
     }
 
     public ProductInOrder() {
@@ -89,6 +94,15 @@ public class ProductInOrder {
         this.productInOrderStatusType = productInOrderStatusType;
     }
 
+    public LocalDateTime getRegisteredAt() {
+        return registeredAt;
+    }
+
+    public void setRegisteredAt(LocalDateTime registeredAt) {
+        Assert.notNull(registeredAt, "Registration date should not be null");
+        this.registeredAt = registeredAt;
+    }
+
     @Override
     public String toString() {
         return "ProductInOrder{" +
@@ -97,6 +111,7 @@ public class ProductInOrder {
                 ", order=" + order +
                 ", amount=" + amount +
                 ", productInOrderStatusType=" + productInOrderStatusType +
+                ", registeredAt=" + registeredAt +
                 '}';
     }
 
@@ -106,11 +121,16 @@ public class ProductInOrder {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductInOrder that = (ProductInOrder) o;
-        return Objects.equals(id, that.id) && Objects.equals(product, that.product) && Objects.equals(order, that.order) && Objects.equals(amount, that.amount) && productInOrderStatusType == that.productInOrderStatusType;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(product, that.product) &&
+                Objects.equals(order, that.order) &&
+                Objects.equals(amount, that.amount) &&
+                productInOrderStatusType == that.productInOrderStatusType &&
+                Objects.equals(registeredAt, that.registeredAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, product, order, amount, productInOrderStatusType);
+        return Objects.hash(id, product, order, amount, productInOrderStatusType, registeredAt);
     }
 }

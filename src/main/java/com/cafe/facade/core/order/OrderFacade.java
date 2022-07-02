@@ -10,4 +10,5 @@ public interface OrderFacade {
 
     OrderUpdateResponseDto updateOrder(OrderUpdateRequestDto dto);
 
+    boolean foundTableWithIdAssignedToWaiterWithUsername(Long tableId, String username);
 }

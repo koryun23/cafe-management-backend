@@ -11,6 +11,7 @@ import com.cafe.dto.response.ProductUpdateResponseDto;
 import com.cafe.dto.response.error.ErrorProductInOrderRegistrationResponseDto;
 import com.cafe.dto.response.error.ErrorProductInOrderUpdateResponseDto;
 import com.cafe.dto.response.error.ErrorProductRegistrationResponseDto;
+import com.cafe.dto.response.error.ErrorProductUpdateResponseDto;
 import com.cafe.entity.order.Order;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.product.Product;
@@ -42,6 +43,8 @@ public class ProductFacadeImpl implements ProductFacade {
     private final ProductUpdateResponseDtoMapper productUpdateResponseDtoMapper;
     private final ProductInOrderCreationParamsMapper productInOrderCreationParamsMapper;
     private final ProductInOrderRegistrationResponseDtoMapper productInOrderRegistrationResponseDtoMapper;
+    private final ProductInOrderUpdateParamsMapper productInOrderUpdateParamsMapper;
+    private final ProductInOrderUpdateResponseDtoMapper productInOrderUpdateResponseDtoMapper;
 
     public ProductFacadeImpl(ProductService productService,
                              ProductInOrderService productInOrderService,
@@ -51,7 +54,9 @@ public class ProductFacadeImpl implements ProductFacade {
                              ProductUpdateParamsMapper productUpdateParamsMapper,
                              ProductUpdateResponseDtoMapper productUpdateResponseDtoMapper,
                              ProductInOrderCreationParamsMapper productInOrderCreationParamsMapper,
-                             ProductInOrderRegistrationResponseDtoMapper productInOrderRegistrationResponseDtoMapper) {
+                             ProductInOrderRegistrationResponseDtoMapper productInOrderRegistrationResponseDtoMapper,
+                             ProductInOrderUpdateParamsMapper productInOrderUpdateParamsMapper,
+                             ProductInOrderUpdateResponseDtoMapper productInOrderUpdateResponseDtoMapper) {
         Assert.notNull(productService, "Product service should not be null");
         Assert.notNull(productInOrderService, "Product in order service should not be null");
         Assert.notNull(orderService, "Order service should not be null");
@@ -61,6 +66,8 @@ public class ProductFacadeImpl implements ProductFacade {
         Assert.notNull(productUpdateResponseDtoMapper, "Product update response dto mapper should not be null");
         Assert.notNull(productInOrderCreationParamsMapper, "Product in order creation params mapper should not be null");
         Assert.notNull(productInOrderRegistrationResponseDtoMapper, "Product in order registration response dto mapper should not be null");
+        Assert.notNull(productInOrderUpdateParamsMapper, "Product in order update params mapper should not be null");
+        Assert.notNull(productInOrderUpdateResponseDtoMapper, "Product in order update response dto mapper should not be null");
         this.productService = productService;
         this.productInOrderService = productInOrderService;
         this.orderService = orderService;
@@ -70,6 +77,8 @@ public class ProductFacadeImpl implements ProductFacade {
         this.productUpdateResponseDtoMapper = productUpdateResponseDtoMapper;
         this.productInOrderCreationParamsMapper = productInOrderCreationParamsMapper;
         this.productInOrderRegistrationResponseDtoMapper = productInOrderRegistrationResponseDtoMapper;
+        this.productInOrderUpdateParamsMapper = productInOrderUpdateParamsMapper;
+        this.productInOrderUpdateResponseDtoMapper = productInOrderUpdateResponseDtoMapper;
     }
 
     @Override
@@ -85,6 +94,22 @@ public class ProductFacadeImpl implements ProductFacade {
         Product product = productService.create(productCreationParamsMapper.apply(dto));
         ProductRegistrationResponseDto responseDto = productRegistrationResponseDtoMapper.apply(product);
         LOGGER.info("Successfully registered a new product according to the product registration request dto - {}, response - {}", dto, responseDto);
+        return responseDto;
+    }
+
+    @Override
+    public ProductUpdateResponseDto updateProduct(ProductUpdateRequestDto dto) {
+        Assert.notNull(dto, "Product update request dto should not be null");
+        LOGGER.info("Updating a product according to the product update request dto - {}", dto);
+        if(productService.findByName(dto.getOriginalName()).isEmpty()) {
+            return new ErrorProductUpdateResponseDto(
+                    List.of(String.format("Cannot update product named as %s because it does not exist.", dto.getOriginalName())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
+        }
+        Product product = productService.updateProduct(productUpdateParamsMapper.apply(dto));
+        ProductUpdateResponseDto responseDto = productUpdateResponseDtoMapper.apply(product);
+        LOGGER.info("Successfully updated a product according to the product update request dto - {}, response - {}", dto, responseDto);
         return responseDto;
     }
 
@@ -160,31 +185,9 @@ public class ProductFacadeImpl implements ProductFacade {
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
-        ProductInOrder productInOrder = productInOrderService.update(new ProductInOrderUpdateParams(
-                dto.getId(),
-                dto.getProductName(),
-                dto.getOrderId(),
-                dto.getAmount(),
-                dto.getStatus()
-        ));
-        ProductInOrderUpdateResponseDto responseDto = new ProductInOrderUpdateResponseDto(
-                productInOrder.getId(),
-                productInOrder.getProduct().getProductName(),
-                productInOrder.getOrder().getId(),
-                productInOrder.getAmount(),
-                LocalDateTime.now()
-        );
+        ProductInOrder productInOrder = productInOrderService.update(productInOrderUpdateParamsMapper.apply(dto));
+        ProductInOrderUpdateResponseDto responseDto = productInOrderUpdateResponseDtoMapper.apply(productInOrder);
         LOGGER.info("Successfully updated product in order according to the request dto - {}, response - {}", dto, responseDto);
-        return responseDto;
-    }
-
-    @Override
-    public ProductUpdateResponseDto updateProduct(ProductUpdateRequestDto dto) {
-        Assert.notNull(dto, "Product update request dto should not be null");
-        LOGGER.info("Updating a product according to the product update request dto - {}", dto);
-        Product product = productService.updateProduct(productUpdateParamsMapper.apply(dto));
-        ProductUpdateResponseDto responseDto = productUpdateResponseDtoMapper.apply(product);
-        LOGGER.info("Successfully updated a product according to the product update request dto - {}, response - {}", dto, responseDto);
         return responseDto;
     }
 }

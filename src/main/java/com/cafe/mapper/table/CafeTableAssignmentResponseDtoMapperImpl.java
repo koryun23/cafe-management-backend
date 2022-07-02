@@ -13,7 +13,7 @@ public class CafeTableAssignmentResponseDtoMapperImpl implements CafeTableAssign
         return new CafeTableAssignmentResponseDto(
                 cafeTableAssignedToWaiter.getCafeTable().getId(),
                 cafeTableAssignedToWaiter.getWaiter().getUsername(),
-                LocalDateTime.now()
+                cafeTableAssignedToWaiter.getAssignedAt()
         );
     }
 }

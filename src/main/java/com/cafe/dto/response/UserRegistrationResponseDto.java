@@ -77,8 +77,8 @@ public class UserRegistrationResponseDto {
     }
 
     public void setPassword(String password) {
-        Assert.notNull(firstName, "password should not be null");
-        Assert.hasText(firstName, "password should not be empty");
+        Assert.notNull(password, "password should not be null");
+        Assert.hasText(password, "password should not be empty");
         this.password = password;
     }
 

@@ -47,7 +47,7 @@ class ProductInOrderServiceImplTest {
 
     @Test
     public void testCreate() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
@@ -56,10 +56,10 @@ class ProductInOrderServiceImplTest {
         Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
-        ProductInOrder productInOrder = new ProductInOrder(product, order, 3);
+        ProductInOrder productInOrder = new ProductInOrder(product, order, 3, LocalDateTime.MAX);
 
         ProductInOrder savedProductInOrder = new ProductInOrder(
-            product, order, 3
+            product, order, 3, LocalDateTime.MAX
         );
         savedProductInOrder.setId(1L);
 
@@ -68,7 +68,7 @@ class ProductInOrderServiceImplTest {
         Mockito.when(orderService.getById(1L)).thenReturn(order);
 
         Assertions.assertThat(testSubject.create(new ProductInOrderCreationParams(
-                "Pepsi", order.getId(), 3
+                "Pepsi", order.getId(), 3, LocalDateTime.MAX
         ))).isEqualTo(savedProductInOrder);
 
         Mockito.verify(productInOrderRepository).save(productInOrder);
@@ -79,7 +79,7 @@ class ProductInOrderServiceImplTest {
 
     @Test
     public void testUpdate() {
-        Product product = new Product("Pepsi", 4, 300);
+        Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
@@ -89,10 +89,12 @@ class ProductInOrderServiceImplTest {
         order.setId(1L);
 
         ProductInOrder updatedProductInOrder = new ProductInOrder(
-                product, order, 6
+                product, order, 6, LocalDateTime.MAX
         );
         updatedProductInOrder.setId(1L);
         updatedProductInOrder.setProductInOrderStatusType(ProductInOrderStatusType.ACTIVE);
+
+        Mockito.when(productInOrderRepository.findById(1L)).thenReturn(Optional.of(updatedProductInOrder));
         Mockito.when(productService.getByName("Pepsi")).thenReturn(product);
         Mockito.when(orderService.getById(1L)).thenReturn(order);
         Mockito.when(productInOrderRepository.save(updatedProductInOrder)).thenReturn(updatedProductInOrder);
@@ -105,6 +107,7 @@ class ProductInOrderServiceImplTest {
                 ProductInOrderStatusType.ACTIVE
         ))).isEqualTo(updatedProductInOrder);
 
+        Mockito.verify(productInOrderRepository).findById(1L);
         Mockito.verify(productService).getByName("Pepsi");
         Mockito.verify(orderService).getById(1L);
         Mockito.verify(productInOrderRepository).save(updatedProductInOrder);

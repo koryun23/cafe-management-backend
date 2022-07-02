@@ -4,6 +4,8 @@ import com.cafe.dto.request.ProductInOrderRegistrationRequestDto;
 import com.cafe.service.core.product.ProductInOrderCreationParams;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class ProductInOrderCreationParamsMapperImpl implements ProductInOrderCreationParamsMapper {
     @Override
@@ -11,7 +13,8 @@ public class ProductInOrderCreationParamsMapperImpl implements ProductInOrderCre
         return new ProductInOrderCreationParams(
                 dto.getProductName(),
                 dto.getOrderId(),
-                dto.getAmount()
+                dto.getAmount(),
+                LocalDateTime.now()
         );
     }
 }
