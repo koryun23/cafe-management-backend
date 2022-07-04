@@ -61,7 +61,7 @@ class ProductInOrderServiceImplTest {
         order.setId(1L);
 
         ProductInOrder productInOrder = new ProductInOrder(product, order, 3, LocalDateTime.MAX);
-
+        productInOrder.setProductInOrderStatusType(ProductInOrderStatusType.ACTIVE);
         ProductInOrder savedProductInOrder = new ProductInOrder(
             product, order, 3, LocalDateTime.MAX
         );
