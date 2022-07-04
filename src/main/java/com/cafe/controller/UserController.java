@@ -26,7 +26,7 @@ public class UserController { // reviewed
     }
 
     @GetMapping
-    public ResponseEntity<UserListRetrievalResponseDto> fetchAll() { // TODO: check this method again
+    public ResponseEntity<UserListRetrievalResponseDto> fetchAll() {
         UserListRetrievalResponseDto userFetchResponseDto = userFacade.getAll();
         return ResponseEntity
                 .status(userFetchResponseDto.getHttpStatus())

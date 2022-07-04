@@ -140,7 +140,13 @@ public class ProductFacadeImpl implements ProductFacade {
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
-        //TODO: CHECK IF WRONG USER TRIES TO ADD PRODUCT IN ORDER
+        Order order = orderOptional.get();
+        if(!order.getWaiter().getUsername().equals(dto.getWaiterUsername())) {
+            return new ErrorProductInOrderRegistrationResponseDto(
+                    List.of("Could not register a product in order since the order belongs to another user."),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
+        }
         ProductInOrder productInOrder = productInOrderService.create(productInOrderCreationParamsMapper.apply(dto));
         productService.updateProduct(new ProductUpdateParams(
                 product.getName(),
