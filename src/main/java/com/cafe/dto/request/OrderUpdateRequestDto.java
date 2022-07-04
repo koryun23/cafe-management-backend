@@ -22,6 +22,11 @@ public class OrderUpdateRequestDto {
         setWaiterUsername(waiterUsername);
     }
 
+    public OrderUpdateRequestDto(Long cafeTableId, OrderStatusType orderStatusType) {
+        setCafeTableId(cafeTableId);
+        setOrderStatusType(orderStatusType);
+    }
+
     public OrderUpdateRequestDto() {
     }
 

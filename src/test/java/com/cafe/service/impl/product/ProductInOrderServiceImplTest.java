@@ -7,6 +7,7 @@ import com.cafe.entity.product.ProductInOrder;
 import com.cafe.entity.product.ProductInOrderStatusType;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableStatusType;
+import com.cafe.entity.user.User;
 import com.cafe.repository.ProductInOrderRepository;
 import com.cafe.service.core.order.OrderService;
 import com.cafe.service.core.product.ProductInOrderCreationParams;
@@ -53,7 +54,10 @@ class ProductInOrderServiceImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        User user = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        user.setId(1L);
+
+        Order order = new Order(cafeTable, user, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
         ProductInOrder productInOrder = new ProductInOrder(product, order, 3, LocalDateTime.MAX);
@@ -85,7 +89,10 @@ class ProductInOrderServiceImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        User user = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        user.setId(1L);
+
+        Order order = new Order(cafeTable, user, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
         ProductInOrder updatedProductInOrder = new ProductInOrder(

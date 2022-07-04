@@ -17,7 +17,7 @@ public class Product {
     private Long id;
 
     @Column(name = "product_name", nullable = false, unique = true, length = 70)
-    private String productName;
+    private String name;
 
     @Column(name = "price", nullable = false)
     private Integer price;
@@ -31,8 +31,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(String productName, Integer price, Integer amount, LocalDateTime registeredAt) {
-        setProductName(productName);
+    public Product(String name, Integer price, Integer amount, LocalDateTime registeredAt) {
+        setName(name);
         setPrice(price);
         setAmount(amount);
         setRegisteredAt(registeredAt);
@@ -47,14 +47,14 @@ public class Product {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        Assert.notNull(productName, "Product name should not be null");
-        Assert.hasText(productName, "Product name should not be empty");
-        this.productName = productName;
+    public void setName(String name) {
+        Assert.notNull(name, "Product name should not be null");
+        Assert.hasText(name, "Product name should not be empty");
+        this.name = name;
     }
 
     public Integer getPrice() {
@@ -96,7 +96,7 @@ public class Product {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return Objects.equals(id, product.id) &&
-                Objects.equals(productName, product.productName) &&
+                Objects.equals(name, product.name) &&
                 Objects.equals(price, product.price) &&
                 Objects.equals(amount, product.amount) &&
                 Objects.equals(registeredAt, product.registeredAt);
@@ -104,14 +104,14 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productName, price, amount);
+        return Objects.hash(id, name, price, amount);
     }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", productName='" + productName + '\'' +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", amount=" + amount +
                 ", registeredAt=" + registeredAt +

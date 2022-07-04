@@ -37,14 +37,16 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
     public ProductInOrder create(ProductInOrderCreationParams params) {
         Assert.notNull(params, "Product in order creation params should not be null");
         LOGGER.info("Creating a new product in order according to the Product in order creation params - {}", params);
-        ProductInOrder productInOrder = productInOrderRepository.save(new ProductInOrder(
+        ProductInOrder productInOrder = new ProductInOrder(
                 productService.findByName(params.getProductName()).orElseThrow(() -> new ProductNotFoundException(params.getProductName())),
                 orderService.getById(params.getOrderId()),
                 params.getAmount(),
                 params.getCreatedAt()
-        ));
+        );
+        productInOrder.setProductInOrderStatusType(ProductInOrderStatusType.ACTIVE);
+        ProductInOrder savedProductInOrder = productInOrderRepository.save(productInOrder);
         LOGGER.info("Successfully created a new product according to the product creation params - {}, result - {}", params, productInOrder);
-        return productInOrder;
+        return savedProductInOrder;
     } // tested
 
     @Transactional
@@ -62,6 +64,16 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         productInOrder.setId(params.getId());
         productInOrder.setProductInOrderStatusType(params.getStatus());
         ProductInOrder savedProductInOrder = productInOrderRepository.save(productInOrder);
+        if(productInOrder.getProductInOrderStatusType() == ProductInOrderStatusType.CANCELLED) {
+            // restore product amount
+            Product product = productService.getByName(productInOrder.getProduct().getName());
+            productService.updateProduct(new ProductUpdateParams(
+                    product.getName(),
+                    product.getName(),
+                    product.getAmount() + params.getAmount(),
+                    product.getPrice()
+            ));
+        }
         LOGGER.info("Successfully updated a product in order according to the product in order update params - {}, result - {}", params, savedProductInOrder);
         return savedProductInOrder;
     } // tested
@@ -76,7 +88,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         for(ProductInOrder productInOrder : productInOrderList) {
             update(new ProductInOrderUpdateParams(
                     productInOrder.getId(),
-                    productInOrder.getProduct().getProductName(),
+                    productInOrder.getProduct().getName(),
                     productInOrder.getOrder().getId(),
                     productInOrder.getAmount(),
                     status
@@ -84,8 +96,8 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
             if(status == ProductInOrderStatusType.CANCELLED) {
                 Product product = productInOrder.getProduct();
                 productService.updateProduct(new ProductUpdateParams(
-                        product.getProductName(),
-                        product.getProductName(),
+                        product.getName(),
+                        product.getName(),
                         product.getAmount() + productInOrder.getAmount(),
                         product.getPrice()
                 ));

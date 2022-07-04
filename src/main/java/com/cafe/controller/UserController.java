@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "users", produces = "application/json", consumes = "application/json")
-public class UserController {
+public class UserController { // reviewed
 
     private final UserFacade userFacade;
 
@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserListRetrievalResponseDto> fetchAll() {
+    public ResponseEntity<UserListRetrievalResponseDto> fetchAll() { // TODO: check this method again
         UserListRetrievalResponseDto userFetchResponseDto = userFacade.getAll();
         return ResponseEntity
                 .status(userFetchResponseDto.getHttpStatus())

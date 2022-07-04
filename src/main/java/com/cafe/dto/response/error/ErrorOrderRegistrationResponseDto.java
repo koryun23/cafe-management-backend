@@ -32,7 +32,7 @@ public class ErrorOrderRegistrationResponseDto extends OrderRegistrationResponse
 
     public void setHttpStatus(HttpStatus httpStatus) {
         Assert.notNull(httpStatus, "Http status should not be null");
-        this.status = status;
+        this.status = httpStatus;
     }
 
     @Override

@@ -16,6 +16,16 @@ public class ProductInOrderUpdateRequestDto {
 
     public ProductInOrderUpdateRequestDto(Long id,
                                           String productName,
+                                          Integer amount,
+                                          ProductInOrderStatusType status) {
+        setId(id);
+        setProductName(productName);
+        setAmount(amount);
+        setStatus(status);
+    }
+
+    public ProductInOrderUpdateRequestDto(Long id,
+                                          String productName,
                                           Long orderId,
                                           Integer amount,
                                           String waiterUsername,

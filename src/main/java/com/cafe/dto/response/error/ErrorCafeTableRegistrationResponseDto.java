@@ -54,6 +54,6 @@ public class ErrorCafeTableRegistrationResponseDto extends CafeTableRegistration
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), errors, httpStatus);
+        return Objects.hash(errors, httpStatus);
     }
 }

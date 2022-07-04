@@ -12,7 +12,7 @@ public class ProductRegistrationResponseDtoMapperImpl implements ProductRegistra
     @Override
     public ProductRegistrationResponseDto apply(Product product) {
         return new ProductRegistrationResponseDto(
-                product.getProductName(),
+                product.getName(),
                 product.getPrice(),
                 product.getAmount(),
                 LocalDateTime.now(),

@@ -7,6 +7,7 @@ import com.cafe.service.core.order.OrderUpdateParams;
 import com.cafe.service.core.table.CafeTableService;
 import com.cafe.service.core.order.OrderCreationParams;
 import com.cafe.service.core.order.OrderService;
+import com.cafe.service.core.user.UserService;
 import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +25,17 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
     private final OrderRepository orderRepository;
     private final CafeTableService cafeTableService;
+    private final UserService userService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CafeTableService cafeTableService) {
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            CafeTableService cafeTableService,
+                            UserService userService) {
         Assert.notNull(orderRepository, "Order repository should not be null");
         Assert.notNull(cafeTableService, "Cafe table service should not be null");
+        Assert.notNull(userService, "User service should not be null");
         this.orderRepository = orderRepository;
         this.cafeTableService = cafeTableService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -39,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
         LOGGER.info("Creating a new order according to the order creation params - {}", params);
         Order order = orderRepository.save(new Order(
                 cafeTableService.getById(params.getCafeTableId()),
+                userService.getByUsername(params.getWaiterUsername()),
                 params.getOrderStatusType(),
                 params.getCreatedAt()
         ));
@@ -51,8 +58,10 @@ public class OrderServiceImpl implements OrderService {
     public Order update(OrderUpdateParams params) {
         Assert.notNull(params, "order update params should not be null");
         LOGGER.info("Updating an order according to the order update params - {}", params);
+        Order existingOrder = orderRepository.findById(params.getId()).orElseThrow(() -> new OrderNotFoundException(params.getId()));
         Order order = new Order(
                 cafeTableService.getById(params.getCafeTableId()),
+                existingOrder.getWaiter(),
                 params.getOrderStatusType(),
                 params.getUpdatedAt()
         );

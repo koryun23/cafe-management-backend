@@ -26,9 +26,10 @@ public class ProductController {
                 .body(responseDto);
     }
 
-    @PutMapping(path = "/update/{productName}")
-    public ResponseEntity<ProductUpdateResponseDto> updateProduct(@RequestBody ProductUpdateRequestDto dto, @PathVariable String productName) {
-        dto.setOriginalName(productName);
+    @PutMapping(path = "/update/{originalName}")
+    public ResponseEntity<ProductUpdateResponseDto> updateProduct(@RequestBody ProductUpdateRequestDto dto,
+                                                                  @PathVariable String originalName) {
+        dto.setOriginalName(originalName);
         ProductUpdateResponseDto responseDto = productFacade.updateProduct(dto);
         return ResponseEntity
                 .status(responseDto.getHttpStatus())

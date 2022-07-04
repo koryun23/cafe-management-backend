@@ -12,6 +12,12 @@ public class ProductInOrderRegistrationRequestDto {
     private String waiterUsername;
 
     public ProductInOrderRegistrationRequestDto(String productName,
+                                                Integer amount) {
+        setProductName(productName);
+        setAmount(amount);
+    }
+
+    public ProductInOrderRegistrationRequestDto(String productName,
                                                 Long orderId,
                                                 Integer amount,
                                                 String waiterUsername) {
@@ -19,6 +25,9 @@ public class ProductInOrderRegistrationRequestDto {
         setOrderId(orderId);
         setAmount(amount);
         setWaiterUsername(waiterUsername);
+    }
+
+    public ProductInOrderRegistrationRequestDto() {
     }
 
     public String getProductName() {

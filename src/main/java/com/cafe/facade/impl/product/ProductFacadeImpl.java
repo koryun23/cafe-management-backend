@@ -133,16 +133,18 @@ public class ProductFacadeImpl implements ProductFacade {
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
-        if(orderService.findById(dto.getOrderId()).isEmpty()) {
+        Optional<Order> orderOptional = orderService.findById(dto.getOrderId());
+        if(orderOptional.isEmpty()) {
             return new ErrorProductInOrderRegistrationResponseDto(
                     List.of(String.format("Could not register a product in order for an order with an id of %d because the order does not exist.", dto.getOrderId())),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
+        //TODO: CHECK IF WRONG USER TRIES TO ADD PRODUCT IN ORDER
         ProductInOrder productInOrder = productInOrderService.create(productInOrderCreationParamsMapper.apply(dto));
         productService.updateProduct(new ProductUpdateParams(
-                product.getProductName(),
-                product.getProductName(),
+                product.getName(),
+                product.getName(),
                 product.getAmount() - dto.getAmount(),
                 product.getPrice()
         ));

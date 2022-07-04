@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(path = "products/order", consumes = "application/json", produces = "application/json")
+@RequestMapping(path = "products-in-order", produces = "application/json", consumes = "application/json")
 public class ProductInOrderController {
 
     private final ProductFacade productFacade;
@@ -24,7 +24,7 @@ public class ProductInOrderController {
         this.basicAuthorizationHttpServletRequestHandler = basicAuthorizationHttpServletRequestHandler;
     }
 
-    @PostMapping(path = "/register/{orderId}")
+    @PostMapping("/register/{orderId}")
     public ResponseEntity<ProductInOrderRegistrationResponseDto> registerProductInOrder(HttpServletRequest request,
                                                                                         @RequestBody ProductInOrderRegistrationRequestDto dto,
                                                                                         @PathVariable Long orderId) {
@@ -32,6 +32,7 @@ public class ProductInOrderController {
         dto.setWaiterUsername(username);
         dto.setOrderId(orderId);
         ProductInOrderRegistrationResponseDto responseDto = productFacade.registerProductInOrder(dto);
+        System.out.println(orderId);
         return ResponseEntity
                 .status(responseDto.getHttpStatus())
                 .body(responseDto);

@@ -20,6 +20,8 @@ import com.cafe.entity.product.ProductInOrderStatusType;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.entity.user.User;
+import com.cafe.entity.user.UserRole;
+import com.cafe.entity.user.UserRoleType;
 import com.cafe.facade.core.product.ProductFacade;
 import com.cafe.mapper.product.*;
 import com.cafe.service.core.order.OrderService;
@@ -35,6 +37,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -261,9 +264,11 @@ class ProductFacadeImplTest {
     @Test
     public void testRegisterProductInOrderWhenProductIsNotFound() {
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.empty());
-        Assertions.assertThat(testSubject.registerProductInOrder(new ProductInOrderRegistrationRequestDto(
-                "Pepsi", 1L, 2, "john11"
-        ))).isExactlyInstanceOf(ErrorProductInOrderRegistrationResponseDto.class);
+        ProductInOrderRegistrationRequestDto requestDto = new ProductInOrderRegistrationRequestDto("Pepsi", 2);
+        requestDto.setOrderId(1L);
+        requestDto.setWaiterUsername("john11");
+        Assertions.assertThat(testSubject.registerProductInOrder(requestDto))
+                .isExactlyInstanceOf(ErrorProductInOrderRegistrationResponseDto.class);
 
         Mockito.verify(productService).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(
@@ -289,9 +294,12 @@ class ProductFacadeImplTest {
 
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.of(product));
 
-        Assertions.assertThat(testSubject.registerProductInOrder(new ProductInOrderRegistrationRequestDto(
-                "Pepsi", 1L, 31, "john11"
-        ))).isExactlyInstanceOf(ErrorProductInOrderRegistrationResponseDto.class);
+        ProductInOrderRegistrationRequestDto requestDto = new ProductInOrderRegistrationRequestDto(
+                "Pepsi", 31
+        );
+        requestDto.setWaiterUsername("john11");
+        requestDto.setOrderId(1L);
+        Assertions.assertThat(testSubject.registerProductInOrder(requestDto)).isExactlyInstanceOf(ErrorProductInOrderRegistrationResponseDto.class);
 
         Mockito.verify(productService).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(
@@ -314,7 +322,9 @@ class ProductFacadeImplTest {
         Product product = new Product("Pepsi", 4, 30, LocalDateTime.MAX);
         product.setId(1L);
 
-        ProductInOrderRegistrationRequestDto requestDto = new ProductInOrderRegistrationRequestDto("Pepsi", 1L, 3, "john11");
+        ProductInOrderRegistrationRequestDto requestDto = new ProductInOrderRegistrationRequestDto("Pepsi", 3);
+        requestDto.setWaiterUsername("john11");
+        requestDto.setOrderId(1L);
 
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.of(product));
         Mockito.when(orderService.findById(1L)).thenReturn(Optional.empty());
@@ -344,21 +354,27 @@ class ProductFacadeImplTest {
         User user = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
         user.setId(1L);
 
+        UserRole userRole = new UserRole(user, UserRoleType.WAITER);
+        userRole.setId(1L);
+        user.setUserRoleList(List.of(userRole));
+
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
         Product product = new Product("Pepsi", 4, 30, LocalDateTime.MAX);
         product.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        Order order = new Order(cafeTable, user, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
         ProductInOrder productInOrder = new ProductInOrder(product, order, 3, LocalDateTime.MAX);
         productInOrder.setId(1L);
 
         ProductInOrderRegistrationRequestDto requestDto = new ProductInOrderRegistrationRequestDto(
-                "Pepsi", 1L, 3, "john11"
+                "Pepsi",  3
         );
+        requestDto.setWaiterUsername("john11");
+        requestDto.setOrderId(1L);
 
         ProductInOrderCreationParams creationParams = new ProductInOrderCreationParams(
                 "Pepsi", 1L, 3, LocalDateTime.MAX
@@ -421,8 +437,10 @@ class ProductFacadeImplTest {
     @Test
     public void testUpdateProductInOrderWhenProductIsNotFound() {
         ProductInOrderUpdateRequestDto productInOrderUpdateRequestDto = new ProductInOrderUpdateRequestDto(
-                1L, "Pepsi", 1L, 3, "john11", ProductInOrderStatusType.ACTIVE
+                1L, "Pepsi", 3, ProductInOrderStatusType.ACTIVE
         );
+        productInOrderUpdateRequestDto.setWaiterUsername("john11");
+        productInOrderUpdateRequestDto.setOrderId(1L);
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.empty());
 
         Assertions.assertThat(testSubject.updateProductInOrder(productInOrderUpdateRequestDto))
@@ -447,9 +465,10 @@ class ProductFacadeImplTest {
     @Test
     public void testUpdateProductInOrderWhenOrderIsNotFound() {
         ProductInOrderUpdateRequestDto requestDto = new ProductInOrderUpdateRequestDto(
-                1L, "Pepsi", 1L, 3, "john11", ProductInOrderStatusType.ACTIVE
+                1L, "Pepsi", 3, ProductInOrderStatusType.ACTIVE
         );
-
+        requestDto.setWaiterUsername("john11");
+        requestDto.setOrderId(1L);
         Product product = new Product("Pepsi", 4, 400, LocalDateTime.MAX);
         product.setId(1L);
 
@@ -479,8 +498,16 @@ class ProductFacadeImplTest {
     @Test
     public void testUpdateProductInOrderWhenOrderIsNotOpen() {
         ProductInOrderUpdateRequestDto requestDto = new ProductInOrderUpdateRequestDto(
-                1L, "Pepsi", 1L, 3, "john11", ProductInOrderStatusType.ACTIVE
+                1L, "Pepsi", 3, ProductInOrderStatusType.ACTIVE
         );
+        requestDto.setWaiterUsername("john11");
+        requestDto.setOrderId(1L);
+        User user = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        user.setId(1L);
+
+        UserRole userRole = new UserRole(user, UserRoleType.WAITER);
+        userRole.setId(1L);
+        user.setUserRoleList(List.of(userRole));
 
         Product product = new Product("Pepsi", 4, 400, LocalDateTime.MAX);
         product.setId(1L);
@@ -488,7 +515,7 @@ class ProductFacadeImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.CLOSED, LocalDateTime.MAX);
+        Order order = new Order(cafeTable, user, OrderStatusType.CLOSED, LocalDateTime.MAX);
         order.setId(1L);
 
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.of(product));
@@ -517,16 +544,24 @@ class ProductFacadeImplTest {
     @Test
     public void testUpdateProductInOrder() {
         ProductInOrderUpdateRequestDto requestDto = new ProductInOrderUpdateRequestDto(
-                1L, "Pepsi", 1L, 3, "john11", ProductInOrderStatusType.ACTIVE
+                1L, "Pepsi", 3, ProductInOrderStatusType.ACTIVE
         );
-
+        requestDto.setWaiterUsername("john11");
+        requestDto.setOrderId(1L);
         Product product = new Product("Pepsi", 4, 400, LocalDateTime.MAX);
         product.setId(1L);
 
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        User user = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        user.setId(1L);
+
+        UserRole userRole = new UserRole(user, UserRoleType.WAITER);
+        userRole.setId(1L);
+        user.setUserRoleList(List.of(userRole));
+
+        Order order = new Order(cafeTable, user, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
         ProductInOrder productInOrder = new ProductInOrder(

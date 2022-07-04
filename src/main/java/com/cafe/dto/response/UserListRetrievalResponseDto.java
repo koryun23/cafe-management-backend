@@ -13,6 +13,7 @@ public class UserListRetrievalResponseDto {
 
     public UserListRetrievalResponseDto(List<UserRegistrationResponseDto> userList, HttpStatus httpStatus) {
         setUserList(userList);
+        setHttpStatus(httpStatus);
     }
 
     public UserListRetrievalResponseDto() {

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(path = "tables/waiters", produces = "application/json", consumes = "application/json")
+@RequestMapping(path = "tables-to-waiters", produces = "application/json", consumes = "application/json")
 public class CafeTableAssignedToWaiterController {
 
     private final CafeTableFacade cafeTableFacade;
@@ -33,7 +33,8 @@ public class CafeTableAssignedToWaiterController {
     }
 
     @GetMapping
-    public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request, @RequestBody CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
+    public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request,
+                                                                                                             @RequestBody CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
         String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
         dto.setWaiterUsername(username);
         CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = cafeTableFacade.retrieveCafeTableList(dto);

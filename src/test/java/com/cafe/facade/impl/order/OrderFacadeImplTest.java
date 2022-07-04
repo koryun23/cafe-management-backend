@@ -13,6 +13,8 @@ import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.entity.user.User;
+import com.cafe.entity.user.UserRole;
+import com.cafe.entity.user.UserRoleType;
 import com.cafe.facade.core.order.OrderFacade;
 import com.cafe.mapper.order.OrderCreationParamsMapper;
 import com.cafe.mapper.order.OrderRegistrationResponseDtoMapper;
@@ -214,9 +216,9 @@ class OrderFacadeImplTest {
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, user, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
 
-        OrderCreationParams creationParams = new OrderCreationParams(1L, OrderStatusType.OPEN, LocalDateTime.MAX);
+        OrderCreationParams creationParams = new OrderCreationParams(1L, "john11", OrderStatusType.OPEN, LocalDateTime.MAX);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        Order order = new Order(cafeTable, user, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
         OrderRegistrationResponseDto responseDto = new OrderRegistrationResponseDto(1L, OrderStatusType.OPEN, LocalDateTime.MAX, HttpStatus.OK);
@@ -289,10 +291,17 @@ class OrderFacadeImplTest {
 
     @Test
     public void testUpdateWhenOrderIsNotOpenAndRequestedOrderStatusIsOpen() {
+        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        waiter.setId(1L);
+
+        UserRole userRole = new UserRole(waiter, UserRoleType.WAITER);
+        userRole.setId(1L);
+        waiter.setUserRoleList(List.of(userRole));
+
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.CLOSED, LocalDateTime.MAX);
+        Order order = new Order(cafeTable, waiter, OrderStatusType.CLOSED, LocalDateTime.MAX);
         order.setId(1L);
 
         OrderUpdateRequestDto requestDto = new OrderUpdateRequestDto(1L, 1L, OrderStatusType.OPEN, "john11");
@@ -320,13 +329,19 @@ class OrderFacadeImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        waiter.setId(1L);
+
+        UserRole userRole = new UserRole(waiter, UserRoleType.WAITER);
+        userRole.setId(1L);
+        waiter.setUserRoleList(List.of(userRole));
+
+        Order order = new Order(cafeTable, waiter, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
         OrderUpdateRequestDto requestDto = new OrderUpdateRequestDto(1L, 1L, OrderStatusType.OPEN, "mary21");
 
-        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
-        waiter.setId(1L);
+
 
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
@@ -357,13 +372,17 @@ class OrderFacadeImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        waiter.setId(1L);
+
+        UserRole userRole = new UserRole(waiter, UserRoleType.WAITER);
+        userRole.setId(1L);
+        waiter.setUserRoleList(List.of(userRole));
+
+        Order order = new Order(cafeTable, waiter, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
         OrderUpdateRequestDto requestDto = new OrderUpdateRequestDto(1L, 1L, OrderStatusType.OPEN, "john11");
-
-        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
-        waiter.setId(1L);
 
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
@@ -402,16 +421,19 @@ class OrderFacadeImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        waiter.setId(1L);
+        UserRole userRole = new UserRole(waiter, UserRoleType.WAITER);
+        userRole.setId(1L);
+        waiter.setUserRoleList(List.of(userRole));
+
+        Order order = new Order(cafeTable, waiter, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
-        Order updatedOrder = new Order(cafeTable, OrderStatusType.CLOSED, LocalDateTime.MAX);
+        Order updatedOrder = new Order(cafeTable, waiter, OrderStatusType.CLOSED, LocalDateTime.MAX);
         updatedOrder.setId(1L);
 
         OrderUpdateRequestDto requestDto = new OrderUpdateRequestDto(1L, 1L, OrderStatusType.CLOSED, "john11");
-
-        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
-        waiter.setId(1L);
 
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);
@@ -453,16 +475,19 @@ class OrderFacadeImplTest {
         CafeTable cafeTable = new CafeTable(CafeTableStatusType.FREE, 5, "qwerty");
         cafeTable.setId(1L);
 
-        Order order = new Order(cafeTable, OrderStatusType.OPEN, LocalDateTime.MAX);
+        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
+        waiter.setId(1L);
+        UserRole userRole = new UserRole(waiter, UserRoleType.WAITER);
+        userRole.setId(1L);
+        waiter.setUserRoleList(List.of(userRole));
+
+        Order order = new Order(cafeTable, waiter, OrderStatusType.OPEN, LocalDateTime.MAX);
         order.setId(1L);
 
-        Order updatedOrder = new Order(cafeTable, OrderStatusType.CANCELLED, LocalDateTime.MAX);
+        Order updatedOrder = new Order(cafeTable, waiter, OrderStatusType.CANCELLED, LocalDateTime.MAX);
         updatedOrder.setId(1L);
 
         OrderUpdateRequestDto requestDto = new OrderUpdateRequestDto(1L, 1L, OrderStatusType.CLOSED, "john11");
-
-        User waiter = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
-        waiter.setId(1L);
 
         CafeTableAssignedToWaiter cafeTableAssignedToWaiter = new CafeTableAssignedToWaiter(cafeTable, waiter, LocalDateTime.MAX);
         cafeTableAssignedToWaiter.setId(1L);

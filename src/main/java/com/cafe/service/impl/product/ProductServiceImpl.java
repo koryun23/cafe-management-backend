@@ -7,7 +7,6 @@ import com.cafe.service.core.product.ProductService;
 import com.cafe.service.core.product.ProductUpdateParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -63,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> findByName(String name) {
         Assert.notNull(name, "Product name should not be null");
         LOGGER.info("Retrieving an optional of a product named as '{}'", name);
-        Optional<Product> productOptional = productRepository.findByProductName(name);
+        Optional<Product> productOptional = productRepository.findByName(name);
         LOGGER.info("Successfully retrieved an optional of a product named as '{}', result - {}", name, productOptional);
         return productOptional;
     } // tested
@@ -74,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         Assert.notNull(name, "Product name should not be null");
         Assert.notNull(name, "Product name should not be empty");
         LOGGER.info("Retrieving amount of the product named as '{}'", name);
-        Product product = productRepository.findByProductName(name).orElseThrow(() -> new ProductNotFoundException(name));
+        Product product = productRepository.findByName(name).orElseThrow(() -> new ProductNotFoundException(name));
         Integer amount = product.getAmount();
         LOGGER.info("Successfully retrieved the amount of a product named as '{}', result - {}", name, amount);
         return amount;
@@ -95,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
         Assert.notNull(params, "Product update params should not be null");
         LOGGER.info("Updating a product according to the product update params - {}", params);
         String originalName = params.getOriginalName();
-        Product product = productRepository.findByProductName(originalName).orElseThrow(() -> new ProductNotFoundException(originalName));
+        Product product = productRepository.findByName(originalName).orElseThrow(() -> new ProductNotFoundException(originalName));
         Product newProduct = new Product(
                 params.getName(),
                 params.getPrice(),
@@ -115,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
         Assert.notNull(name, "Product name should not be null");
         Assert.hasText(name, "Product name should not be empty");
         LOGGER.info("Retrieving a product named as {}", name);
-        Product product = productRepository.findByProductName(name).orElseThrow(() -> new ProductNotFoundException(name));
+        Product product = productRepository.findByName(name).orElseThrow(() -> new ProductNotFoundException(name));
         LOGGER.info("Successfully retrieved a product named as {}, result - {}", name, product);
         return product;
     } // tested

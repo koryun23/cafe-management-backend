@@ -14,7 +14,7 @@ public class ProductInOrderUpdateResponseDtoMapperImpl implements ProductInOrder
     public ProductInOrderUpdateResponseDto apply(ProductInOrder productInOrder) {
         return new ProductInOrderUpdateResponseDto(
                 productInOrder.getId(),
-                productInOrder.getProduct().getProductName(),
+                productInOrder.getProduct().getName(),
                 productInOrder.getOrder().getId(),
                 productInOrder.getAmount(),
                 LocalDateTime.now(),

@@ -18,6 +18,15 @@ public class ProductUpdateRequestDto {
         setAmount(amount);
     }
 
+    public ProductUpdateRequestDto(String name, Integer price, Integer amount) {
+        setName(name);
+        setPrice(price);
+        setAmount(amount);
+    }
+
+    public ProductUpdateRequestDto() {
+    }
+
     public String getName() {
         return name;
     }

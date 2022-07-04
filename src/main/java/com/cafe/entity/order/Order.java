@@ -2,6 +2,7 @@ package com.cafe.entity.order;
 
 import com.cafe.entity.product.ProductInOrder;
 import com.cafe.entity.table.CafeTable;
+import com.cafe.entity.user.User;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -25,6 +26,10 @@ public class Order {
     @JoinColumn(name = "cafe_table_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "ORDER_CAFE_TABLE_ID"))
     private CafeTable table;
 
+    @ManyToOne
+    @JoinColumn(name = "waiter_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "ORDER_USER_ID"))
+    private User waiter;
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
     private OrderStatusType orderStatusType;
@@ -35,8 +40,9 @@ public class Order {
     public Order() {
     }
 
-    public Order(CafeTable table, OrderStatusType orderStatusType, LocalDateTime createdAt) {
+    public Order(CafeTable table, User waiter, OrderStatusType orderStatusType, LocalDateTime createdAt) {
         setTable(table);
+        setWaiter(waiter);
         setOrderStatusType(orderStatusType);
         setCreatedAt(createdAt);
     }
@@ -86,17 +92,30 @@ public class Order {
         this.createdAt = createdAt;
     }
 
+    public User getWaiter() {
+        return waiter;
+    }
+
+    public void setWaiter(User waiter) {
+        Assert.notNull(waiter, "Waiter should not be null");
+        this.waiter = waiter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(id, order.id) && Objects.equals(productsInOrder, order.productsInOrder) && Objects.equals(table, order.table) && orderStatusType == order.orderStatusType && Objects.equals(createdAt, order.createdAt);
+        return Objects.equals(id, order.id) &&
+                Objects.equals(productsInOrder, order.productsInOrder) &&
+                Objects.equals(table, order.table) && orderStatusType == order.orderStatusType &&
+                Objects.equals(createdAt, order.createdAt) &&
+                Objects.equals(waiter, order.waiter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productsInOrder, table, orderStatusType, createdAt);
+        return Objects.hash(id, productsInOrder, table, waiter, orderStatusType, createdAt);
     }
 
     @Override
@@ -105,6 +124,7 @@ public class Order {
                 "id=" + id +
                 //", productsInOrder=" + productsInOrder +
                 ", table=" + table +
+                ", waiter=" + waiter +
                 ", orderStatusType=" + orderStatusType +
                 ", createdAt=" + createdAt +
                 '}';

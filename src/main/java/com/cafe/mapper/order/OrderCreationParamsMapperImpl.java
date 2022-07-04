@@ -13,6 +13,7 @@ public class OrderCreationParamsMapperImpl implements OrderCreationParamsMapper 
     public OrderCreationParams apply(OrderRegistrationRequestDto dto) {
         return new OrderCreationParams(
                 dto.getCafeTableId(),
+                dto.getWaiterUsername(),
                 dto.getStatus(),
                 LocalDateTime.now()
         );

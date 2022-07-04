@@ -13,7 +13,7 @@ public class ProductUpdateResponseDtoMapperImpl implements ProductUpdateResponse
     @Override
     public ProductUpdateResponseDto apply(Product product) {
         return new ProductUpdateResponseDto(
-                product.getProductName(),
+                product.getName(),
                 product.getPrice(),
                 product.getAmount(),
                 LocalDateTime.now(),

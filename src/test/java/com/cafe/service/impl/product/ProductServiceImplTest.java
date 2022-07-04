@@ -12,12 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
@@ -54,9 +51,9 @@ class ProductServiceImplTest {
 
     @Test
     public void testFindByNameWhenProductDoesNotExist() {
-        Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.empty());
+        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.empty());
         Assertions.assertThat(testSubject.findByName("Pepsi")).isEqualTo(Optional.empty());
-        Mockito.verify(productRepository).findByProductName("Pepsi");
+        Mockito.verify(productRepository).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
@@ -65,19 +62,19 @@ class ProductServiceImplTest {
         Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
-        Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.of(product));
 
         Assertions.assertThat(testSubject.findByName("Pepsi")).isEqualTo(Optional.of(product));
 
-        Mockito.verify(productRepository).findByProductName("Pepsi");
+        Mockito.verify(productRepository).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
     @Test
     public void testGetAmountByProductNameWhenProductDoesNotExist() {
-        Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.empty());
+        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.empty());
         Assertions.assertThatThrownBy(() -> testSubject.getAmountByProductName("Pepsi")).isExactlyInstanceOf(ProductNotFoundException.class);
-        Mockito.verify(productRepository).findByProductName("Pepsi");
+        Mockito.verify(productRepository).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
@@ -86,11 +83,11 @@ class ProductServiceImplTest {
         Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
-        Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.of(product));
 
         Assertions.assertThat(testSubject.getAmountByProductName("Pepsi")).isEqualTo(300);
 
-        Mockito.verify(productRepository).findByProductName("Pepsi");
+        Mockito.verify(productRepository).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
@@ -117,9 +114,9 @@ class ProductServiceImplTest {
 
     @Test
     public void testGetByNameWhenProductDoesNotExist() {
-        Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.empty());
+        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.empty());
         Assertions.assertThatThrownBy(() -> testSubject.getByName("Pepsi")).isExactlyInstanceOf(ProductNotFoundException.class);
-        Mockito.verify(productRepository).findByProductName("Pepsi");
+        Mockito.verify(productRepository).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
@@ -128,11 +125,11 @@ class ProductServiceImplTest {
         Product product = new Product("Pepsi", 4, 300, LocalDateTime.MAX);
         product.setId(1L);
 
-        Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.of(product));
 
         Assertions.assertThat(testSubject.getByName("Pepsi")).isEqualTo(product);
 
-        Mockito.verify(productRepository).findByProductName("Pepsi");
+        Mockito.verify(productRepository).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
@@ -181,7 +178,7 @@ class ProductServiceImplTest {
         Product updatedProduct = new Product("Pepsi", 4, 500, LocalDateTime.MAX);
         updatedProduct.setId(1L);
 
-        Mockito.when(productRepository.findByProductName("Pepsi")).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.of(product));
         Mockito.when(productRepository.save(updatedProduct)).thenReturn(updatedProduct);
 
         Assertions.assertThat(testSubject.updateProduct(
@@ -189,7 +186,7 @@ class ProductServiceImplTest {
         )).isEqualTo(updatedProduct);
 
         Mockito.verify(productRepository).save(updatedProduct);
-        Mockito.verify(productRepository).findByProductName("Pepsi");
+        Mockito.verify(productRepository).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
