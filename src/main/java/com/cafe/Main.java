@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.util.Date;
 import java.util.List;
 
 @EnableJpaRepositories
@@ -30,13 +31,13 @@ public class Main {
 
         System.out.println("---------------------------------");
         System.out.println("ADMIN");
-        System.out.println(jwtService.createToken("ADMIN"));
+        System.out.println(jwtService.createToken("ADMIN", new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)));
         System.out.println("---------------------------------");
         System.out.println("mary21");
-        System.out.println(jwtService.createToken("mary21"));
+        System.out.println(jwtService.createToken("mary21", new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)));
         System.out.println("---------------------------------");
         System.out.println("emily31");
-        System.out.println(jwtService.createToken("emily31"));
+        System.out.println(jwtService.createToken("emily31", new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)));
         System.out.println("---------------------------------");
     }
 }

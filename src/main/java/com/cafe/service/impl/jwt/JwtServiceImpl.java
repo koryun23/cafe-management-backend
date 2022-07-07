@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Component
@@ -20,8 +21,9 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String createToken(String username) {
+    public String createToken(String username, Date expirationDate) {
         return jwtBuilder
+                .setExpiration(expirationDate)
                 .claim("tokenId", UUID.randomUUID().toString())
                 .claim("username", username).compact();
     }

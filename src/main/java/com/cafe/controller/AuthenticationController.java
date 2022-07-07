@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.http.HttpResponse;
+import java.util.Date;
 
 @RestController
 @RequestMapping(path = "login")
@@ -25,7 +26,7 @@ public class AuthenticationController {
     @PostMapping
     public ResponseEntity<String> login(@RequestBody UsernamePasswordHolder usernamePasswordHolder, HttpServletResponse response) {
         System.out.println("AUTHENTICATING");
-        String token = jwtService.createToken(usernamePasswordHolder.getUsername());
+        String token = jwtService.createToken(usernamePasswordHolder.getUsername(), new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
         response.setHeader("token", token);
         return ResponseEntity.status(HttpStatus.FOUND).body(token);
     }
