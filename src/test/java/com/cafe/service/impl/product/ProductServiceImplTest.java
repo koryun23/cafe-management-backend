@@ -182,7 +182,7 @@ class ProductServiceImplTest {
         Mockito.when(productRepository.save(updatedProduct)).thenReturn(updatedProduct);
 
         Assertions.assertThat(testSubject.updateProduct(
-                new ProductUpdateParams("Pepsi", "Pepsi", 500, 4)
+                new ProductUpdateParams(1L, "Pepsi", 500, 4)
         )).isEqualTo(updatedProduct);
 
         Mockito.verify(productRepository).save(updatedProduct);

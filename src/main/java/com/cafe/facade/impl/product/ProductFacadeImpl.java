@@ -1,17 +1,8 @@
 package com.cafe.facade.impl.product;
 
-import com.cafe.dto.request.ProductInOrderRegistrationRequestDto;
-import com.cafe.dto.request.ProductInOrderUpdateRequestDto;
-import com.cafe.dto.request.ProductRegistrationRequestDto;
-import com.cafe.dto.request.ProductUpdateRequestDto;
-import com.cafe.dto.response.ProductInOrderRegistrationResponseDto;
-import com.cafe.dto.response.ProductInOrderUpdateResponseDto;
-import com.cafe.dto.response.ProductRegistrationResponseDto;
-import com.cafe.dto.response.ProductUpdateResponseDto;
-import com.cafe.dto.response.error.ErrorProductInOrderRegistrationResponseDto;
-import com.cafe.dto.response.error.ErrorProductInOrderUpdateResponseDto;
-import com.cafe.dto.response.error.ErrorProductRegistrationResponseDto;
-import com.cafe.dto.response.error.ErrorProductUpdateResponseDto;
+import com.cafe.dto.request.*;
+import com.cafe.dto.response.*;
+import com.cafe.dto.response.error.*;
 import com.cafe.entity.order.Order;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.product.Product;
@@ -29,6 +20,7 @@ import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductFacadeImpl implements ProductFacade {
@@ -101,9 +93,16 @@ public class ProductFacadeImpl implements ProductFacade {
     public ProductUpdateResponseDto updateProduct(ProductUpdateRequestDto dto) {
         Assert.notNull(dto, "Product update request dto should not be null");
         LOGGER.info("Updating a product according to the product update request dto - {}", dto);
-        if(productService.findByName(dto.getOriginalName()).isEmpty()) {
+        if(productService.findById(dto.getId()).isEmpty()) {
             return new ErrorProductUpdateResponseDto(
-                    List.of(String.format("Cannot update product named as %s because it does not exist.", dto.getOriginalName())),
+                    List.of(String.format("Cannot update product with an id of %d because it does not exist.", dto.getId())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
+        }
+        Optional<Product> productOptional = productService.findByName(dto.getName());
+        if(productOptional.isPresent() && (!productOptional.get().getId().equals(dto.getId()))) {
+            return new ErrorProductUpdateResponseDto(
+                    List.of(String.format("The product named %s already exists.", dto.getName())),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
@@ -111,6 +110,62 @@ public class ProductFacadeImpl implements ProductFacade {
         ProductUpdateResponseDto responseDto = productUpdateResponseDtoMapper.apply(product);
         LOGGER.info("Successfully updated a product according to the product update request dto - {}, response - {}", dto, responseDto);
         return responseDto;
+    }
+
+    @Override
+    public AllProductsRetrievalResponseDto fetchAll() {
+        LOGGER.info("Retrieving all product dtos");
+        List<ProductRetrievalResponseDto> productRetrievalResponseDtoList = productService.getAll().stream()
+                .map(product -> new ProductRetrievalResponseDto(product.getId(), product.getName(), product.getAmount(), product.getPrice(), HttpStatus.OK))
+                .collect(Collectors.toList());
+        AllProductsRetrievalResponseDto result = new AllProductsRetrievalResponseDto(productRetrievalResponseDtoList, HttpStatus.OK);
+        LOGGER.info("Successfully retrieved all product dtos, result - {}", result);
+        return result;
+    }
+
+    @Override
+    public ProductDeletionResponseDto deleteProduct(ProductDeletionRequestDto dto) {
+        Assert.notNull(dto, "Product deletion request dto should not be null");
+        LOGGER.info("Deleting a product according to the product deletion request dto - {}", dto);
+        Long productId = dto.getProductId();
+        if(productService.findById(productId).isEmpty()) {
+            return new ProductDeletionResponseDto(HttpStatus.NOT_ACCEPTABLE, List.of(String.format("Cannot delete a product having an id of %d because it does not exist", productId)));
+        }
+        productService.deleteProduct(dto.getProductId());
+        LOGGER.info("Successfully deleted a product according to the product deletion request dto - {}", dto);
+        return new ProductDeletionResponseDto(HttpStatus.OK);
+    }
+
+    @Override
+    public ProductInOrderListRetrievalResponseDto getAllProductsInOrderByOrderId(ProductInOrderListRetrievalRequestDto dto) {
+        Assert.notNull(dto, "Product in order list retrieval request dto should not be null");
+        LOGGER.info("Retrieving a list of all products in order according to the product in order list retrieval request dto - {}", dto);
+        Optional<Order> orderOptional = orderService.findById(dto.getOrderId());
+        if(orderOptional.isEmpty()) {
+            return new ErrorProductInOrderListRetrievalResponseDto(
+                    List.of(String.format("Order with an id of %d does not exist.", dto.getOrderId())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
+        }
+        Order order = orderOptional.get();
+        if(!order.getWaiter().getUsername().equals(dto.getWaiterUsername())) {
+            return new ErrorProductInOrderListRetrievalResponseDto(
+                    List.of(String.format("User %s cannot retrieve products in order created by the user %s", dto.getWaiterUsername(), order.getWaiter().getUsername())),
+                    HttpStatus.OK
+            );
+        }
+        List<ProductInOrderRetrievalResponseDto> allByOrderId = productInOrderService.findAllByOrderId(dto.getOrderId()).stream()
+                .map(productInOrder -> new ProductInOrderRetrievalResponseDto(
+                        productInOrder.getId(),
+                        productInOrder.getProduct().getName(),
+                        productInOrder.getAmount(),
+                        productInOrder.getProductInOrderStatusType(),
+                        productInOrder.getRegisteredAt(),
+                        HttpStatus.OK
+                )).collect(Collectors.toList());
+        ProductInOrderListRetrievalResponseDto result = new ProductInOrderListRetrievalResponseDto(allByOrderId, HttpStatus.OK);
+        LOGGER.info("Successfully retrieved a list of all products in order according to the product in order list retrieval request dto - {}, result - {}", dto, result);
+        return result;
     }
 
     @Override
@@ -149,7 +204,7 @@ public class ProductFacadeImpl implements ProductFacade {
         }
         ProductInOrder productInOrder = productInOrderService.create(productInOrderCreationParamsMapper.apply(dto));
         productService.updateProduct(new ProductUpdateParams(
-                product.getName(),
+                product.getId(),
                 product.getName(),
                 product.getAmount() - dto.getAmount(),
                 product.getPrice()

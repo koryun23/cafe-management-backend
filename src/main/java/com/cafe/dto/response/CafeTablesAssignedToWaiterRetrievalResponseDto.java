@@ -9,22 +9,23 @@ import java.util.Objects;
 
 public class CafeTablesAssignedToWaiterRetrievalResponseDto {
 
-    private List<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterList;
+    private List<CafeTableAssignedToWaiterRetrievalResponseDto> cafeTableAssignedToWaiterList;
     private HttpStatus httpStatus;
 
-    public CafeTablesAssignedToWaiterRetrievalResponseDto(List<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterList,
+    public CafeTablesAssignedToWaiterRetrievalResponseDto(List<CafeTableAssignedToWaiterRetrievalResponseDto> cafeTableAssignedToWaiterList,
                                                           HttpStatus httpStatus) {
         setCafeTableAssignedToWaiterList(cafeTableAssignedToWaiterList);
+        setHttpStatus(httpStatus);
     }
 
     public CafeTablesAssignedToWaiterRetrievalResponseDto() {
     }
 
-    public List<CafeTableAssignedToWaiter> getCafeTableAssignedToWaiterList() {
+    public List<CafeTableAssignedToWaiterRetrievalResponseDto> getCafeTableAssignedToWaiterList() {
         return cafeTableAssignedToWaiterList;
     }
 
-    public void setCafeTableAssignedToWaiterList(List<CafeTableAssignedToWaiter> cafeTableAssignedToWaiterList) {
+    public void setCafeTableAssignedToWaiterList(List<CafeTableAssignedToWaiterRetrievalResponseDto> cafeTableAssignedToWaiterList) {
         Assert.notNull(cafeTableAssignedToWaiterList, "List of cafe tables assigned to waiter should not be null");
         this.cafeTableAssignedToWaiterList = cafeTableAssignedToWaiterList;
     }

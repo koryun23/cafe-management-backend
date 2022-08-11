@@ -68,7 +68,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
             // restore product amount
             Product product = productService.getByName(productInOrder.getProduct().getName());
             productService.updateProduct(new ProductUpdateParams(
-                    product.getName(),
+                    product.getId(),
                     product.getName(),
                     product.getAmount() + params.getAmount(),
                     product.getPrice()
@@ -96,12 +96,21 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
             if(status == ProductInOrderStatusType.CANCELLED) {
                 Product product = productInOrder.getProduct();
                 productService.updateProduct(new ProductUpdateParams(
-                        product.getName(),
+                        product.getId(),
                         product.getName(),
                         product.getAmount() + productInOrder.getAmount(),
                         product.getPrice()
                 ));
             }
         }
+    }
+
+    @Override
+    public List<ProductInOrder> findAllByOrderId(Long orderId) {
+        Assert.notNull(orderId, "Order id should not be null");
+        LOGGER.info("Retrieving a list of products in the order with an id of {}", orderId);
+        List<ProductInOrder> allByOrderId = productInOrderRepository.findAllByOrderId(orderId);
+        LOGGER.info("Successfully retrieved the list of products in the order with an id of {}, result - {}",orderId, allByOrderId);
+        return allByOrderId;
     }
 }

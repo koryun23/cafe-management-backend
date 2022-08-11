@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
 
@@ -36,11 +39,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserRoleType getRoleType(String username) {
+    public List<UserRoleType> getRoleType(String username) {
         Assert.notNull(username, "username should not be null");
         Assert.hasText(username, "username should not be empty");
         LOGGER.info("Retrieving the role type of a user with username '{}'", username);
-        UserRoleType userRoleType = userRoleRepository.findByUserUsername(username).orElseThrow(() -> new UserNotFoundException(username)).getUserRoleType();
+        List<UserRoleType> userRoleType = userRoleRepository.findAllByUserUsername(username).stream().map(UserRole::getUserRoleType).collect(Collectors.toList());
         LOGGER.info("Successfully retrieved the role type of a user with username '{}', result - {}", username, userRoleType);
         return userRoleType;
     } // tested

@@ -3,8 +3,10 @@ package com.cafe.service.core.user;
 import com.cafe.entity.user.UserRole;
 import com.cafe.entity.user.UserRoleType;
 
+import java.util.List;
+
 public interface UserRoleService {
     UserRole create(UserRoleCreationParams params);
 
-    UserRoleType getRoleType(String username);
+    List<UserRoleType> getRoleType(String username);
 }

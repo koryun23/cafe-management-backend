@@ -6,6 +6,7 @@ import com.cafe.dto.request.CafeTablesAssignedToWaiterRetrievalRequestDto;
 import com.cafe.dto.response.CafeTablesAssignedToWaiterRetrievalResponseDto;
 import com.cafe.facade.core.table.CafeTableFacade;
 import com.cafe.handler.BasicAuthorizationHttpServletRequestHandler;
+import com.cafe.service.core.jwt.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 public class CafeTableAssignedToWaiterController {
 
     private final CafeTableFacade cafeTableFacade;
-    private final BasicAuthorizationHttpServletRequestHandler basicAuthorizationHttpServletRequestHandler;
+    private final JwtService jwtService;
 
-    public CafeTableAssignedToWaiterController(CafeTableFacade cafeTableFacade,
-                                               BasicAuthorizationHttpServletRequestHandler basicAuthorizationHttpServletRequestHandler) {
+    public CafeTableAssignedToWaiterController(CafeTableFacade cafeTableFacade, JwtService jwtService) {
         this.cafeTableFacade = cafeTableFacade;
-        this.basicAuthorizationHttpServletRequestHandler = basicAuthorizationHttpServletRequestHandler;
+        this.jwtService = jwtService;
     }
 
     @PostMapping(path = "/assign")
@@ -33,11 +33,11 @@ public class CafeTableAssignedToWaiterController {
     }
 
     @GetMapping
-    public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request,
-                                                                                                             @RequestBody CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
-        String username = basicAuthorizationHttpServletRequestHandler.getUsernameAndPassword(request).getUsername();
+    public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request) {
+        String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
+        CafeTablesAssignedToWaiterRetrievalRequestDto dto = new CafeTablesAssignedToWaiterRetrievalRequestDto(username);
         dto.setWaiterUsername(username);
-        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = cafeTableFacade.retrieveCafeTableList(dto);
+        CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = cafeTableFacade.retrieveCafeTableAssignedToWaiterList(dto);
         return ResponseEntity.status(responseDto.getHttpStatus()).body(responseDto);
     }
 }

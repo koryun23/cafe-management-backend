@@ -3,6 +3,7 @@ package com.cafe.service.core.table;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableStatusType;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CafeTableService {
@@ -18,4 +19,6 @@ public interface CafeTableService {
     Optional<CafeTable> findByCode(String code);
 
     boolean existsByCode(String code);
+
+    List<CafeTable> getAll();
 }

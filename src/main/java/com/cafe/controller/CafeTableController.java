@@ -1,6 +1,7 @@
 package com.cafe.controller;
 
 import com.cafe.dto.request.CafeTableRegistrationRequestDto;
+import com.cafe.dto.response.AllCafeTablesRetrievalResponseDto;
 import com.cafe.dto.response.CafeTableRegistrationResponseDto;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.facade.core.table.CafeTableFacade;
@@ -21,6 +22,14 @@ public class CafeTableController {
     public ResponseEntity<CafeTableRegistrationResponseDto> register(@RequestBody CafeTableRegistrationRequestDto requestDto) {
         requestDto.setCafeTableStatusType(CafeTableStatusType.FREE);
         CafeTableRegistrationResponseDto responseDto = cafeTableFacade.register(requestDto);
+        return ResponseEntity
+                .status(responseDto.getHttpStatus())
+                .body(responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<AllCafeTablesRetrievalResponseDto> fetchAll() {
+        AllCafeTablesRetrievalResponseDto responseDto = cafeTableFacade.retrieveAllCafeTables();
         return ResponseEntity
                 .status(responseDto.getHttpStatus())
                 .body(responseDto);

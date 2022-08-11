@@ -26,6 +26,7 @@ import com.cafe.service.core.order.OrderUpdateParams;
 import com.cafe.service.core.product.ProductInOrderService;
 import com.cafe.service.core.table.CafeTableAssignedToWaiterService;
 import com.cafe.service.core.table.CafeTableService;
+import com.cafe.service.core.user.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,12 +71,15 @@ class OrderFacadeImplTest {
     @Mock
     private ProductInOrderService productInOrderService;
 
+    @Mock
+    private UserService userService;
     @BeforeEach
     public void init() {
         testSubject = new OrderFacadeImpl(
                 orderService,
                 cafeTableService,
                 cafeTableAssignedToWaiterService,
+                userService,
                 orderRegistrationResponseDtoMapper,
                 orderUpdateResponseDtoMapper,
                 orderUpdateParamsMapper,

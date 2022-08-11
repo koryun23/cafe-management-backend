@@ -2,6 +2,7 @@ package com.cafe.service.core.product;
 
 import com.cafe.entity.product.Product;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
@@ -20,4 +21,8 @@ public interface ProductService {
     Product updateProduct(ProductUpdateParams params);
 
     Product getByName(String name);
+
+    List<Product> getAll();
+
+    void deleteProduct(Long id);
 }

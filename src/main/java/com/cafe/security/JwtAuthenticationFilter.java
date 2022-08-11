@@ -1,7 +1,11 @@
 package com.cafe.security;
 
+import com.cafe.dto.response.AuthenticationResponseDto;
 import com.cafe.entity.user.User;
+import com.cafe.entity.user.UserRole;
 import com.cafe.service.core.jwt.JwtService;
+import com.cafe.service.core.user.UserRoleService;
+import com.cafe.service.core.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.config.Elements.JWT;
@@ -29,11 +34,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Value("${jwt.secret.key}")
     private String secretKey;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final UserRoleService userRoleService;
     private final JwtService jwtService;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
+                                   JwtService jwtService ,
+                                   UserService userService,
+                                   UserRoleService userRoleService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.userService = userService;
+        this.userRoleService = userRoleService;
         setFilterProcessesUrl("/login");
     }
 
@@ -41,6 +53,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
 
+        System.out.println("Attempting authentication");
         try {
             User creds = new ObjectMapper()
                     .readValue(request.getInputStream(), User.class);
@@ -58,22 +71,28 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
+
     @Override
     protected void successfulAuthentication(HttpServletRequest req,
                                             HttpServletResponse res,
                                             FilterChain chain,
                                             Authentication auth) throws IOException {
-        /*String token = Jwts.builder()
-                .setSubject(((User) auth.getPrincipal()).getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 60*1000*10))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .claim();*/
         String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
         String token = jwtService.createToken(username, new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
 
-        String body = username + " " + token;
+        User user = userService.getByUsername(username);
+        AuthenticationResponseDto body = new AuthenticationResponseDto(
+                token,
+                username,
+                user.getPassword(),
+                user.getFirstName(),
+                user.getSecondName(),
+                userRoleService.getRoleType(username)
+        );
 
-        res.getWriter().write(body);
+        res.setHeader("token", token);
+
+        res.getWriter().write(new ObjectMapper().writeValueAsString(body));
         res.getWriter().flush();
     }
 }

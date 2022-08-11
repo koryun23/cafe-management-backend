@@ -1,8 +1,12 @@
 package com.cafe.security;
 
+import com.cafe.entity.user.UserRole;
 import com.cafe.service.core.jwt.JwtService;
+import com.cafe.service.core.user.UserRoleService;
+import com.cafe.service.core.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -12,14 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JwtService jwtService;
+    private final UserService userService;
+    private final UserRoleService userRoleService;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtService jwtService, UserService userService, UserRoleService userRoleService) {
         super(authenticationManager);
         this.jwtService = jwtService;
+        this.userService = userService;
+        this.userRoleService = userRoleService;
     }
 
     @Override
@@ -37,19 +46,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         chain.doFilter(request, response);
     }
 
-    // Reads the JWT from the Authorization header, and then uses JWT to validate the token
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
 
         if (token != null) {
-            // parse the token. // Bearer
             token = token.substring(7);
             String username = jwtService.getUsername(token);
 
             if (username != null) {
-                // new arraylist means authorities
                 return new UsernamePasswordAuthenticationToken(
-                        username, null, new ArrayList<>()
+                        username,
+                        null,
+                        userRoleService.getRoleType(username).stream()
+                                .map(userRoleType -> new SimpleGrantedAuthority(userRoleType.toString()))
+                                .collect(Collectors.toList())
                 );
             }
 

@@ -89,4 +89,14 @@ public class OrderServiceImpl implements OrderService {
         LOGGER.info("Successfully retrieved an order having an id of {}, result - {}", id, orderOptional);
         return orderOptional;
     } // tested
+
+    @Override
+    public List<Order> findAllByWaiterUsername(String username) {
+        Assert.notNull(username, "Waiter username should not be null");
+        Assert.hasText(username, "Waiter username should not be empty");
+        LOGGER.info("Retrieving all orders created by the user {}", username);
+        List<Order> allByWaiterUsername = orderRepository.findAllByWaiterUsername(username);
+        LOGGER.info("Successfully retrieved all orders created by the user {}, result - {}", username, allByWaiterUsername);
+        return allByWaiterUsername;
+    }
 }

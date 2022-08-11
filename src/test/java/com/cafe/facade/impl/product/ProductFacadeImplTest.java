@@ -185,7 +185,7 @@ class ProductFacadeImplTest {
     public void testUpdateProductWhenProductDoesNotExist() {
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.empty());
         Assertions.assertThat(testSubject.updateProduct(new ProductUpdateRequestDto(
-                "Pepsi", "Pepsi", 4, 400
+                1L, "Pepsi", 4, 400
         ))).isExactlyInstanceOf(ErrorProductUpdateResponseDto.class);
         Mockito.verify(productService).findByName("Pepsi");
         Mockito.verifyNoMoreInteractions(
@@ -208,8 +208,8 @@ class ProductFacadeImplTest {
         Product product = new Product("Pepsi", 2, 400, LocalDateTime.MAX);
         product.setId(1L);
 
-        ProductUpdateRequestDto requestDto = new ProductUpdateRequestDto("Pepsi", "Pepsi", 4, 400);
-        ProductUpdateParams productUpdateParams = new ProductUpdateParams("Pepsi", "Pepsi", 400, 4);
+        ProductUpdateRequestDto requestDto = new ProductUpdateRequestDto(1L, "Pepsi", 4, 400);
+        ProductUpdateParams productUpdateParams = new ProductUpdateParams(1L, "Pepsi", 400, 4);
 
         Product updatedProduct = new Product("Pepsi", 400, 4, LocalDateTime.MAX);
         updatedProduct.setId(1L);
@@ -398,7 +398,7 @@ class ProductFacadeImplTest {
         Mockito.verify(productInOrderService).create(creationParams);
         Mockito.verify(productInOrderRegistrationResponseDtoMapper).apply(productInOrder);
         Mockito.verify(productService).updateProduct(new ProductUpdateParams(
-                "Pepsi", "Pepsi", 27, 4
+                1L, "Pepsi", 27, 4
         ));
         Mockito.verifyNoMoreInteractions(
                 productService,

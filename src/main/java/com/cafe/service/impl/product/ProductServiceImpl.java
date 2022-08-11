@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -93,8 +94,8 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(ProductUpdateParams params) {
         Assert.notNull(params, "Product update params should not be null");
         LOGGER.info("Updating a product according to the product update params - {}", params);
-        String originalName = params.getOriginalName();
-        Product product = productRepository.findByName(originalName).orElseThrow(() -> new ProductNotFoundException(originalName));
+        Long id = params.getId();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         Product newProduct = new Product(
                 params.getName(),
                 params.getPrice(),
@@ -118,4 +119,19 @@ public class ProductServiceImpl implements ProductService {
         LOGGER.info("Successfully retrieved a product named as {}, result - {}", name, product);
         return product;
     } // tested
+
+    @Override
+    public List<Product> getAll() {
+        LOGGER.info("Retrieving all products");
+        List<Product> allProducts = productRepository.findAll();
+        LOGGER.info("Successfully retrieved all products, result - {}", allProducts);
+        return allProducts;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        LOGGER.info("Deleting a product with an id of {}", id);
+        productRepository.deleteById(id);
+        LOGGER.info("Successfully deleted a product with an id of {}", id);
+    }
 }

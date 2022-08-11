@@ -3,9 +3,7 @@ package com.cafe.facade.impl.table;
 import com.cafe.dto.request.CafeTableAssignmentRequestDto;
 import com.cafe.dto.request.CafeTableRegistrationRequestDto;
 import com.cafe.dto.request.CafeTablesAssignedToWaiterRetrievalRequestDto;
-import com.cafe.dto.response.CafeTableAssignmentResponseDto;
-import com.cafe.dto.response.CafeTableRegistrationResponseDto;
-import com.cafe.dto.response.CafeTablesAssignedToWaiterRetrievalResponseDto;
+import com.cafe.dto.response.*;
 import com.cafe.dto.response.error.ErrorCafeTableAssignmentResponseDto;
 import com.cafe.dto.response.error.ErrorCafeTableRegistrationResponseDto;
 import com.cafe.entity.table.CafeTable;
@@ -30,6 +28,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class CafeTableFacadeImpl implements CafeTableFacade {
@@ -97,7 +96,7 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
             );
         }
         User user = userOptional.get();
-        if (userRoleService.getRoleType(user.getUsername()) != UserRoleType.WAITER) {
+        if (!userRoleService.getRoleType(user.getUsername()).contains(UserRoleType.WAITER)) {
             return new ErrorCafeTableAssignmentResponseDto(
                     List.of("Cannot assign a cafe table to a user who is not a waiter"),
                     HttpStatus.NOT_ACCEPTABLE
@@ -133,12 +132,28 @@ public class CafeTableFacadeImpl implements CafeTableFacade {
     }
 
     @Override
-    public CafeTablesAssignedToWaiterRetrievalResponseDto retrieveCafeTableList(CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
+    public CafeTablesAssignedToWaiterRetrievalResponseDto retrieveCafeTableAssignedToWaiterList(CafeTablesAssignedToWaiterRetrievalRequestDto dto) {
         Assert.notNull(dto, "Cafe table list retrieval request dto should not be null");
         LOGGER.info("Retrieving a list of cafe tables according to the cafe table retrieval request dto - {}", dto);
-        List<CafeTableAssignedToWaiter> allByWaiterUsername = cafeTableAssignedToWaiterService.findAllByWaiterUsername(dto.getWaiterUsername());
+        List<CafeTableAssignedToWaiterRetrievalResponseDto> allByWaiterUsername = cafeTableAssignedToWaiterService.findAllByWaiterUsername(dto.getWaiterUsername()).stream()
+                .map(cafeTableAssignedToWaiter -> new CafeTableAssignedToWaiterRetrievalResponseDto(
+                        cafeTableAssignedToWaiter.getCafeTable().getId(),
+                        cafeTableAssignedToWaiter.getWaiter().getUsername(),
+                        cafeTableAssignedToWaiter.getAssignedAt()
+                )).collect(Collectors.toList());
         CafeTablesAssignedToWaiterRetrievalResponseDto responseDto = new CafeTablesAssignedToWaiterRetrievalResponseDto(allByWaiterUsername, HttpStatus.OK);
         LOGGER.info("Successfully retrieved a list of cafe tables according to the cafe table retrieval request dto - {}, result - {}", dto, responseDto);
         return responseDto;
+    }
+
+    @Override
+    public AllCafeTablesRetrievalResponseDto retrieveAllCafeTables() {
+        LOGGER.info("Retrieving a list of all cafe tables retrieval response dtos");
+        List<CafeTableRetrievalResponseDto> cafeTableRetrievalResponseDtoList = cafeTableService.getAll().stream()
+                .map(table -> new CafeTableRetrievalResponseDto(table.getId(), table.getCode(), table.getNumberOfSeats(), table.getCafeTableStatusType(), HttpStatus.OK))
+                .collect(Collectors.toList());
+        AllCafeTablesRetrievalResponseDto result = new AllCafeTablesRetrievalResponseDto(cafeTableRetrievalResponseDtoList, HttpStatus.OK);
+        LOGGER.info("Successfully retrieved all cafe tables, result - {}", result);
+        return result;
     }
 }

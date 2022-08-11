@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -97,4 +98,13 @@ public class CafeTableServiceImpl implements CafeTableService {
         LOGGER.info("Checking if a cafe table having a code of {} exists or not, result - {}", code, result);
         return result;
     } // tested
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<CafeTable> getAll() {
+        LOGGER.info("Retrieving all cafe tables");
+        List<CafeTable> allTables = cafeTableRepository.findAll();
+        LOGGER.info("Successfully retrieved all cafe tables, result - {}", allTables);
+        return allTables;
+    }
 }
