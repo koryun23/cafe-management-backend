@@ -78,7 +78,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException {
         String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
-        String token = jwtService.createToken(username, new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7));
+        String token = jwtService.createToken(
+                username,
+                userRoleService.getRoleType(username),
+                new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)
+        );
 
         User user = userService.getByUsername(username);
         AuthenticationResponseDto body = new AuthenticationResponseDto(

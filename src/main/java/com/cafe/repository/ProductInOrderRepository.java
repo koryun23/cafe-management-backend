@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProductInOrderRepository extends JpaRepository<ProductInOrder, Long> {
 
     List<ProductInOrder> findAllByOrderId(Long orderId);
+
+    boolean existsByProductId(Long productId);
 }

@@ -7,6 +7,7 @@ import com.cafe.entity.order.Order;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.product.Product;
 import com.cafe.entity.product.ProductInOrder;
+import com.cafe.entity.product.ProductInOrderStatusType;
 import com.cafe.facade.core.product.ProductFacade;
 import com.cafe.mapper.product.*;
 import com.cafe.service.core.order.OrderService;
@@ -131,6 +132,14 @@ public class ProductFacadeImpl implements ProductFacade {
         if(productService.findById(productId).isEmpty()) {
             return new ProductDeletionResponseDto(HttpStatus.NOT_ACCEPTABLE, List.of(String.format("Cannot delete a product having an id of %d because it does not exist", productId)));
         }
+
+        if(productInOrderService.existsByProductId(dto.getProductId())) {
+            return new ProductDeletionResponseDto(
+                    HttpStatus.NOT_ACCEPTABLE,
+                    List.of(String.format("Cannot delete the product with an id of %d at this moment because it is ordered", dto.getProductId()))
+            );
+        }
+
         productService.deleteProduct(dto.getProductId());
         LOGGER.info("Successfully deleted a product according to the product deletion request dto - {}", dto);
         return new ProductDeletionResponseDto(HttpStatus.OK);
@@ -249,6 +258,16 @@ public class ProductFacadeImpl implements ProductFacade {
             );
         }
         ProductInOrder productInOrder = productInOrderService.update(productInOrderUpdateParamsMapper.apply(dto));
+        if(productInOrder.getProductInOrderStatusType() == ProductInOrderStatusType.CANCELLED) {
+            Product product = productInOrder.getProduct();
+
+            productService.updateProduct(new ProductUpdateParams(
+                    product.getId(),
+                    product.getName(),
+                    product.getAmount() + dto.getAmount(), // dto.getAmount()????
+                    product.getPrice()
+            ));
+        }
         ProductInOrderUpdateResponseDto responseDto = productInOrderUpdateResponseDtoMapper.apply(productInOrder);
         LOGGER.info("Successfully updated product in order according to the request dto - {}, response - {}", dto, responseDto);
         return responseDto;

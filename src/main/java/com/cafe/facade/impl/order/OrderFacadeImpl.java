@@ -124,17 +124,21 @@ public class OrderFacadeImpl implements OrderFacade {
         }
 
         Order orderToUpdate = orderToUpdateOptional.get();
-        if(orderToUpdate.getOrderStatusType() != OrderStatusType.OPEN && dto.getOrderStatusType() == OrderStatusType.OPEN) {
+        if(orderToUpdate.getOrderStatusType() != OrderStatusType.OPEN) {
             return new ErrorOrderUpdateResponseDto(
                     List.of(String.format("Cannot update the status of an order from %s to %s", orderToUpdate.getOrderStatusType(), dto.getOrderStatusType())),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
 
-        CafeTableAssignedToWaiter cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(
-                orderToUpdate.getTable().getId()).orElseThrow(() -> new CafeTableNotFoundException(orderToUpdate.getTable().getId())
-        );
-        String orderCreatorUsername = cafeTableAssignedToWaiter.getWaiter().getUsername();
+        Optional<CafeTableAssignedToWaiter> cafeTableAssignedToWaiter = cafeTableAssignedToWaiterService.findByCafeTableId(orderToUpdate.getTable().getId());
+        if(cafeTableAssignedToWaiter.isEmpty()) {
+            return new ErrorOrderUpdateResponseDto(
+                    List.of(String.format("Cannot update the status of an order because the table with an id of %d is not assigned to the waiter %s anymore", orderToUpdate.getTable().getId(), orderToUpdate.getWaiter().getUsername())),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
+        }
+        String orderCreatorUsername = cafeTableAssignedToWaiter.get().getWaiter().getUsername();
         String orderUpdatorUsername = dto.getWaiterUsername();
         if(!orderCreatorUsername.equals(orderUpdatorUsername)) {
             return new ErrorOrderUpdateResponseDto(

@@ -4,6 +4,7 @@ import com.cafe.entity.order.Order;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,8 +16,8 @@ public class CafeTable {
     @SequenceGenerator(name = "CAFE_TABLE_SEQUENCE")
     private Long id;
 
-    @OneToOne(mappedBy = "table", cascade = CascadeType.PERSIST)
-    private Order order;
+    @OneToMany(mappedBy = "table", cascade = CascadeType.PERSIST)
+    private List<Order> orders;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
@@ -48,13 +49,13 @@ public class CafeTable {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void setOrder(Order order) {
-        Assert.notNull(order, "Order should not be null");
-        this.order = order;
+    public void setOrders(List<Order> orders) {
+        Assert.notNull(orders, "Orders should not be null");
+        this.orders = orders;
     }
 
     public Integer getNumberOfSeats() {
@@ -93,12 +94,12 @@ public class CafeTable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CafeTable cafeTable = (CafeTable) o;
-        return Objects.equals(id, cafeTable.id) && Objects.equals(order, cafeTable.order) && cafeTableStatusType == cafeTable.cafeTableStatusType && Objects.equals(numberOfSeats, cafeTable.numberOfSeats) && Objects.equals(code, cafeTable.code);
+        return Objects.equals(id, cafeTable.id) && Objects.equals(orders, cafeTable.orders) && cafeTableStatusType == cafeTable.cafeTableStatusType && Objects.equals(numberOfSeats, cafeTable.numberOfSeats) && Objects.equals(code, cafeTable.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, order, cafeTableStatusType, numberOfSeats, code);
+        return Objects.hash(id, orders, cafeTableStatusType, numberOfSeats, code);
     }
 
     @Override

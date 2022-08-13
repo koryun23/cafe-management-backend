@@ -2,6 +2,7 @@ package com.cafe.entity.order;
 
 import com.cafe.entity.product.ProductInOrder;
 import com.cafe.entity.table.CafeTable;
+import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.entity.user.User;
 import org.springframework.util.Assert;
 
@@ -22,7 +23,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<ProductInOrder> productsInOrder;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_table_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "ORDER_CAFE_TABLE_ID"))
     private CafeTable table;
 

@@ -14,4 +14,6 @@ public interface ProductInOrderService {
     void markAllAs(Long orderId, ProductInOrderStatusType status);
 
     List<ProductInOrder> findAllByOrderId(Long orderId);
+
+    boolean existsByProductId(Long productId);
 }

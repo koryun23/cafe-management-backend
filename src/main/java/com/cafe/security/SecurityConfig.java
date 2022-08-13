@@ -39,29 +39,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().and().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login/").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.POST, "/users/register/").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.GET, "/products/").hasAnyAuthority("MANAGER", "WAITER")
-                .antMatchers(HttpMethod.POST, "/products/register/").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.PUT, "/products/update/*").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.POST, "/tables/register/").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.GET, "/tables-to-waiters/").hasAuthority("WAITER")
-                .antMatchers(HttpMethod.POST, "/tables-to-waiters/assign/").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.GET, "/tables/").hasAnyAuthority("MANAGER", "WAITER")
-                .antMatchers(HttpMethod.DELETE, "/tables/*/").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.POST, "/orders/register/*/").hasAuthority("WAITER")
-                .antMatchers(HttpMethod.POST, "/products-in-order/register/*/").hasAuthority("WAITER")
-                .antMatchers(HttpMethod.GET, "/products-in-order/*/").hasAuthority("WAITER")
-                .antMatchers(HttpMethod.PUT, "/products-in-order/update/*/").hasAuthority("WAITER")
-                .antMatchers(HttpMethod.PUT, "/orders/update/*/").hasAuthority("WAITER")
-                .anyRequest()
-                .authenticated()
+        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationManager(), jwtService, userService, userRoleService);
+        JwtAuthorizationFilter authorizationFilter = new JwtAuthorizationFilter(jwtService, userService, userRoleService);
+        http.csrf().disable().cors().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtService, userService, userRoleService))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtService, userService, userRoleService))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .addFilter(authenticationFilter)
+                .addFilterAfter(authorizationFilter, JwtAuthenticationFilter.class)
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/users").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.POST, "/users/register").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.GET, "/products").hasAnyAuthority("MANAGER", "WAITER")
+                .antMatchers(HttpMethod.POST, "/products/register").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.PUT, "/products/update/*").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.POST, "/tables/register").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.GET, "/tables-to-waiters").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.POST, "/tables-to-waiters/assign").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.GET, "/tables").hasAnyAuthority("MANAGER", "WAITER")
+                .antMatchers(HttpMethod.DELETE, "/tables/*").hasAuthority("MANAGER")
+                .antMatchers(HttpMethod.POST, "/orders/register/*").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.POST, "/products-in-order/register/*").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.GET, "/products-in-order/*").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.PUT, "/products-in-order/update/*").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.PUT, "/orders/update/*").hasAuthority("WAITER")
+                .anyRequest()
+                .authenticated();
+//                .and()
+//                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtService, userService, userRoleService))
+//                .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtService, userService, userRoleService))
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //http.httpBasic();
     }
 

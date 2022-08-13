@@ -64,16 +64,7 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         productInOrder.setId(params.getId());
         productInOrder.setProductInOrderStatusType(params.getStatus());
         ProductInOrder savedProductInOrder = productInOrderRepository.save(productInOrder);
-        if(productInOrder.getProductInOrderStatusType() == ProductInOrderStatusType.CANCELLED) {
-            // restore product amount
-            Product product = productService.getByName(productInOrder.getProduct().getName());
-            productService.updateProduct(new ProductUpdateParams(
-                    product.getId(),
-                    product.getName(),
-                    product.getAmount() + params.getAmount(),
-                    product.getPrice()
-            ));
-        }
+
         LOGGER.info("Successfully updated a product in order according to the product in order update params - {}, result - {}", params, savedProductInOrder);
         return savedProductInOrder;
     } // tested
@@ -86,6 +77,9 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         LOGGER.info("Marking all products in order having an id of {} to {}", orderId, status);
         List<ProductInOrder> productInOrderList = productInOrderRepository.findAllByOrderId(orderId);
         for(ProductInOrder productInOrder : productInOrderList) {
+            if(productInOrder.getProductInOrderStatusType() != ProductInOrderStatusType.ACTIVE) {
+                continue;
+            }
             update(new ProductInOrderUpdateParams(
                     productInOrder.getId(),
                     productInOrder.getProduct().getName(),
@@ -112,5 +106,14 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
         List<ProductInOrder> allByOrderId = productInOrderRepository.findAllByOrderId(orderId);
         LOGGER.info("Successfully retrieved the list of products in the order with an id of {}, result - {}",orderId, allByOrderId);
         return allByOrderId;
+    }
+
+    @Override
+    public boolean existsByProductId(Long productId) {
+        Assert.notNull(productId, "Product id should not be null");
+        LOGGER.info("Checking if a product with an id of {} is in an order", productId);
+        boolean result = productInOrderRepository.existsByProductId(productId);
+        LOGGER.info("Checked if a product with an id of {} is in an order, result - {}", productId, result);
+        return result;
     }
 }
