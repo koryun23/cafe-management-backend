@@ -17,7 +17,9 @@ public class Config {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        System.out.println(encoder.encode("ADMIN"));
+        return encoder;
     }
 
     @Bean

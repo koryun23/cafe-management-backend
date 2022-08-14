@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
@@ -22,21 +23,21 @@ public class Main {
 
         UserFacade userFacade = context.getBean(UserFacade.class);
         JwtService jwtService = context.getBean(JwtService.class);
-
-        System.out.println(userFacade.registerUser(new UserRegistrationRequestDto(
-                "ADMIN",
-                "ADMIN",
-                "John",
-                "Williams",
-                List.of(UserRoleType.MANAGER)
-        )));
-        userFacade.registerUser(new UserRegistrationRequestDto(
-                "mary21",
-                "pwd21",
-                "Mary",
-                "Smith",
-                List.of(UserRoleType.WAITER)
-        ));
+//
+//        System.out.println(userFacade.registerUser(new UserRegistrationRequestDto(
+//                "ADMIN",
+//                "ADMIN",
+//                "John",
+//                "Williams",
+//                List.of(UserRoleType.MANAGER)
+//        )));
+//        userFacade.registerUser(new UserRegistrationRequestDto(
+//                "mary21",
+//                "pwd21",
+//                "Mary",
+//                "Smith",
+//                List.of(UserRoleType.WAITER)
+//        ));
 
         System.out.println("---------------------------------");
         System.out.println("ADMIN");
