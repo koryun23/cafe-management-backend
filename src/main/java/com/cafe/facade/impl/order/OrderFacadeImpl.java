@@ -100,7 +100,7 @@ public class OrderFacadeImpl implements OrderFacade {
         CafeTable cafeTable = cafeTableOptional.get();
         if(cafeTable.getCafeTableStatusType() != CafeTableStatusType.FREE) {
             return new ErrorOrderRegistrationResponseDto(
-                    List.of(String.format("The cafe table with an id of %d is not free, its status is %s", dto.getCafeTableId(), cafeTable.getCafeTableStatusType())),
+                    List.of(String.format("The cafe table with an id of %d already has an order attached to it", dto.getCafeTableId())),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }

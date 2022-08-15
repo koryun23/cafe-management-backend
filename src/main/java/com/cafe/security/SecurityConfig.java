@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/users").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.POST, "/users/register").hasAuthority("MANAGER")
-                .antMatchers(HttpMethod.GET, "/products").hasAnyAuthority("MANAGER", "WAITER")
+                .antMatchers(HttpMethod.GET, "/products").hasAnyAuthority("MANAGER")
                 .antMatchers(HttpMethod.POST, "/products/register").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.PUT, "/products/update/*").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.POST, "/tables/register").hasAuthority("MANAGER")

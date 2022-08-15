@@ -51,7 +51,7 @@ public class UserFacadeImpl implements UserFacade {
         LOGGER.info("Registering a new user according to the user registration request dto - {}", dto);
         if(userService.existsByPasswordOrUsername(dto.getPassword(), dto.getUsername())) {
             return new ErrorUserRegistrationResponseDto(
-                    List.of("Cannot register as on of the given credentials is already taken"),
+                    List.of("Cannot register as one of the given credentials is already taken"),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }
