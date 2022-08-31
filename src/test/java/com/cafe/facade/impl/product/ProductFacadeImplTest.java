@@ -1,5 +1,6 @@
 package com.cafe.facade.impl.product;
 
+import com.cafe.AbstractTest;
 import com.cafe.dto.request.ProductInOrderRegistrationRequestDto;
 import com.cafe.dto.request.ProductInOrderUpdateRequestDto;
 import com.cafe.dto.request.ProductRegistrationRequestDto;
@@ -42,8 +43,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
-class ProductFacadeImplTest {
+class ProductFacadeImplTest extends AbstractTest {
 
     private ProductFacade testSubject;
 
@@ -160,7 +160,7 @@ class ProductFacadeImplTest {
     public void testRegisterWhenRequestDtoIsNull() {
         Assertions.assertThatThrownBy(() -> testSubject.registerProduct(null))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
-        Mockito.verifyNoInteractions(
+        Mockito.verifyNoMoreInteractions(
                 productService,
                 productInOrderService,
                 orderService,
@@ -183,11 +183,11 @@ class ProductFacadeImplTest {
 
     @Test
     public void testUpdateProductWhenProductDoesNotExist() {
-        Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.empty());
+        Mockito.when(productService.findById(1L)).thenReturn(Optional.empty());
         Assertions.assertThat(testSubject.updateProduct(new ProductUpdateRequestDto(
                 1L, "Pepsi", 4, 400
         ))).isExactlyInstanceOf(ErrorProductUpdateResponseDto.class);
-        Mockito.verify(productService).findByName("Pepsi");
+        Mockito.verify(productService).findById(1L);
         Mockito.verifyNoMoreInteractions(
                 productService,
                 productInOrderService,
@@ -215,6 +215,7 @@ class ProductFacadeImplTest {
         updatedProduct.setId(1L);
 
         ProductUpdateResponseDto responseDto = new ProductUpdateResponseDto("Pepsi", 4, 400, LocalDateTime.MAX, HttpStatus.OK);
+        Mockito.when(productService.findById(1L)).thenReturn(Optional.of(updatedProduct));
         Mockito.when(productService.findByName("Pepsi")).thenReturn(Optional.of(updatedProduct));
         Mockito.when(productUpdateParamsMapper.apply(requestDto)).thenReturn(productUpdateParams);
         Mockito.when(productService.updateProduct(productUpdateParams)).thenReturn(updatedProduct);
@@ -222,6 +223,7 @@ class ProductFacadeImplTest {
 
         Assertions.assertThat(testSubject.updateProduct(requestDto)).isEqualTo(responseDto);
 
+        Mockito.verify(productService).findById(1L);
         Mockito.verify(productService).findByName("Pepsi");
         Mockito.verify(productUpdateParamsMapper).apply(requestDto);
         Mockito.verify(productService).updateProduct(productUpdateParams);
@@ -246,7 +248,7 @@ class ProductFacadeImplTest {
     public void testRegisterProductInOrderWhenRequestDtoIsNull() {
         Assertions.assertThatThrownBy(() -> testSubject.registerProductInOrder(null))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
-        Mockito.verifyNoInteractions(
+        Mockito.verifyNoMoreInteractions(
                 productService,
                 productInOrderService,
                 orderService,
@@ -419,7 +421,7 @@ class ProductFacadeImplTest {
     public void testUpdateProductInOrderWhenRequestDtoIsNull() {
         Assertions.assertThatThrownBy(() -> testSubject.updateProductInOrder(null))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
-        Mockito.verifyNoInteractions(
+        Mockito.verifyNoMoreInteractions(
                 productService,
                 productInOrderService,
                 orderService,

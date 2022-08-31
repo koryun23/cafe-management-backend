@@ -22,7 +22,7 @@ public class User {
     @Column(name = "second_name", nullable = false, length = 40)
     private String secondName;
 
-    @Column(name = "username", nullable = false, length = 30)
+    @Column(name = "username", nullable = false, length = 30, unique = true)
     private String username;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)

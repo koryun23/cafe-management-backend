@@ -1,5 +1,6 @@
 package com.cafe.service.impl.table;
 
+import com.cafe.AbstractTest;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableStatusType;
 import com.cafe.repository.CafeTableRepository;
@@ -17,8 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.Collections;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class CafeTableServiceImplTest {
+class CafeTableServiceImplTest extends AbstractTest {
 
     private CafeTableService testSubject;
 

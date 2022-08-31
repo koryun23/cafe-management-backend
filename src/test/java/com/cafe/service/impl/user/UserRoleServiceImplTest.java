@@ -1,5 +1,6 @@
 package com.cafe.service.impl.user;
 
+import com.cafe.AbstractTest;
 import com.cafe.entity.user.User;
 import com.cafe.entity.user.UserRole;
 import com.cafe.entity.user.UserRoleType;
@@ -16,11 +17,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class UserRoleServiceImplTest {
+class UserRoleServiceImplTest extends AbstractTest {
 
     private UserRoleService testSubject;
 
@@ -37,9 +38,9 @@ class UserRoleServiceImplTest {
 
     @Test
     public void testGetRoleTypeByUsernameWhenUserIsNotFound() {
-        Mockito.when(userRoleRepository.findByUserUsername("john11")).thenReturn(Optional.empty());
-        Assertions.assertThatThrownBy(() -> testSubject.getRoleType("john11")).isExactlyInstanceOf(UserNotFoundException.class);
-        Mockito.verify(userRoleRepository).findByUserUsername("john11");
+        Mockito.when(userRoleRepository.findAllByUserUsername("john11")).thenReturn(Collections.emptyList());
+        Assertions.assertThat(testSubject.getRoleType("john11")).isEqualTo(Collections.emptyList());
+        Mockito.verify(userRoleRepository).findAllByUserUsername("john11");
         Mockito.verifyNoMoreInteractions(userRoleRepository, userService);
     }
 
@@ -48,8 +49,8 @@ class UserRoleServiceImplTest {
         User user = new User("John", "Smith", "john11", "pwd11", LocalDateTime.MAX);
         UserRole userRole = new UserRole(user, UserRoleType.MANAGER);
         user.setUserRoleList(List.of(userRole));
-        Mockito.when(userRoleRepository.findByUserUsername("john11")).thenReturn(Optional.of(userRole));
-        Assertions.assertThat(testSubject.getRoleType("john11")).isEqualTo(UserRoleType.MANAGER);
+        Mockito.when(userRoleRepository.findAllByUserUsername("john11")).thenReturn(List.of(userRole));
+        Assertions.assertThat(testSubject.getRoleType("john11")).isEqualTo(List.of(UserRoleType.MANAGER));
         Mockito.verifyNoMoreInteractions(userRoleRepository, userService);
     }
 

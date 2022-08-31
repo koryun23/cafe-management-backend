@@ -1,5 +1,6 @@
 package com.cafe.facade.impl.user;
 
+import com.cafe.AbstractTest;
 import com.cafe.dto.request.UserRegistrationRequestDto;
 import com.cafe.dto.response.UserListRetrievalResponseDto;
 import com.cafe.dto.response.UserRegistrationResponseDto;
@@ -26,8 +27,7 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
-class UserFacadeImplTest {
+class UserFacadeImplTest extends AbstractTest {
     private UserFacade testSubject;
 
     @Mock

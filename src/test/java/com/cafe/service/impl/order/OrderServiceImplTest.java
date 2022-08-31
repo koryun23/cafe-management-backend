@@ -1,5 +1,6 @@
 package com.cafe.service.impl.order;
 
+import com.cafe.AbstractTest;
 import com.cafe.entity.order.Order;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.table.CafeTable;
@@ -23,8 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class OrderServiceImplTest {
+class OrderServiceImplTest extends AbstractTest {
 
     private OrderService testSubject;
 

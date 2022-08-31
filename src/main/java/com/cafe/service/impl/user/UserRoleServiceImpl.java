@@ -42,9 +42,9 @@ public class UserRoleServiceImpl implements UserRoleService {
     public List<UserRoleType> getRoleType(String username) {
         Assert.notNull(username, "username should not be null");
         Assert.hasText(username, "username should not be empty");
-        LOGGER.info("Retrieving the role type of a user with username '{}'", username);
+        LOGGER.info("Retrieving the role types of a user with username '{}'", username);
         List<UserRoleType> userRoleType = userRoleRepository.findAllByUserUsername(username).stream().map(UserRole::getUserRoleType).collect(Collectors.toList());
-        LOGGER.info("Successfully retrieved the role type of a user with username '{}', result - {}", username, userRoleType);
+        LOGGER.info("Successfully retrieved the role types of a user with username '{}', result - {}", username, userRoleType);
         return userRoleType;
     } // tested
 }

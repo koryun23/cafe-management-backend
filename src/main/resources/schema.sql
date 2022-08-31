@@ -1,10 +1,10 @@
-create sequence cafe_table_sequence start 1 increment 1
-create sequence cafe_table_waiter_id_sequence start 1 increment 1
-create sequence order_id_sequence start 1 increment 1
-create sequence product_id_sequence start 1 increment 1
-create sequence product_in_order_sequence start 1 increment 1
-create sequence user_id_sequence start 1 increment 1
-create sequence user_role_id_sequence start 1 increment 1
+create sequence cafe_table_sequence start 1
+create sequence cafe_table_waiter_id_sequence start 1
+create sequence order_id_sequence start 1
+create sequence product_id_sequence start 1
+create sequence product_in_order_sequence start 1
+create sequence user_id_sequence start 1
+create sequence user_role_id_sequence start 1
 create table cafe_table_waiter (assigned_at timestamp not null, cafe_table_id int8 not null, waiter_id int8 not null, serial primary key (id))
 create table orders (created_at timestamp not null, status varchar(20) not null, cafe_table_id int8 not null, waiter_id int8 not null, serial primary key (id))
 create table product (amount int4 not null, product_name varchar(70) not null, price int4 not null, registered_at timestamp not null, serial primary key (id))

@@ -1,5 +1,6 @@
 package com.cafe.facade.impl.order;
 
+import com.cafe.AbstractTest;
 import com.cafe.dto.request.OrderRegistrationRequestDto;
 import com.cafe.dto.request.OrderUpdateRequestDto;
 import com.cafe.dto.response.OrderRegistrationResponseDto;
@@ -42,8 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class OrderFacadeImplTest {
+class OrderFacadeImplTest extends AbstractTest {
 
     private OrderFacade testSubject;
 
@@ -93,7 +93,7 @@ class OrderFacadeImplTest {
         Assertions.assertThatThrownBy(() -> testSubject.register(null))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
 
-        Mockito.verifyNoInteractions(
+        Mockito.verifyNoMoreInteractions(
                 orderService,
                 cafeTableService,
                 cafeTableAssignedToWaiterService,

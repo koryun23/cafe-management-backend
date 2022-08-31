@@ -1,5 +1,6 @@
 package com.cafe.service.impl.product;
 
+import com.cafe.AbstractTest;
 import com.cafe.entity.order.Order;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.entity.product.Product;
@@ -27,8 +28,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class ProductInOrderServiceImplTest {
+class ProductInOrderServiceImplTest extends AbstractTest {
 
     private ProductInOrderService testSubject;
 

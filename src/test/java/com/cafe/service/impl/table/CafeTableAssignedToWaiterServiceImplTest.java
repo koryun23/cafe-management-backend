@@ -1,5 +1,6 @@
 package com.cafe.service.impl.table;
 
+import com.cafe.AbstractTest;
 import com.cafe.entity.table.CafeTable;
 import com.cafe.entity.table.CafeTableAssignedToWaiter;
 import com.cafe.entity.table.CafeTableStatusType;
@@ -26,8 +27,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
-class CafeTableAssignedToWaiterServiceImplTest {
+class CafeTableAssignedToWaiterServiceImplTest extends AbstractTest {
 
     private CafeTableAssignedToWaiterService testSubject;
 

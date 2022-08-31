@@ -1,5 +1,6 @@
 package com.cafe.facade.impl.table;
 
+import com.cafe.AbstractTest;
 import com.cafe.dto.request.CafeTableAssignmentRequestDto;
 import com.cafe.dto.request.CafeTableRegistrationRequestDto;
 import com.cafe.dto.request.CafeTablesAssignedToWaiterRetrievalRequestDto;
@@ -39,8 +40,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class CafeTableFacadeImplTest {
+class CafeTableFacadeImplTest extends AbstractTest {
 
     private CafeTableFacade testSubject;
 
@@ -86,7 +86,7 @@ class CafeTableFacadeImplTest {
     public void testRegisterCafeTableWhenRequestDtoIsNull() {
         Assertions.assertThatThrownBy(() -> testSubject.register(null))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
-        Mockito.verifyNoInteractions(
+        Mockito.verifyNoMoreInteractions(
                 cafeTableService,
                 userService,
                 cafeTableAssignedToWaiterService,
@@ -153,7 +153,7 @@ class CafeTableFacadeImplTest {
     public void testAssignTableToWaiterWhenRequestDtoIsNull() {
         Assertions.assertThatThrownBy(() -> testSubject.assignTableToWaiter(null))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
-        Mockito.verifyNoInteractions(
+        Mockito.verifyNoMoreInteractions(
                 cafeTableService,
                 userService,
                 cafeTableAssignedToWaiterService,

@@ -1,5 +1,6 @@
 package com.cafe.service.impl.user;
 
+import com.cafe.AbstractTest;
 import com.cafe.entity.user.User;
 import com.cafe.repository.UserRepository;
 import com.cafe.service.core.user.UserCreationParams;
@@ -17,8 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class UserServiceImplTest {
+class UserServiceImplTest extends AbstractTest {
 
     private UserService testSubject;
 

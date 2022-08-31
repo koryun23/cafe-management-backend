@@ -1,5 +1,6 @@
 package com.cafe.service.impl.product;
 
+import com.cafe.AbstractTest;
 import com.cafe.entity.product.Product;
 import com.cafe.repository.ProductRepository;
 import com.cafe.service.core.product.ProductCreationParams;
@@ -16,8 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-class ProductServiceImplTest {
+class ProductServiceImplTest extends AbstractTest {
 
     private ProductService testSubject;
 
@@ -178,15 +178,15 @@ class ProductServiceImplTest {
         Product updatedProduct = new Product("Pepsi", 4, 500, LocalDateTime.MAX);
         updatedProduct.setId(1L);
 
-        Mockito.when(productRepository.findByName("Pepsi")).thenReturn(Optional.of(product));
         Mockito.when(productRepository.save(updatedProduct)).thenReturn(updatedProduct);
+        Mockito.when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         Assertions.assertThat(testSubject.updateProduct(
                 new ProductUpdateParams(1L, "Pepsi", 500, 4)
         )).isEqualTo(updatedProduct);
 
         Mockito.verify(productRepository).save(updatedProduct);
-        Mockito.verify(productRepository).findByName("Pepsi");
+        Mockito.verify(productRepository).findById(1L);
         Mockito.verifyNoMoreInteractions(productRepository);
     }
 
