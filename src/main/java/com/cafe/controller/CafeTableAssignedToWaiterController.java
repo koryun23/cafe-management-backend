@@ -7,10 +7,12 @@ import com.cafe.dto.response.CafeTablesAssignedToWaiterRetrievalResponseDto;
 import com.cafe.facade.core.table.CafeTableFacade;
 import com.cafe.handler.BasicAuthorizationHttpServletRequestHandler;
 import com.cafe.service.core.jwt.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(path = "tables-to-waiters", produces = "application/json", consumes = "application/json")
@@ -25,7 +27,10 @@ public class CafeTableAssignedToWaiterController {
     }
 
     @PostMapping(path = "/assign")
-    public ResponseEntity<CafeTableAssignmentResponseDto> assignCafeTableToWaiter(@RequestBody CafeTableAssignmentRequestDto requestDto) {
+    public ResponseEntity<CafeTableAssignmentResponseDto> assignCafeTableToWaiter(@RequestBody CafeTableAssignmentRequestDto requestDto, HttpServletRequest request) {
+        if(jwtService.isExpired(request.getHeader("Authorization").substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         CafeTableAssignmentResponseDto responseDto = cafeTableFacade.assignTableToWaiter(requestDto);
         return ResponseEntity
                 .status(responseDto.getHttpStatus())
@@ -34,6 +39,9 @@ public class CafeTableAssignedToWaiterController {
 
     @GetMapping
     public ResponseEntity<CafeTablesAssignedToWaiterRetrievalResponseDto> retrieveCafeTablesAssignedToWaiter(HttpServletRequest request) {
+        if(jwtService.isExpired(request.getHeader("Authorization").substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
         CafeTablesAssignedToWaiterRetrievalRequestDto dto = new CafeTablesAssignedToWaiterRetrievalRequestDto(username);
         dto.setWaiterUsername(username);

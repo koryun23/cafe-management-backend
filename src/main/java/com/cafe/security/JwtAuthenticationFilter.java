@@ -1,5 +1,6 @@
 package com.cafe.security;
 
+import com.auth0.jwt.JWT;
 import com.cafe.dto.response.AuthenticationResponseDto;
 import com.cafe.entity.user.User;
 import com.cafe.entity.user.UserRole;
@@ -33,6 +34,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Value("${jwt.secret.key}")
     private String secretKey;
+
+    @Value("${jwt.token.expiration}")
+    private long expirationMillis;
+
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final UserRoleService userRoleService;
@@ -80,13 +85,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
         String token = jwtService.createToken(
                 username,
-                userRoleService.getRoleType(username),
-                new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)
+                userRoleService.getRoleType(username)
         );
 
         User user = userService.getByUsername(username);
         AuthenticationResponseDto body = new AuthenticationResponseDto(
                 token,
+                com.auth0.jwt.JWT.decode(token).getExpiresAt().getTime() - System.currentTimeMillis(),
                 username,
                 user.getPassword(),
                 user.getFirstName(),

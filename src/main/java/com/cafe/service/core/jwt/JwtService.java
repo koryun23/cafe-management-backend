@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface JwtService {
 
-    String createToken(String username, List<UserRoleType> roles, Date expirationDate);
+    String createToken(String username, List<UserRoleType> roles);
 
     String getUsername(String token);
 
     List<String> getAuthorities(String token);
+
+    boolean isExpired(String token);
+
+    String getRefreshToken(String username);
 }

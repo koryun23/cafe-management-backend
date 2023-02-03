@@ -7,9 +7,11 @@ import com.cafe.service.core.user.UserRoleService;
 import com.cafe.service.core.user.UserService;
 import io.jsonwebtoken.Jwt;
 import net.bytebuddy.build.Plugin;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -45,7 +47,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }
@@ -54,6 +55,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
         if (token != null) {
             token = token.substring(7);
+            if(jwtService.isExpired(token)) {
+                return null;
+            }
             String username = jwtService.getUsername(token);
             List<String> authorities = jwtService.getAuthorities(token);
             Set<SimpleGrantedAuthority> simpleGrantedAuthoritySet = authorities.stream()

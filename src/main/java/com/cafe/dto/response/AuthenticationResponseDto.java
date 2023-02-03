@@ -8,6 +8,7 @@ import java.util.Objects;
 public class AuthenticationResponseDto {
 
     private String token;
+    private long expiresIn;
     private String username;
     private String password;
     private String firstName;
@@ -24,12 +25,14 @@ public class AuthenticationResponseDto {
     }
 
     public AuthenticationResponseDto(String token,
+                                     long expiresIn,
                                      String username,
                                      String password,
                                      String firstName,
                                      String secondName,
                                      List<UserRoleType> role) {
         this.token = token;
+        this.expiresIn = expiresIn;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -101,12 +104,21 @@ public class AuthenticationResponseDto {
         this.role = role;
     }
 
+    public long getExpiresIn() {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(long expiresIn) {
+        this.expiresIn = expiresIn;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationResponseDto that = (AuthenticationResponseDto) o;
         return Objects.equals(token, that.token) &&
+                expiresIn == that.expiresIn &&
                 Objects.equals(username, that.username) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(firstName, that.firstName) &&
@@ -118,13 +130,14 @@ public class AuthenticationResponseDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(token, username, password, firstName, secondName, type, message, role);
+        return Objects.hash(token, expiresIn, username, password, firstName, secondName, type, message, role);
     }
 
     @Override
     public String toString() {
         return "AuthenticationResponseDto{" +
                 "token='" + token + '\'' +
+                "expiresIn='" + expiresIn + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +

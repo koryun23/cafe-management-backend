@@ -10,6 +10,7 @@ import com.cafe.dto.response.OrderUpdateResponseDto;
 import com.cafe.entity.order.OrderStatusType;
 import com.cafe.facade.core.order.OrderFacade;
 import com.cafe.service.core.jwt.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,12 @@ public class OrderController {
     @PostMapping(path = "/register/{cafeTableId}")
     public ResponseEntity<OrderRegistrationResponseDto> register(HttpServletRequest request,
                                                                  @PathVariable Long cafeTableId) {
-        String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
+
+        String token = request.getHeader("Authorization").substring(7);
+        if(jwtService.isExpired(request.getHeader("Authorization").substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String username = jwtService.getUsername(token);
         OrderRegistrationRequestDto dto = new OrderRegistrationRequestDto(cafeTableId, username);
         OrderRegistrationResponseDto responseDto = orderFacade.register(dto);
         return ResponseEntity
@@ -43,7 +49,11 @@ public class OrderController {
     public ResponseEntity<OrderUpdateResponseDto> updateOrder(HttpServletRequest request,
                                                               @RequestBody OrderUpdateRequestDto dto,
                                                               @PathVariable Long id) {
-        String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
+        String token = request.getHeader("Authorization").substring(7);
+        if(jwtService.isExpired(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String username = jwtService.getUsername(token);
         dto.setWaiterUsername(username);
         dto.setId(id);
         OrderUpdateResponseDto responseDto = orderFacade.updateOrder(dto);
@@ -54,7 +64,11 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<OrderListRetrievalResponseDto> fetchAll(HttpServletRequest request) {
-        String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
+        String token = request.getHeader("Authorization").substring(7);
+        if(jwtService.isExpired(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String username = jwtService.getUsername(token);
         OrderListRetrievalResponseDto result = orderFacade.getAllByWaiterUsername(new OrderListRetrievalRequestDto(username));
         return ResponseEntity
                 .status(result.getHttpStatus())

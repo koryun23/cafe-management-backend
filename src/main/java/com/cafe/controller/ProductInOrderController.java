@@ -9,6 +9,7 @@ import com.cafe.dto.response.ProductInOrderUpdateResponseDto;
 import com.cafe.facade.core.product.ProductFacade;
 import com.cafe.handler.BasicAuthorizationHttpServletRequestHandler;
 import com.cafe.service.core.jwt.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,11 @@ public class ProductInOrderController {
     public ResponseEntity<ProductInOrderRegistrationResponseDto> registerProductInOrder(HttpServletRequest request,
                                                                                         @RequestBody ProductInOrderRegistrationRequestDto dto,
                                                                                         @PathVariable Long orderId) {
-        String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
+        String token = request.getHeader("Authorization").substring(7);
+        if(jwtService.isExpired(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String username = jwtService.getUsername(token);
         dto.setWaiterUsername(username);
         dto.setOrderId(orderId);
         ProductInOrderRegistrationResponseDto responseDto = productFacade.registerProductInOrder(dto);
@@ -45,7 +50,11 @@ public class ProductInOrderController {
     public ResponseEntity<ProductInOrderUpdateResponseDto> updateProductInOrder(HttpServletRequest request,
                                                                                 @RequestBody ProductInOrderUpdateRequestDto dto,
                                                                                 @PathVariable Long productInOrderId) {
-        String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
+        String token = request.getHeader("Authorization").substring(7);
+        if(jwtService.isExpired(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String username = jwtService.getUsername(token);
         dto.setWaiterUsername(username);
         dto.setId(productInOrderId);
         ProductInOrderUpdateResponseDto responseDto = productFacade.updateProductInOrder(dto);
@@ -55,7 +64,11 @@ public class ProductInOrderController {
     }
     @GetMapping("/{orderId}")
     public ResponseEntity<ProductInOrderListRetrievalResponseDto> fetchAll(HttpServletRequest request, @PathVariable Long orderId){
-        String username = jwtService.getUsername(request.getHeader("Authorization").substring(7));
+        String token = request.getHeader("Authorization").substring(7);
+        if(jwtService.isExpired(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String username = jwtService.getUsername(token);
         ProductInOrderListRetrievalRequestDto dto = new ProductInOrderListRetrievalRequestDto(orderId, username);
         ProductInOrderListRetrievalResponseDto result = productFacade.getAllProductsInOrderByOrderId(dto);
         return ResponseEntity.status(result.getHttpStatus()).body(result);

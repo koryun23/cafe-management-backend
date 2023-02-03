@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(authorizationFilter, JwtAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/login/refresh-token").permitAll()
                 .antMatchers(HttpMethod.GET, "/users").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.POST, "/users/register").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.GET, "/products").hasAnyAuthority("MANAGER")
