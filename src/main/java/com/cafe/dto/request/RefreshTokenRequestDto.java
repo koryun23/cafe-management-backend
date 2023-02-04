@@ -5,6 +5,9 @@ import java.util.Objects;
 public class RefreshTokenRequestDto {
     private String username;
 
+    public RefreshTokenRequestDto() {
+    }
+
     public RefreshTokenRequestDto(String username) {
         this.username = username;
     }

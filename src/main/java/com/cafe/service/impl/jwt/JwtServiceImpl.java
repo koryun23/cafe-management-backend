@@ -37,7 +37,6 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String createToken(String username, List<UserRoleType> roles) {
-        System.out.println(expiration);
         return jwtBuilder
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .claim("tokenId", UUID.randomUUID().toString())

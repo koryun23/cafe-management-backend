@@ -58,11 +58,4 @@ public class AuthenticationController {
 //                userWithRequestedUsername.getSecondName()
 //        ));
     }
-
-    @GetMapping(path = "/refresh-token")
-    public ResponseEntity<RefreshTokenResponseDto> refreshToken(@RequestBody RefreshTokenRequestDto dto) {
-        System.out.println(dto.getUsername());
-        String refreshToken = jwtService.getRefreshToken(dto.getUsername());
-        return ResponseEntity.status(HttpStatus.OK).body(new RefreshTokenResponseDto(refreshToken, expiresIn));
-    }
 }

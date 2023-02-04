@@ -1,5 +1,6 @@
 package com.cafe.security;
 
+import com.cafe.controller.JwtTokenValidationFilter;
 import com.cafe.service.core.jwt.JwtService;
 import com.cafe.service.core.user.UserRoleService;
 import com.cafe.service.core.user.UserService;
@@ -41,14 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationManager(), jwtService, userService, userRoleService);
         JwtAuthorizationFilter authorizationFilter = new JwtAuthorizationFilter(jwtService, userService, userRoleService);
+        JwtTokenValidationFilter jwtTokenValidationFilter = new JwtTokenValidationFilter(jwtService);
         http.csrf().disable().cors().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(authenticationFilter)
-                .addFilterAfter(authorizationFilter, JwtAuthenticationFilter.class)
+                .addFilterAfter(jwtTokenValidationFilter, JwtAuthenticationFilter.class)
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/refresh-token").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/login/refresh-token").permitAll()
                 .antMatchers(HttpMethod.GET, "/users").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.POST, "/users/register").hasAuthority("MANAGER")
                 .antMatchers(HttpMethod.GET, "/products").hasAnyAuthority("MANAGER")
