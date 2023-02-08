@@ -1,6 +1,5 @@
 package com.cafe.security;
 
-import com.cafe.controller.JwtTokenValidationFilter;
 import com.cafe.service.core.jwt.JwtService;
 import com.cafe.service.core.user.UserRoleService;
 import com.cafe.service.core.user.UserService;

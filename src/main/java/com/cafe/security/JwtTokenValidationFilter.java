@@ -1,4 +1,4 @@
-package com.cafe.controller;
+package com.cafe.security;
 
 import com.cafe.service.core.jwt.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
